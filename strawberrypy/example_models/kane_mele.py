@@ -1,7 +1,6 @@
-from pythtb import tb_model
-from tbmodels import Model
-
 import numpy as np
+from tbmodels import *
+from pythtb import *
 
 def kane_mele_pythtb(rashba, esite, spin_orb, L):
     # From http://www.physics.rutgers.edu/pythtb/examples.html#kane-mele-model-using-spinor-features
@@ -89,22 +88,3 @@ def kane_mele_tbmodels(rashba,esite,spin_orb,L):
 
     sc_model = km_model.supercell([L,L])
     return sc_model
-
-def km_anderson_disorder_pythtb(model, w):
-    n_orb = model.get_num_orbitals()   
-    if w != 0.:
-        for j in range (n_orb):
-            dis = 0.5*w*(2*np.random.random()-1.0)
-            model.set_onsite(dis, j, mode='add')
-    
-    return model
-
-def km_anderson_disorder_tbmodels(model, w):
-    n_orb = len(model.pos)
-    if w != 0.:
-        d = 0.5*w*(2*np.random.rand(n_orb//2)-1.0)                   
-        dis = np.repeat(d,2)
-
-        model.add_on_site(dis)
-
-    return model

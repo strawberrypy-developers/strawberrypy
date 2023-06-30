@@ -1,7 +1,6 @@
-from pythtb import tb_model
-from tbmodels import Model
-
 import numpy as np
+from tbmodels import *
+from pythtb import *
 
 def haldane_pythtb(delta, t, t2, phi, L):
     # From http://www.physics.rutgers.edu/pythtb/examples.html#haldane-model
@@ -33,21 +32,3 @@ def haldane_tbmodels(delta, t, t2, phi, L):
     sc_model = h_model.supercell([L,L])
        
     return sc_model
-
-def h_anderson_disorder_pythtb(model, w):
-    n_orb = model.get_num_orbitals() 
-    if w != 0.:
-        for j in range (n_orb):
-            dis = 0.5*w*(2*np.random.random()-1.0)
-            model.set_onsite(dis, j, mode='add')
-
-    return model
-
-def h_anderson_disorder_tbmodels(model, w):
-    n_orb = len(model.pos)
-    if w != 0.:
-        dis = 0.5*w*(2*np.random.rand(n_orb)-1.0)                   
-
-        model.add_on_site(dis)
-
-    return model

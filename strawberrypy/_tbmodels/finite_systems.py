@@ -1,11 +1,11 @@
 import numpy as np
 import tbmodels as tbm
 
-def get_positions(model, nx_sites : int, ny_sites : int):
+def get_positions(model, nx_sites, ny_sites):
     """
     Returns the cartesian coordinates of the states in a finite sample of tbmodels.Model
     """
-    
+        
     positions = np.copy(model.pos)
     for i in range(model.pos.shape[0]):
         positions[i][0] *= nx_sites
@@ -14,7 +14,7 @@ def get_positions(model, nx_sites : int, ny_sites : int):
         positions[i] = cartesian_pos
     return positions
 
-def cut_piece_tbm(source_model, num : int, fin_dir : int, dimk : int, glue : bool = False):
+def _cut_piece_tbm(source_model, num : int, fin_dir : int, dimk : int, glue : bool = False):
     """
     Reduce by 1 the dimension of a model in TBModels in a given direction, building a supercell made by a given number of atoms. If a zero dimensional system, is needed it is required to run twice the function with dimk = 1 and then dimk = 0.
     
@@ -133,8 +133,8 @@ def make_finite(model: tbm.Model, nx_sites: int, ny_sites: int):
     if not (nx_sites > 0 and ny_sites > 0):
         raise RuntimeError("Number of sites along finite direction must be greater than 0")
 
-    ribbon = cut_piece_tbm(model, num = ny_sites, fin_dir = 1, dimk = 1, glue = False)
-    finite = cut_piece_tbm(ribbon, num = nx_sites, fin_dir = 0, dimk = 0, glue = False)
+    ribbon = _cut_piece_tbm(model, num = ny_sites, fin_dir = 1, dimk = 1, glue = False)
+    finite = _cut_piece_tbm(ribbon, num = nx_sites, fin_dir = 0, dimk = 0, glue = False)
     
     return finite
 
@@ -216,3 +216,66 @@ def make_heterostructure(model1 : tbm.Model , model2 : tbm.Model,  nx_sites : in
         occ = model1.occ, uc = model1.uc, pos = model1.pos, contains_cc = False)
 
     return newmodel
+
+def onsite_disorder(source_model, w : float = 0, spinstates : int = 2, seed : int = None):
+    """
+    Add onsite (Anderson) disorder to the specified model. The disorder amplitude per site is taken randomly in [-w/2, w/2].
+
+        Args:
+        - source_model : the model to add disorder to
+        - w : disorder amplitude
+        - spinstates : spin of the model
+        - seed : seed for random number generator
+
+        Returns:
+        - model : the disordered model
+    """
+    # Quick return for no disorder
+    if w == 0:
+        return source_model
+
+    # Set the seed for the random number generator
+    if seed is not None:
+        np.random.seed(seed)
+
+    # Number of orbitals in the supercell model = norbs (original) x num
+    norbs = source_model.size
+    
+    # Onsite energies per unit cell (2 is by convention with TBModels)
+    onsite = [2 * np.real(source_model.hop[source_model._zero_vec][j][j]) for j in range(norbs)]
+    disorder = 0.5 * w * (2 * np.random.rand(norbs // spinstates) - 1.0)
+    disorder = np.repeat(disorder, spinstates)
+    onsite += disorder
+
+    # Hopping amplitudes and positions
+    hoppings = [[key, val] for key, val in iter(source_model.hop.items())]
+
+    # Hoppings to be added
+    hopping_list = []
+
+    # Cycle over the number of defined hoppings
+    for j in range(len(hoppings)):
+
+        # Set lattice vector of the current hopping matrix
+        objective = np.copy(hoppings[j][0])
+
+        # Cycle over the rows of the hopping matrix
+        for k in range(hoppings[j][1].shape[0]):
+
+            # Cycle over the columns of the hopping matrix
+            for l in range(hoppings[j][1].shape[1]):
+
+                # Hopping amplitudes
+                amplitude = hoppings[j][1][k][l]
+                if np.absolute(amplitude) < 1e-10:
+                    continue
+
+                if k == l:
+                    continue
+                else:
+                    hopping_list.append([amplitude, int(k), int(l), objective])
+    
+    model = tbm.Model.from_hop_list(hop_list = hopping_list, on_site = onsite, size = norbs, dim = source_model.dim,
+        occ = source_model.occ, uc = source_model.uc, pos = source_model.pos, contains_cc = False)
+    
+    return model

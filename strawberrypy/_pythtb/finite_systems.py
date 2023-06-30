@@ -1,6 +1,18 @@
 import numpy as np
 import pythtb as ptb
 
+def orb_cart (model):
+    #returns position of orbitals in cartesian coordinates
+    n_orb = model.get_num_orbitals()
+    lat_super = model.get_lat()          
+    orb_red = model.get_orb()            
+
+    orb_c = []
+    for i in range (n_orb):
+        orb_c.append( (np.matmul(lat_super.transpose(),orb_red[i].reshape(-1,1))).squeeze() )   
+    orb_c = np.array(orb_c)
+    return orb_c
+
 def make_finite(model, nx_sites: int, ny_sites: int):
     """
     Make a finite mdoel along x and y direction by first cutting on the y direction and then on the x. This convention has been used to track the positions in the functions
@@ -21,7 +33,7 @@ def make_finite(model, nx_sites: int, ny_sites: int):
     
     return finite
 
-def make_heterostructure(model1 , model2,  nx_sites : int, ny_sites : int, direction : int, start : int, stop : int):
+def make_heterostructure(model1, model2,  nx_sites : int, ny_sites : int, direction : int, start : int, stop : int):
     """
     Modify a finite model by merging another system in it. The system will be split in the direction starting from start.
 
@@ -88,4 +100,43 @@ def make_heterostructure(model1 , model2,  nx_sites : int, ny_sites : int, direc
             if np.absolute(hoppings1[k][0]) < 1e-10: continue
             newmodel.set_hop(hoppings1[k][0], hoppings1[k][1], hoppings1[k][2], mode = "add")
 
+    return newmodel
+
+def onsite_disorder(source_model, w : float, spinstates : int = 2, seed : int = None):
+    """
+    Add onsite (Anderson) disorder to the specified model. The disorder amplitude per site is taken randomly in [-w/2, w/2].
+
+        Args:
+        - source_model : the model to add disorder to
+        - w : disorder amplitude
+        - spinstates : spin of the model
+        - seed : seed for random number generator
+
+        Returns:
+        - model : the disordered model
+    """
+    # Quick return for no disorder
+    if w == 0:
+        return source_model
+
+    if seed is not None:
+        np.random.seed(seed)
+
+    # Number of orbitals in the supercell model = norbs (original) x num
+    norbs = source_model.get_num_orbitals()
+    
+    # Onsite energies per unit cell (2 is by convention with TBModels)
+    disorder = 0.5 * w * (2 * np.random.rand(norbs // spinstates) - 1.0)
+    disorder = np.repeat(disorder, spinstates)
+    onsite = source_model._site_energies + disorder
+
+    newmodel = ptb.tb_model(dim_k = 0, dim_r = source_model._dim_r, lat = source_model._lat, orb = source_model._orb, nspin = source_model._nspin)
+    newmodel.set_onsite(onsite, mode = 'set')
+
+    # Cycle over the rows of the hopping matrix
+    hoppings = source_model._hoppings
+    for k in range(len(hoppings)):
+        if np.absolute(hoppings[k][0]) < 1e-10: continue
+        newmodel.set_hop(hoppings[k][0], hoppings[k][1], hoppings[k][2], mode = "add")
+    
     return newmodel

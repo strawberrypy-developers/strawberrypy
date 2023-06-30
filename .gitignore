@@ -4,3 +4,4 @@ strawberrypy/_pythtb/__pycache__/
 strawberrypy/_tbmodels/__pycache__/
 .devcontainer/
 .pytest_cache
+.DS_Store
