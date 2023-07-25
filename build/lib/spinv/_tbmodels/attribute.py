@@ -21,8 +21,6 @@ def get_positions(model, nx_sites = 1, ny_sites = 1):
         cartesian_pos = np.dot(positions[i], model.uc)
         positions[i] = cartesian_pos
 
-    #ATT: fa la stessa cosa della funzione orb_cart per nx=ny=1
-
     return positions
 
 def _orb_cart(model):

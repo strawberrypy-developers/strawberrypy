@@ -6,7 +6,6 @@ from opt_einsum import contract
 
 from . import _tbmodels
 from . import _pythtb
-from .common_func import *
 from .classes import Model
 
 class FiniteModel(Model):
@@ -87,7 +86,7 @@ class FiniteModel(Model):
         """
         Evaluate the Chern marker on the whole lattice if direction is None. If direction is not None evaluates the Z Chern marker along direction starting from start.
         
-            Args:
+        Args:
             - direction : direction along which compute the local Chern marker, default is None (returns the whole lattice Chern marker), allowed values are 0 for 'x' direction and 1 for 'y' direction
             - start : if direction is not None, is the coordinate of the unit cell at the start of the evaluation of the Chern marker
             - return_projector : if True, returns the ground state projector at the end of the calculation, default is False
@@ -95,7 +94,7 @@ class FiniteModel(Model):
             - macroscopic_average : if True, returns the local Chern marker averaged over a radius equal to the cutoff
             - cutoff : cutoff set for the calculation of averages
 
-            Returns:
+        Returns:
             - lattice_chern : local Chern marker of the whole lattice if direction is None
             - lcm_direction : local Chern marker along direction starting from start
             - projector : ground state projector, returned if return_projector is set True (default is False)
@@ -124,7 +123,9 @@ class FiniteModel(Model):
             gs_projector = projector
 
         # Chern marker operator
-        chern_operator = np.imag(gs_projector @ commutator(self.r[0], gs_projector) @ commutator(self.r[1], gs_projector))
+        commut_rx_gsp = self.r[0] @ gs_projector - gs_projector @ self.r[0]
+        commut_ry_gsp = self.r[1] @ gs_projector - gs_projector @ self.r[1]
+        chern_operator = np.imag(gs_projector @ commut_rx_gsp @ commut_ry_gsp)
         chern_operator *= -4 * np.pi / self.uc_vol
 
         # If macroscopic average I have to compute the lattice values with the averages first
@@ -147,7 +148,7 @@ class FiniteModel(Model):
                 return np.array(lcm_direction), gs_projector
 
         if not macroscopic_average and not self.disordered:
-            lattice_chern = partialtrace(chern_operator, self.states_uc)
+            lattice_chern = [np.sum([chern_operator[i * self.states_uc + k, i * self.states_uc + k] for k in range(self.states_uc)]) for i in range(int(len(chern_operator) / self.states_uc))]
             lattice_chern = np.repeat(lattice_chern, self.states_uc)
 
         if not return_projector:

@@ -13,9 +13,6 @@ class Model():
         self.model = tbmodel
         self.Lx = Lx
         self.Ly = Ly
-
-        if spinful == None:
-            raise NotImplementedError("Please, specify if the model is spinful or not!")
         self.spinful = spinful
 
         # Generate the positions of the atoms in the lattice
@@ -55,23 +52,24 @@ class Model():
         Returns the cartesian coordinates of the states in a finite sample
         """
         if isinstance(self.model, tbm.Model):
-            return _tbmodels.get_positions(self.model, self.Lx, self.Ly)          #Ho tolto il T perche' a me le posizioni servono cosi'
+            return _tbmodels.get_positions(self.model)
         elif isinstance(self.model, ptb.tb_model):
             return _pythtb.get_positions(self.model, self.spinful)
         else:
             raise NotImplementedError("Invalid model instance.")
 
     
-    def _get_hamiltonian(self):
+    def _get_hamiltonian(self, external_model = None):
         """
         Returns the hamiltonian matrix at Gamma point
         """
-        if isinstance(self.model, tbm.Model):
+        model_use = self.model if external_model is None else external_model
+        if isinstance(model_use, tbm.Model):
             gamma_point = np.zeros(self.dim)
-            return _tbmodels.get_hamiltonian(self.model, gamma_point)
-        elif isinstance(self.model, ptb.tb_model):
+            return _tbmodels.get_hamiltonian(model_use, gamma_point)
+        elif isinstance(model_use, ptb.tb_model):
             gamma_point = np.zeros(self.dim)
-            return _pythtb.get_hamiltonian(self.model, self.spinful, gamma_point, self.dim)
+            return _pythtb.get_hamiltonian(model_use, self.spinful, gamma_point, self.dim)
         else:
             raise NotImplementedError("Invalid model instance.")
         
@@ -129,7 +127,7 @@ class Model():
         """
         Add onsite (Anderson) disorder to the specified model. The disorder amplitude per site is taken randomly in [-w/2, w/2].
 
-            Args:
+        Args:
             - w : disorder amplitude
             - seed : seed for random number generator
         """
@@ -159,6 +157,7 @@ class Model():
         """
         ham = self.hamiltonian
         pos = self.r
+        cart_pos = self.cart_positions.T
         sz = self.sz
         nocc = self.n_occ
         norbs = self.n_orb
@@ -178,11 +177,9 @@ class Model():
                 ham = np.delete(ham, vacancies, 0)
                 ham = np.delete(ham, vacancies, 1)
                 for dim in range(len(self.r)):
-                    pos[dim] = np.delete(pos[dim], vacancies)
-                    pos[dim] = np.delete(pos[dim], vacancies)
-                if sz is not None:
-                    sz = np.delete(sz, vacancies, 0)
-                    sz = np.delete(sz, vacancies, 1)
+                    pos[dim] = np.delete(pos[dim], vacancies, 0)
+                    pos[dim] = np.delete(pos[dim], vacancies, 1)
+                cart_pos = np.delete(cart_pos, vacancies)
                 nocc -= 1
                 norbs -= 1
             else:
@@ -191,11 +188,11 @@ class Model():
                     ham = np.delete(ham, vacancies, 0)
                     ham = np.delete(ham, vacancies, 1)
                     for dim in range(len(self.r)):
-                        pos[dim] = np.delete(pos[dim], vacancies)
-                        pos[dim] = np.delete(pos[dim], vacancies)
-                    if sz is not None:
-                        sz = np.delete(sz, vacancies, 0)
-                        sz = np.delete(sz, vacancies, 1)
+                        pos[dim] = np.delete(pos[dim], vacancies, 0)
+                        pos[dim] = np.delete(pos[dim], vacancies, 1)
+                    cart_pos = np.delete(cart_pos, vacancies, 1)
+                    sz = np.delete(sz, vacancies, 0)
+                    sz = np.delete(sz, vacancies, 1)
                 nocc -= 2
                 norbs -= 2
         else:
@@ -206,11 +203,9 @@ class Model():
                     ham = np.delete(ham, h, 0)
                     ham = np.delete(ham, h, 1)
                     for dim in range(len(self.r)):
-                        pos[dim] = np.delete(pos[dim], h)
-                        pos[dim] = np.delete(pos[dim], h)
-                    if sz is not None:
-                        sz = np.delete(sz, h, 0)
-                        sz = np.delete(sz, h, 1)
+                        pos[dim] = np.delete(pos[dim], h, 0)
+                        pos[dim] = np.delete(pos[dim], h, 1)
+                    cart_pos = np.delete(cart_pos, h, 1)
                     nocc -= 1
                     norbs -= 1
                 else:
@@ -220,11 +215,11 @@ class Model():
                         ham = np.delete(ham, h, 0)
                         ham = np.delete(ham, h, 1)
                         for dim in range(len(self.r)):
-                            pos[dim] = np.delete(pos[dim], h)
-                            pos[dim] = np.delete(pos[dim], h)
-                        if sz is not None:
-                            sz = np.delete(sz, h, 0)
-                            sz = np.delete(sz, h, 1)
+                            pos[dim] = np.delete(pos[dim], h, 0)
+                            pos[dim] = np.delete(pos[dim], h, 1)
+                        cart_pos = np.delete(cart_pos, h, 1)
+                        sz = np.delete(sz, h, 0)
+                        sz = np.delete(sz, h, 1)
                     nocc -= 2
                     norbs -= 2
         
@@ -232,6 +227,85 @@ class Model():
         self.sz = sz
         self.n_occ = nocc
         self.disordered = True
+        self.cart_positions = cart_pos.T
+
+    def make_heterostructure(self, model2, direction : int = 0, start : int = 0, stop : int = 0):
+        """
+        Modify a FiniteModel by merging another model in it. The system will be split in the direction starting from start.
+        Beware: the previous model will be modified
+
+        Args:
+            - model2: the model that has to be merged into the existing one
+            - direction : direction in which the splitting happen, allowed 0 for 'x' or 1 for 'y'
+            - start : starting point for the splitting in the 'direction' direction
+            - end : end point of the splitting in the 'direction' direction
+        """
+
+        # Check input data are ok
+        if not start < stop:
+            raise RuntimeError("Starting point is greater or equal to the end point")
+        if not (start >= 0 and start < (self.Lx if direction == 0 else self.Ly)):
+            raise RuntimeError("Start point value not allowed")
+        if not (stop > 0 and stop < (self.Lx if direction == 0 else self.Ly)):
+            raise RuntimeError("End point value not allowed")
+        if direction not in [0, 1]:
+            raise RuntimeError("Direction not allowed: insert 0 for 'x' and 1 for 'y'")
+        
+        if not issubclass(type(model2), Model):
+            raise RuntimeError("The two models must be instances of Model, Supercell or FiniteModel")
+        
+        if not (self.Lx == model2.Lx and self.Ly == model2.Ly and np.allclose(self.r, model2.r)):
+            raise RuntimeError("You can only build heterostructures of the same model")
+        
+        # Generate the Hamiltonian of the second model
+        hamilt_model2 = np.copy(model2.hamiltonian)
+
+        # Check if only the onsite terms are changed
+        onsite_only = False
+        if np.allclose( self.hamiltonian - np.diag(np.diag(self.hamiltonian)), hamilt_model2 - np.diag(np.diag(hamilt_model2)) ):
+            onsite_only = True
+
+        # Remove onsite terms from the model
+        onsite1 = np.diag(self.hamiltonian).copy()
+        onsite2 = np.diag(hamilt_model2).copy()
+        self.hamiltonian -= np.diag(onsite1)
+        
+        if direction == 0:
+            # Splitting along the x direction
+            ind = np.array([[(start + i) * self.Ly * self.states_uc + j * self.states_uc for j in range(self.Ly)] for i in range(stop - start + 1)]).flatten()
+        else:
+            # Splitting along the y direction
+            ind = np.array([[i * self.Ly * self.states_uc + start * self.states_uc + j * self.states_uc for j in range(stop - start + 1)] for i in range(self.Lx)]).flatten()
+
+        for i in ind:
+            for j in range(self.states_uc):
+                onsite1[i + j] = onsite2[i + j]
+
+        # Add the new onsite terms
+        self.hamiltonian += np.diag(onsite1)
+        
+        # If other matrix element are changed
+        if not onsite_only:
+            # Indices of every atom in the selected cells, not only of the initial atom of the cell
+            indices = np.array([[i + j for j in range(self.states_uc)] for i in ind]).flatten()
+
+            # Cycle over the rows of the hopping matrix
+            for k in range(self.hamiltonian.shape[0]):
+
+                # Cycle over the columns of the hopping matrix
+                for l in range(self.hamiltonian.shape[1]):
+                    if k == l: continue
+
+                    # Hopping amplitudes
+                    amplitude1 = self.hamiltonian[k][l]
+                    amplitude2 = hamilt_model2[k][l]
+                            
+                    if k in indices:
+                        if np.absolute(amplitude2) < 1e-10: continue
+                        self.hamiltonian[k][l] = amplitude2
+                    else:
+                        if np.absolute(amplitude1) < 1e-10: continue
+                        self.hamiltonian[k][l] = amplitude1
 
     #################################################
     # Utility functions
@@ -241,6 +315,4 @@ class Model():
         """
         Convert [cell_x, cell_y, basis] to the internal indexing of the lattice sites
         """
-        return self.Ly * self.atoms_uc * cellx + self.states_uc * celly + basis * (2 if self.spinful else 1)
-    
-
+        return self.Ly * self.states_uc * cellx + self.states_uc * celly + basis * (2 if self.spinful else 1)

@@ -11,13 +11,18 @@ from . import _pythtb
 import scipy.linalg as la
 
 class Supercell(Model):
-    def __init__(self, tbmodel, Lx : int, Ly : int, spinful : None):
+    def __init__(self, tbmodel, Lx : int, Ly : int, spinful : bool = False):
         self.Lx = Lx
         self.Ly = Ly
 
         self.model = self._make_supercell(tbmodel)
 
-        super().__init__(self.model, spinful, super()._calc_states_uc(tbmodel, spinful))
+        super().__init__(tbmodel = self.model, 
+                         spinful = spinful,
+                         states_uc = super()._calc_states_uc(tbmodel, spinful),
+                         Lx = self.Lx,
+                         Ly = self.Ly
+                        )
 
     def _make_supercell(self, tbmodel):
         if (self.Lx != 1 and self.Ly != 1):

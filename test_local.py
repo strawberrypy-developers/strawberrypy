@@ -23,16 +23,14 @@ assert np.allclose(lcm_ptb, lcm_tbm)
 
 # New version
 t = time()
-hmodel_ptb_finite = finite_model.FiniteModel(hmodel_ptb, 8, 8, False)
-hmodel_tbm_finite = finite_model.FiniteModel(hmodel_tbm, 8, 8, False)
-hmodel_ptb_finite.add_onsite_disorder(3, seed)
-hmodel_tbm_finite.add_onsite_disorder(3, seed)
+hmodel_ptb_finite_class = finite_model.FiniteModel(hmodel_ptb, 8, 8, False)
+hmodel_tbm_finite_class = finite_model.FiniteModel(hmodel_tbm, 8, 8, False)
 
-assert np.allclose(hmodel_ptb_finite.r, hmodel_tbm_finite.r)
-assert np.allclose(hmodel_ptb_finite.hamiltonian, hmodel_tbm_finite.hamiltonian)
+assert np.allclose(hmodel_ptb_finite_class.r, hmodel_tbm_finite_class.r)
+assert np.allclose(hmodel_ptb_finite_class.hamiltonian, hmodel_tbm_finite_class.hamiltonian)
 
-lcm_ptb_2 = hmodel_ptb_finite.local_chern_marker()
-lcm_tbm_2 = hmodel_tbm_finite.local_chern_marker()
+lcm_ptb_2 = hmodel_ptb_finite_class.local_chern_marker()
+lcm_tbm_2 = hmodel_tbm_finite_class.local_chern_marker()
 #print("New strawberrypy: ", time() - t)
 
 assert np.allclose(lcm_ptb_2, lcm_tbm_2)
@@ -48,10 +46,10 @@ lcm_tbm = strawberrypy.local_chern_marker(hmodel_tbm_finite, 8, 8, macroscopic_a
 assert np.allclose(lcm_ptb, lcm_tbm)
 
 # Disorder - new method
-hmodel_ptb_finite.add_onsite_disorder(3, seed)
-hmodel_tbm_finite.add_onsite_disorder(3, seed)
-lcm_ptb_2 = hmodel_ptb_finite.local_chern_marker(macroscopic_average = True, cutoff = 1.5)
-lcm_tbm_2 = hmodel_tbm_finite.local_chern_marker(macroscopic_average = True, cutoff = 1.5)
+hmodel_ptb_finite_class.add_onsite_disorder(3, seed)
+hmodel_tbm_finite_class.add_onsite_disorder(3, seed)
+lcm_ptb_2 = hmodel_ptb_finite_class.local_chern_marker(macroscopic_average = True, cutoff = 1.5)
+lcm_tbm_2 = hmodel_tbm_finite_class.local_chern_marker(macroscopic_average = True, cutoff = 1.5)
 assert np.allclose(lcm_ptb_2, lcm_tbm_2)
 
 # Final check with disorder
