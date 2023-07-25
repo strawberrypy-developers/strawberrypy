@@ -5,3 +5,5 @@ strawberrypy/_tbmodels/__pycache__/
 .devcontainer/
 .pytest_cache
 .DS_Store
+local_marker/
+strawberrypy.egg-info/

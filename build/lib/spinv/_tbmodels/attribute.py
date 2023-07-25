@@ -1,18 +1,66 @@
 import numpy as np
 import tbmodels as tbm
 
-def get_positions(model, nx_sites : int, ny_sites : int):
+def _reciprocal_vec(model):
     """
-    Returns the cartesian coordinates of the states in a finite sample of tbmodels.Model
+    Returns the cartesian coordinates of the reciprocal lattice vectors
     """
-    
+    b_matrix = model.reciprocal_lattice
+    b1 = b_matrix[0,:]
+    b2 = b_matrix[1,:]
+    return b1, b2
+
+def get_positions(model, nx_sites = 1, ny_sites = 1):
+    """
+    Returns the cartesian coordinates of the orbitals centers states for a tbmodels.Model
+    """
     positions = np.copy(model.pos)
     for i in range(model.pos.shape[0]):
         positions[i][0] *= nx_sites
         positions[i][1] *= ny_sites
         cartesian_pos = np.dot(positions[i], model.uc)
         positions[i] = cartesian_pos
+
+    #ATT: fa la stessa cosa della funzione orb_cart per nx=ny=1
+
     return positions
+
+def _orb_cart(model):
+    #returns position of orbitals in cartesian coordinates
+    orb_red = model.pos
+    n_orb = len(model.pos)
+    lat_super = model.uc
+
+    orb_c = []
+    for i in range (n_orb):
+        orb_c.append((np.matmul(lat_super.transpose(),orb_red[i].reshape(-1,1))).squeeze())
+    orb_c = np.array(orb_c)
+    return orb_c
+
+def get_hamiltonian(model, point):
+    """
+    Returns the hamiltonian at the given k point and the number of occupied states for a tbmodels.Model
+    """
+
+    return model.hamilton(point, convention = 1), model.occ
+
+def calc_states_uc(model):
+    """
+    Returns the number of states per unit cell of a tbmodels.Model
+    """
+    return model.size
+
+def initialize_mask(model):
+    """
+    Returns a list of True for each state of the model
+    """
+    return np.array([True for _ in range(model.size)])
+
+def calc_uc_vol(model):
+    """
+    Returns the volume of a 2D unit cell
+    """
+    return np.linalg.norm(np.cross(model.uc[0], model.uc[1]))
 
 def cut_piece_tbm(source_model, num : int, fin_dir : int, dimk : int, glue : bool = False):
     """
@@ -118,101 +166,15 @@ def cut_piece_tbm(source_model, num : int, fin_dir : int, dimk : int, glue : boo
     
     return model
 
-def make_finite(model: tbm.Model, nx_sites: int, ny_sites: int):
+def make_finite(model, lx, ly):
     """
-    Make a finite mdoel along x and y direction by first cutting on the y direction and then on the x. This convention has been used to track the positions in the functions
-
-        Args:
-        - model : instance of the model, which should be periodic in both x and y direction
-        - nx_sites, ny_sites : number of sites of the finite sample in both directions
-
-        Returns:
-        - model : the finite model
+    Returns an instance of a tbmodels.Model with OBCs
     """
 
-    if not (nx_sites > 0 and ny_sites > 0):
+    if not (lx > 0 and ly > 0):
         raise RuntimeError("Number of sites along finite direction must be greater than 0")
 
-    ribbon = cut_piece_tbm(model, num = ny_sites, fin_dir = 1, dimk = 1, glue = False)
-    finite = cut_piece_tbm(ribbon, num = nx_sites, fin_dir = 0, dimk = 0, glue = False)
-    
+    ribbon = cut_piece_tbm(model, num = ly, fin_dir = 1, dimk = 1, glue = False)
+    finite = cut_piece_tbm(ribbon, num = lx, fin_dir = 0, dimk = 0, glue = False)
+
     return finite
-
-def make_heterostructure(model1 : tbm.Model , model2 : tbm.Model,  nx_sites : int, ny_sites : int, direction : int, start : int, stop : int):
-    """
-    Modify a finite model by merging another system in it. The system will be split in the direction starting from start.
-
-        Args:
-        - model1, model2: the models which composes the heterostructure
-        - nx_sites, ny_sites : x and y length of the finite system
-        - direction : direction in which the splitting happen, allowed 0 for 'x' or 1 for 'y'
-        - start : starting point for the splitting in the 'direction' direction
-        - end : end point of the splitting in the 'direction' direction
-
-        Returns:
-        - model : the model composed my the two subsystems
-    """
-
-    # Number of states per unit cell
-    atoms_uc = int(model1.size / (nx_sites * ny_sites))
-
-    # Check validity of input data
-    if not start < stop:
-        raise RuntimeError("Starting point is greater or equal to the end point")
-    if not (start >= 0 and start < (nx_sites if direction == 0 else ny_sites)):
-        raise RuntimeError("Start point value not allowed")
-    if not (stop > 0 and stop < (nx_sites if direction == 0 else ny_sites)):
-        raise RuntimeError("End point value not allowed")
-    if direction not in [0, 1]:
-        raise RuntimeError("Direction not allowed: insert 0 for 'x' and 1 for 'y'")
-
-    # Assert the model is the same
-    if not (model1.size == model2.size and np.allclose(model1.pos, model2.pos) and np.allclose(model1.uc, model2.uc) and model1.occ == model2.occ):
-        raise RuntimeError("The models to merge must be the same model with different parameters")
-
-    # Make a copy of the model and remove all onsite terms
-    onsite1 = np.diag(list(model1.hop.values())[0]).copy()
-    onsite2 = np.diag(list(model2.hop.values())[0]).copy()
-    
-    if direction == 0:
-        # Splitting along the x direction
-        ind = np.array([[(start + i) * ny_sites * atoms_uc + j * atoms_uc for j in range(ny_sites)] for i in range(stop - start + 1)]).flatten()
-    else:
-        # Splitting along the y direction
-        ind = np.array([[i * ny_sites * atoms_uc + start * atoms_uc + j * atoms_uc for j in range(stop - start + 1)] for i in range(nx_sites)]).flatten()
-
-    for i in ind:
-        for j in range(atoms_uc):
-            onsite1[i + j] = onsite2[i + j]
-    onsite1 = [2 * term for term in onsite1]
-
-    # Indices of every atom in the selected cells, not only of the initial atom of the cell
-    indices = np.array([[i + j for j in range(atoms_uc)] for i in ind]).flatten()
-
-    # Hopping amplitudes and positions
-    hoppings1 = [[key, val] for key, val in iter(model1.hop.items())][0][1]
-    hoppings2 = [[key, val] for key, val in iter(model2.hop.items())][0][1]
-    hopping_list = []
-
-    # Cycle over the rows of the hopping matrix
-    for k in range(hoppings1.shape[0]):
-
-        # Cycle over the columns of the hopping matrix
-        for l in range(hoppings1.shape[1]):
-            if k == l: continue
-
-            # Hopping amplitudes
-            amplitude1 = hoppings1[k][l]
-            amplitude2 = hoppings2[k][l]
-                    
-            if k in indices:
-                if np.absolute(amplitude2) < 1e-10: continue
-                hopping_list.append([amplitude2, k, l, [0 for i in range(model1.dim)]])
-            else:
-                if np.absolute(amplitude1) < 1e-10: continue
-                hopping_list.append([amplitude1, k, l, [0 for i in range(model1.dim)]])
-
-    newmodel = tbm.Model.from_hop_list(hop_list = hopping_list, on_site = onsite1, size = model1.size, dim = model1.dim,
-        occ = model1.occ, uc = model1.uc, pos = model1.pos, contains_cc = False)
-
-    return newmodel
