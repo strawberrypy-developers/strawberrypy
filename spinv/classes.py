@@ -150,7 +150,8 @@ class Model():
 
     def add_vacancies(self, vacancies_list):
         """
-        Add vacancies in the systems by removing a site in the lattice.
+        Add vacancies in the systems by removing a site in the lattice. In order to enforce the half-filling, if the model is not
+        spinful, an even number ov vacancies is required.
 
         Args:
             - vacancies_list: a list of [cell_x, cell_y, basis] pointing to the cell and atom to be removed. Multiple values at once are allowed
@@ -174,14 +175,7 @@ class Model():
         if np.array(vacancies).shape == ():
             self._mask[vacancies] = False
             if not self.spinful:
-                ham = np.delete(ham, vacancies, 0)
-                ham = np.delete(ham, vacancies, 1)
-                for dim in range(len(self.r)):
-                    pos[dim] = np.delete(pos[dim], vacancies, 0)
-                    pos[dim] = np.delete(pos[dim], vacancies, 1)
-                cart_pos = np.delete(cart_pos, vacancies)
-                nocc -= 1
-                norbs -= 1
+                raise RuntimeError("Adding an odd number of vacancies causes the model to no longer be half-filled")
             else:
                 self._mask[vacancies + 1] = False
                 for _ in range(2):
@@ -193,10 +187,16 @@ class Model():
                     cart_pos = np.delete(cart_pos, vacancies, 1)
                     sz = np.delete(sz, vacancies, 0)
                     sz = np.delete(sz, vacancies, 1)
-                nocc -= 2
+                nocc -= 1
                 norbs -= 2
         else:
+            # Avoid relabelling
             vacancies = np.sort(vacancies)[::-1]
+
+            # Check if the number of vacancies is odd if the model is not spinful
+            if (not self.spinful) and (len(vacancies) % 2 == 1):
+                raise RuntimeError("Adding an odd number of vacancies causes the model to no longer be half-filled")
+
             for h in vacancies:
                 self._mask[h] = False
                 if not self.spinful:
@@ -206,7 +206,7 @@ class Model():
                         pos[dim] = np.delete(pos[dim], h, 0)
                         pos[dim] = np.delete(pos[dim], h, 1)
                     cart_pos = np.delete(cart_pos, h, 1)
-                    nocc -= 1
+                    nocc -= 0.5
                     norbs -= 1
                 else:
                     self._mask[h] = False
@@ -220,12 +220,12 @@ class Model():
                         cart_pos = np.delete(cart_pos, h, 1)
                         sz = np.delete(sz, h, 0)
                         sz = np.delete(sz, h, 1)
-                    nocc -= 2
+                    nocc -= 1
                     norbs -= 2
         
         self.hamiltonian = ham
         self.sz = sz
-        self.n_occ = nocc
+        self.n_occ = int(nocc)
         self.disordered = True
         self.cart_positions = cart_pos.T
 
