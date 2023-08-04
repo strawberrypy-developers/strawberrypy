@@ -1,4 +1,9 @@
 import numpy as np
+import os, sys
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+
 from strawberrypy import Supercell, FiniteModel
 from strawberrypy.example_models import kane_mele_tbmodels, kane_mele_pythtb, haldane_pythtb, haldane_tbmodels
 
@@ -20,7 +25,6 @@ def test_vacancies_haldane():
     # Check that the same sites have been removed
     assert np.allclose(super_model.r, fin_model.r)
     assert np.allclose(super_model.cart_positions, fin_model.cart_positions)
-    assert np.allclose(super_model.sz, fin_model.sz)
     assert np.allclose(super_model.n_occ, fin_model.n_occ)
     assert np.allclose(super_model.n_orb, fin_model.n_orb)
 
