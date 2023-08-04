@@ -1,6 +1,4 @@
 __pycache__/
-strawberrypy/__pycache__/
-strawberrypy/_pythtb/__pycache__/
-strawberrypy/_tbmodels/__pycache__/
 .devcontainer/
 .pytest_cache
+*.txt
