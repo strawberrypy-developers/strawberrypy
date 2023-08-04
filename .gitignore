@@ -4,3 +4,4 @@ __pycache__/
 .DS_Store
 local_marker/
 strawberrypy.egg-info/
+tests/

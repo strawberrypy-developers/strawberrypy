@@ -1,5 +1,4 @@
-from .package import single_point_spin_chern, single_point_chern
-from .package import make_finite, make_heterostructure
-from .package import onsite_disorder
-from .package import local_chern_marker
+from .classes import Model
+from .supercell import Supercell
+from .finite_model import FiniteModel
 from . import example_models
