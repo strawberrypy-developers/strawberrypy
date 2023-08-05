@@ -1,7 +1,8 @@
 __pycache__/
+strawberrypy/__pycache__/
+strawberrypy/_pythtb/__pycache__/
+strawberrypy/_tbmodels/__pycache__/
+tests/__pycache__
 .devcontainer/
 .pytest_cache
 .DS_Store
-local_marker/
-strawberrypy.egg-info/
-tests/

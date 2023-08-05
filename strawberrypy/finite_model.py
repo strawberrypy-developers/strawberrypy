@@ -156,6 +156,193 @@ class FiniteModel(Model):
         else:
             return np.array(lattice_chern), gs_projector
         
+    def local_spin_chern_marker(self, direction : int = None, start : int = 0, return_projector : bool = None, projector : np.ndarray = None, macroscopic_average : bool = False, cutoff : float = 0.8, check_gap : bool = False):
+        """
+        Evaluate the spin Chern marker on the whole lattice if direction is None. If direction is not None evaluates the spin Chern marker along direction starting from start.
+            
+        Args:
+            - direction: direction along which compute the local spin Chern marker, default is None (returns the whole lattice spin Chern marker), allowed values are 0 for 'x' direction and 1 for 'y' direction
+            - start: if direction is not None, is the coordinate of the unit cell at the start of the evaluation of the spin Chern marker
+            - return_projector : if True, returns a list of the two individual "positive" P+ and "negative" P- projectors at the end of the calculation, default is False
+            - projector : input the list of the individual "positive" P+ and "negative" P- projectors to be used in the calculation. Default is None, which means they are computed from the model
+            - macroscopic_average : if True, returns the local spin Chern marker averaged over a radius equal to the cutoff
+            - cutoff : cutoff set for the calculation of averages
+            - check_gap : if True, checks that the gap of PSzP does not close (default is False)
+
+        Returns:
+            - lattice_chern: local spin Chern marker of the whole lattice if direction is None
+            - lcm_direction: local spin Chern marker along direction starting from start
+            - projector : list composed by the individual "positive" P+ and "negative" P- projectors, returned if return_projector is set True (default is False)
+        """
+        if not self.spinful:
+            raise RuntimeError("Cannot evaluate the local spin Chern marker for a spinless model.")
+
+        # Check input variables
+        if direction not in [None, 0, 1]:
+            raise RuntimeError("Direction allowed are None, 0 (which stands for x), and 1 (which stands for y)")
+        
+        if direction is not None:
+            if direction == 0:
+                if start not in range(self.Ly): raise RuntimeError("Invalid start parameter (must be within [0, ny_sites - 1])")
+            else:
+                if start not in range(self.Lx): raise RuntimeError("Invalid start parameter (must be within [0, nx_sites - 1])")
+
+        if projector is None:
+            # Evaluate the model to get the eigenvectors
+            _, eigenvecs = la.eigh(self.hamiltonian)
+            canonical_to_H = eigenvecs
+
+            # S^z and PS^zP matrix in the eigenvector basis
+            pszp = canonical_to_H.T[:self.n_occ, :].conjugate() @ (self.sz @ canonical_to_H)[:, :self.n_occ]
+            evals, evecs = la.eigh(pszp)
+
+            # Check that the gap in PSzP does not close
+            if check_gap and evals[int(self.n_occ // 2)] - evals[int(self.n_occ // 2) - 1] < 1e-14:
+                raise RuntimeError("PSzP gap closes!")
+            
+            # Eigevectors by row
+            evecs = (canonical_to_H[:, :self.n_occ] @ evecs).conjugate()
+
+            # Now I build the projector onto the lower and higher eigenvalues
+            lowerproj = contract("ki,ji->kj", evecs[:, :int(0.5 * evecs.shape[1])], evecs[:, :int(0.5 * evecs.shape[1])].conjugate())
+            higherproj = contract("ki,ji->kj", evecs[:, int(0.5 * evecs.shape[1]):], evecs[:, int(0.5 * evecs.shape[1]):].conjugate())
+        else:
+            higherproj = projector[0]
+            lowerproj = projector[1]
+
+        # Chern marker operator
+        comm_rx_high = self.r[0] @ higherproj - higherproj @ self.r[0]
+        comm_ry_high = self.r[1] @ higherproj - higherproj @ self.r[1]
+        comm_rx_low = self.r[0] @ lowerproj - lowerproj @ self.r[0]
+        comm_ry_low = self.r[1] @ lowerproj - lowerproj @ self.r[1]
+        chern_operator_plus = np.imag(higherproj @ comm_rx_high @ comm_ry_high)
+        chern_operator_minus = np.imag(lowerproj @ comm_rx_low @ comm_ry_low)
+        chern_operator_plus *= -4 * np.pi / self.uc_vol
+        chern_operator_minus *= -4 * np.pi / self.uc_vol
+
+        # If macroscopic average I have to compute the lattice values with the averages first
+        if macroscopic_average or self.disordered:
+            chernmarker_plus = self._average_over_radius(np.diag(chern_operator_plus), cutoff)
+            chernmarker_minus = self._average_over_radius(np.diag(chern_operator_minus), cutoff)
+        
+        if direction is not None:
+            # Evaluate index of the selected direction
+            indices = self._xy_to_line('x' if direction == 1 else 'y', start)
+
+            # If macroscopic average consider the averaged lattice, else the Chern operators
+            if macroscopic_average or self.disordered:
+                lcm_plus = [chernmarker_plus[indices[i]] for i in range(len(indices))]
+                lcm_minus = [chernmarker_minus[indices[i]] for i in range(len(indices))]
+            else:
+                lcm_plus = [np.sum([chern_operator_plus[indices[self.states_uc * i + j], indices[self.states_uc * i + j]] for j in range(self.states_uc)]) for i in range(int(len(indices) / self.states_uc))]
+                lcm_minus = [np.sum([chern_operator_minus[indices[self.states_uc * i + j], indices[self.states_uc * i + j]] for j in range(self.states_uc)]) for i in range(int(len(indices) / self.states_uc))]
+            
+            lcm_direction = [np.fmod(0.5 * (lcm_plus[i] - lcm_minus[i]), 2) for i in range(len(lcm_plus))]
+
+            if not return_projector:
+                return np.array(np.abs(lcm_direction))
+            else:
+                return np.array(np.abs(lcm_direction)), [higherproj, lowerproj]
+        
+        # If not macroscopic averages I sum the values of the Chern operators of the unit cell
+        if not macroscopic_average and not self.disordered:
+            chernmarker_plus = [np.sum([chern_operator_plus[self.states_uc * i + j, self.states_uc * i + j] for j in range(self.states_uc)]) for i in range(int(len(chern_operator_plus) / self.states_uc))]
+            chernmarker_minus = [np.sum([chern_operator_minus[self.states_uc * i + j, self.states_uc * i + j] for j in range(self.states_uc)]) for i in range(int(len(chern_operator_minus) / self.states_uc))]
+            chernmarker_plus = np.repeat(chernmarker_plus, self.states_uc)
+            chernmarker_minus = np.repeat(chernmarker_minus, self.states_uc)
+
+        lattice_chern = np.fmod(0.5 * (np.array(chernmarker_plus) - np.array(chernmarker_minus)), 2)
+        if not return_projector:
+            return np.array(np.abs(lattice_chern))
+        else:
+            return np.array(np.abs(lattice_chern)), [higherproj, lowerproj]
+
+    def localization_marker(self, direction : int = None, start : int = 0, return_projector : bool = None, projector : np.ndarray = None, macroscopic_average : bool = False, cutoff : float = 0.8):
+        """
+        Evaluate the localization marker on the whole lattice if direction is None. If direction is not None evaluates the localization marker along direction starting from start.
+            
+        Args:
+            - direction : direction along which compute the local localization marker, default is None (returns the whole lattice localization marker), allowed values are 0 for 'x' direction and 1 for 'y' direction
+            - start : if direction is not None, is the coordinate of the unit cell at the start of the evaluation of the localization marker
+            - return_projector : if True, returns the ground state projector at the end of the calculation, default is False
+            - projector : input the ground state projector to be used in the calculation. Default is None, which means it is computed from the model
+            - macroscopic_average : if True, returns the local spin Chern marker averaged over a radius equal to the cutoff
+            - cutoff : cutoff set for the calculation of averages
+
+        Returns:
+            - lattice_loc : local localization marker of the whole lattice if direction is None
+            - loc_direction : local localization marker along direction starting from start if direction is not None
+            - projector : ground state projector, returned if return_projector is set True (default is False)
+        """
+
+        # BEWARE: THIS FUNCTION WORKS ONLY WITH TBMODELS AND PYTHTB UP TO NOW
+        if self.model == None:
+            raise NotImplementedError("The localization marker is implemented only for TBmodels and PythTB up to now.")
+
+        # Check input variables
+        if direction not in [None, 0, 1]:
+            raise RuntimeError("Direction allowed are None, 0 (which stands for x), and 1 (which stands for y)")
+        
+        if direction is not None:
+            if direction == 0:
+                if start not in range(self.Ly): raise RuntimeError("Invalid start parameter (must be within [0, ny_sites - 1])")
+            else:
+                if start not in range(self.Lx): raise RuntimeError("Invalid start parameter (must be within [0, nx_sites - 1])")
+
+        if projector is None:
+            # Eigenvectors at \Gamma
+            _, eigenvecs = la.eigh(self.hamiltonian)
+
+            # Build the ground state projector
+            gs_projector = contract("ji,ki->jk", eigenvecs[:, :int(0.5 * len(eigenvecs))], eigenvecs[:, :int(0.5 * len(eigenvecs))].conjugate())
+        else:
+            gs_projector = projector
+
+        # Reduced coordinate
+        if isinstance(self.model, tbm.Model):
+            inv = la.inv(self.model.uc)
+        elif isinstance(self.model, ptb.tb_model):
+            inv = la.inv(self.model.get_lat())
+        else:
+            raise NotImplementedError("Invalid model instance.")
+        positions = np.array([np.dot([self.r[0][i, i], self.r[1][i, i]], inv) for i in range(len(self.r[0]))])
+
+        # Position operator on a square lattice (reduced coordinate adjusted by the dimension of the sample)
+        rx = np.diag(positions[:, 0]); ry = np.diag(positions[:, 1])
+
+        # Local marker operator
+        commxgsp = rx @ gs_projector - gs_projector @ rx
+        commygsp = ry @ gs_projector - gs_projector @ ry
+        localization_operator = -np.real(gs_projector @ commxgsp @ commxgsp) - np.real(gs_projector @ commygsp @ commygsp)
+
+        # If macroscopic average I have to compute the lattice values with the averages first
+        if macroscopic_average or self.disordered:
+            lattice_loc = self._average_over_radius(np.diag(localization_operator), cutoff)
+        
+        if direction is not None:
+            # Evaluate index of the selected direction
+            indices = self._xy_to_line('x' if direction == 1 else 'y', start)
+
+            # If macroscopic average consider the averaged lattice, else the localization operator
+            if macroscopic_average or self.disordered:
+                loc_direction = [lattice_loc[indices[i]] for i in range(len(indices))]
+            else:
+                loc_direction = [np.sum([localization_operator[indices[self.states_uc * i + j], indices[self.states_uc * i + j]] for j in range(self.states_uc)]) for i in range(int(len(indices) / self.states_uc))]
+            
+            if not return_projector:
+                return np.array(loc_direction)
+            else:
+                return np.array(loc_direction), gs_projector
+
+        if not macroscopic_average and not self.disordered:
+            lattice_loc = [np.sum([localization_operator[i * self.states_uc + k, i * self.states_uc + k] for k in range(self.states_uc)]) for i in range(int(len(localization_operator) / self.states_uc))]
+            lattice_loc = np.repeat(lattice_loc, self.states_uc)
+
+        if not return_projector:
+            return np.array(lattice_loc)
+        else:
+            return np.array(lattice_loc), gs_projector
+        
     #################################################
     # Utility functions
     #################################################
