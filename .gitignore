@@ -6,3 +6,5 @@ tests/__pycache__
 .devcontainer/
 .pytest_cache
 .DS_Store
+build/
+strawberrypy.egg-info/

@@ -55,6 +55,7 @@ class FiniteModel(Model):
         else:
             raise NotImplementedError("Invalid model instance.")
 
+
     def _calc_uc_vol(self):
         """
         Returns the volume of a 2D unit cell
@@ -82,15 +83,15 @@ class FiniteModel(Model):
     # Local markers
     #################################################
 
-    def local_chern_marker(self, direction : int = None, start : int = 0, return_projector : bool = False, projector : np.ndarray = None, macroscopic_average : bool = False, cutoff : float = 0.8):
+    def local_chern_marker(self, direction : int = None, start : int = 0, return_projector : bool = False, input_projector : np.ndarray = None, macroscopic_average : bool = False, cutoff : float = 0.8):
         """
-        Evaluate the Chern marker on the whole lattice if direction is None. If direction is not None evaluates the Z Chern marker along direction starting from start.
+        Evaluate the local Chern marker on the whole lattice if direction is None. If direction is not None evaluates the Chern marker along direction starting from start.
         
         Args:
-            - direction : direction along which compute the local Chern marker, default is None (returns the whole lattice Chern marker), allowed values are 0 for 'x' direction and 1 for 'y' direction
+            - direction : direction along which compute the local Chern marker, default is None (returns the marker on the whole lattice), allowed values are 0 for 'x' direction and 1 for 'y' direction
             - start : if direction is not None, is the coordinate of the unit cell at the start of the evaluation of the Chern marker
             - return_projector : if True, returns the ground state projector at the end of the calculation, default is False
-            - projector : input the ground state projector to be used in the calculation. Default is None, which means it is computed from the model
+            - input_projector : input the ground state projector to be used in the calculation. Default is None, which means it is computed from the model
             - macroscopic_average : if True, returns the local Chern marker averaged over a radius equal to the cutoff
             - cutoff : cutoff set for the calculation of averages
 
@@ -113,14 +114,14 @@ class FiniteModel(Model):
         if len(self.r) != 2:
             raise NotImplementedError("The local Chern marker is not yet implemented for dimensionality different than 2")
 
-        if projector is None:
+        if input_projector is None:
             # Eigenvectors at \Gamma
             _, eigenvecs = la.eigh(self.hamiltonian)
 
             # Build the ground state projector
             gs_projector = contract("ji,ki->jk", eigenvecs[:, :self.n_occ], eigenvecs[:, :self.n_occ].conjugate())
         else:
-            gs_projector = projector
+            gs_projector = input_projector
 
         # Chern marker operator
         commut_rx_gsp = self.r[0] @ gs_projector - gs_projector @ self.r[0]
@@ -156,22 +157,23 @@ class FiniteModel(Model):
         else:
             return np.array(lattice_chern), gs_projector
         
-    def local_spin_chern_marker(self, direction : int = None, start : int = 0, return_projector : bool = None, projector : np.ndarray = None, macroscopic_average : bool = False, cutoff : float = 0.8, check_gap : bool = False):
+
+    def local_spin_chern_marker(self, direction : int = None, start : int = 0, return_projector : bool = None, input_projector : np.ndarray = None, macroscopic_average : bool = False, cutoff : float = 0.8, check_gap : bool = False):
         """
-        Evaluate the spin Chern marker on the whole lattice if direction is None. If direction is not None evaluates the spin Chern marker along direction starting from start.
+        Evaluate the local spin Chern marker on the whole lattice if direction is None. If direction is not None evaluates the spin Chern marker along direction starting from start.
             
         Args:
-            - direction: direction along which compute the local spin Chern marker, default is None (returns the whole lattice spin Chern marker), allowed values are 0 for 'x' direction and 1 for 'y' direction
+            - direction: direction along which compute the local spin Chern marker, default is None (returns the marker on the whole lattice), allowed values are 0 for 'x' direction and 1 for 'y' direction
             - start: if direction is not None, is the coordinate of the unit cell at the start of the evaluation of the spin Chern marker
             - return_projector : if True, returns a list of the two individual "positive" P+ and "negative" P- projectors at the end of the calculation, default is False
-            - projector : input the list of the individual "positive" P+ and "negative" P- projectors to be used in the calculation. Default is None, which means they are computed from the model
+            - input_projector : input the list of the individual "positive" P+ and "negative" P- projectors to be used in the calculation. Default is None, which means they are computed from the model
             - macroscopic_average : if True, returns the local spin Chern marker averaged over a radius equal to the cutoff
             - cutoff : cutoff set for the calculation of averages
             - check_gap : if True, checks that the gap of PSzP does not close (default is False)
 
         Returns:
-            - lattice_chern: local spin Chern marker of the whole lattice if direction is None
-            - lcm_direction: local spin Chern marker along direction starting from start
+            - lattice_chern : local spin Chern marker of the whole lattice if direction is None
+            - lcm_direction : local spin Chern marker along direction starting from start
             - projector : list composed by the individual "positive" P+ and "negative" P- projectors, returned if return_projector is set True (default is False)
         """
         if not self.spinful:
@@ -187,7 +189,7 @@ class FiniteModel(Model):
             else:
                 if start not in range(self.Lx): raise RuntimeError("Invalid start parameter (must be within [0, nx_sites - 1])")
 
-        if projector is None:
+        if input_projector is None:
             # Evaluate the model to get the eigenvectors
             _, eigenvecs = la.eigh(self.hamiltonian)
             canonical_to_H = eigenvecs
@@ -207,8 +209,8 @@ class FiniteModel(Model):
             lowerproj = contract("ki,ji->kj", evecs[:, :int(0.5 * evecs.shape[1])], evecs[:, :int(0.5 * evecs.shape[1])].conjugate())
             higherproj = contract("ki,ji->kj", evecs[:, int(0.5 * evecs.shape[1]):], evecs[:, int(0.5 * evecs.shape[1]):].conjugate())
         else:
-            higherproj = projector[0]
-            lowerproj = projector[1]
+            higherproj = input_projector[0]
+            lowerproj = input_projector[1]
 
         # Chern marker operator
         comm_rx_high = self.r[0] @ higherproj - higherproj @ self.r[0]
@@ -257,7 +259,8 @@ class FiniteModel(Model):
         else:
             return np.array(np.abs(lattice_chern)), [higherproj, lowerproj]
 
-    def localization_marker(self, direction : int = None, start : int = 0, return_projector : bool = None, projector : np.ndarray = None, macroscopic_average : bool = False, cutoff : float = 0.8):
+
+    def localization_marker(self, direction : int = None, start : int = 0, return_projector : bool = None, input_projector : np.ndarray = None, macroscopic_average : bool = False, cutoff : float = 0.8):
         """
         Evaluate the localization marker on the whole lattice if direction is None. If direction is not None evaluates the localization marker along direction starting from start.
             
@@ -265,7 +268,7 @@ class FiniteModel(Model):
             - direction : direction along which compute the local localization marker, default is None (returns the whole lattice localization marker), allowed values are 0 for 'x' direction and 1 for 'y' direction
             - start : if direction is not None, is the coordinate of the unit cell at the start of the evaluation of the localization marker
             - return_projector : if True, returns the ground state projector at the end of the calculation, default is False
-            - projector : input the ground state projector to be used in the calculation. Default is None, which means it is computed from the model
+            - input_projector : input the ground state projector to be used in the calculation. Default is None, which means it is computed from the model
             - macroscopic_average : if True, returns the local spin Chern marker averaged over a radius equal to the cutoff
             - cutoff : cutoff set for the calculation of averages
 
@@ -289,14 +292,14 @@ class FiniteModel(Model):
             else:
                 if start not in range(self.Lx): raise RuntimeError("Invalid start parameter (must be within [0, nx_sites - 1])")
 
-        if projector is None:
+        if input_projector is None:
             # Eigenvectors at \Gamma
             _, eigenvecs = la.eigh(self.hamiltonian)
 
             # Build the ground state projector
             gs_projector = contract("ji,ki->jk", eigenvecs[:, :int(0.5 * len(eigenvecs))], eigenvecs[:, :int(0.5 * len(eigenvecs))].conjugate())
         else:
-            gs_projector = projector
+            gs_projector = input_projector
 
         # Reduced coordinate
         if isinstance(self.model, tbm.Model):
@@ -343,58 +346,322 @@ class FiniteModel(Model):
         else:
             return np.array(lattice_loc), gs_projector
         
-    #################################################
-    # Utility functions
-    #################################################
 
-    def _xy_to_line(self, fixed_coordinate : str, xy : int):
+    def local_Z2_marker(self, direction : int = None, start : int = 0, return_projector : bool = None, input_projector = None, macroscopic_average : bool = False, cutoff : float = 0.8, sd_minimization : bool = False, sd_beta : float = 0.001, sd_epsilon : float = 1e-6, sd_maxiter : int = 200):
         """
-        Returns the indices of the sites of the lattice keeping fixed the direction fixed_coordinate starting from xy
+        Evaluate the local Z2 marker on the whole lattice if direction is None. If direction is not None evaluates the local Z2 marker along direction starting from start.
+            
+        Args:
+            - direction: direction along which compute the local Z2 marker, default is None (returns the marker on the whole lattice), allowed values are 0 for 'x' direction and 1 for 'y' direction
+            - start: if direction is not None, is the coordinate of the unit cell at the start of the evaluation of the Z2 marker
+            - return_projector : if True, returns a list of the two individual P1 and P2 projectors at the end of the calculation, default is False
+            - input_projector : input the list of the individual P1 and P2 projectors to be used in the calculation. Default is None, which means they are computed from the model
+            - macroscopic_average : if True, returns the local Z2 marker averaged over a radius equal to the cutoff
+            - cutoff : cutoff set for the calculation of averages
+            - sd_minimization : if True, a steepest descent minimization is performed after the division into time-reversal-conjugated subspaces (default is False)
+            - sd_beta : the "length" of a step of a single of steepest descent minimization
+            - sd_epsilon : threshold for convergence of the steepest descent alrogithm
+            - sd_maxiter : maximum number of iterations allowed for the steepest descent procedure
+
+        Returns:
+            - z2marker : local Z2 marker of the whole lattice if direction is None
+            - lz2_direction : local Z2 marker along direction starting from start
+            - projector : list composed by the individual P1 and P2 projectors, returned if return_projector is set True (default is False)
         """
-        if fixed_coordinate == 'x':
-            return np.array([self.states_uc * xy * self.Ly + i for i in range(self.states_uc * self.Ly) if self._mask[self.states_uc * xy * self.Ly + i]]).flatten().tolist()
-        elif fixed_coordinate == 'y':
-            indices = []
-            for i in range(self.Lx):
-                for j in range(self.states_uc):
-                    if self._mask[self.states_uc * xy + self.states_uc * self.Ly * i + j]:
-                        indices.append(self.states_uc * xy + self.states_uc * self.Ly * i + j)
-            return np.array(indices)
-        else:
-            raise RuntimeError("Direction not allowed, only 'x' or 'y'")
-
-    #################################################
-    # Macroscopic average functions
-    #################################################
-
-    def _lattice_contraction(self, cutoff : float):
-        """
-        Defines which atomic sites must be contracted on one site, for each site of the lattice
-        """
-        contraction = []
-
-        rx = self.cart_positions[:, 0]; ry = self.cart_positions[:, 1]
-        def within_range(current, trial):
-            return True if (rx[current] - rx[trial]) ** 2 + (ry[current] - ry[trial]) ** 2 - cutoff ** 2 < 1e-6 else False
-
-        for current in range(len(rx)):
-            contraction.append([trial for trial in range(len(rx)) if within_range(current, trial)])
-
-        return contraction
-
-    def _average_over_radius(self, vals, cutoff : float):
-        """
-        Average vals over the contraction of the lattice defined by the cutoff radius
-        """
-        return_vals = []
-        contraction = self._lattice_contraction(cutoff)
-
-        # Macroscopic average within a certain radius
-        for current in range(len(self.cart_positions[:, 0])):
-            tmp = [vals[ind] for ind in contraction[current]]
-            if not len(tmp) == 0:
-                return_vals.append(np.sum(tmp) / (len(tmp) / self.states_uc))
+        # Check input variables
+        if direction not in [None, 0, 1]:
+            raise RuntimeError("Direction allowed are None, 0 (which stands for x), and 1 (which stands for y)")
+        
+        if direction is not None:
+            if direction == 0:
+                if start not in range(self.Ly): raise RuntimeError("Invalid start parameter (must be within [0, ny_sites - 1])")
             else:
-                raise RuntimeError("Unexpected error occourred in counting the neighbors of a lattice site, there are none")
+                if start not in range(self.Lx): raise RuntimeError("Invalid start parameter (must be within [0, nx_sites - 1])")
 
-        return np.array(return_vals)
+        if input_projector is None:
+            # Evaluate the model to get the eigenvectors
+            eigenvals, eigenvecs = la.eigh(self.hamiltonian)
+
+            # VERSION 2
+            eigenvecs_projected = self._delta_projection(eigenvecs[:, :self.n_occ])
+            vectors, _ = self._time_reversal_separation(eigenvecs_projected, eigenvals[:self.n_occ])
+            if sd_minimization: vectors = self._steepest_descent(vectors, sd_beta, sd_epsilon, sd_maxiter)
+
+            # Sigma y matrix
+            diagonal = np.array([[-1.j, 0] for jj in range(int(0.5 * len(eigenvecs)))], dtype = complex).flatten()
+            sigma_y = np.diag(diagonal, 1) + np.diag(diagonal.conjugate(), -1)
+            sigma_y = sigma_y[:len(eigenvecs), :len(eigenvecs)]
+
+            # Compute the two projectors
+            projector = contract("ik,ij->kj", vectors, vectors.conjugate())
+            trprojector = contract("ik,ij->kj", np.array([1.j * sigma_y @ vi.conjugate() for vi in vectors]), np.array([1.j * sigma_y @ vi.conjugate() for vi in vectors]).conjugate())
+        else:
+            projector = input_projector[0]
+            trprojector = input_projector[1]
+
+        # Chern marker operator
+        rxpc = self.r[0] @ projector - projector @ self.r[0]
+        rypc = self.r[1] @ projector - projector @ self.r[1]
+        lz2_operator_1 = np.imag(projector @ rxpc @ rypc)
+        rxtpc = self.r[0] @ trprojector - trprojector @ self.r[0]
+        rytpc = self.r[1] @ trprojector - trprojector @ self.r[1]
+        lz2_operator_2 = np.imag(trprojector @ rxtpc @ rytpc)
+        lz2_operator_1 *= -4 * np.pi / self.uc_vol
+        lz2_operator_2 *= -4 * np.pi / self.uc_vol
+
+        # If macroscopic average I have to compute the lattice values with the averages first
+        if macroscopic_average:
+            z2marker_1 = self._average_over_radius(np.diag(lz2_operator_1), cutoff)
+            z2marker_2 = self._average_over_radius(np.diag(lz2_operator_2), cutoff)
+        
+        if direction is not None:
+            # Evaluate index of the selected direction
+            indices = self._xy_to_index('x' if direction == 1 else 'y', start)
+
+            # If macroscopic average consider the averaged lattice, else the Chern operators
+            if macroscopic_average:
+                lz2_1 = [z2marker_1[int(indices[self.states_uc * i] / self.states_uc)] for i in range(int(len(indices) / self.states_uc))]
+                lz2_2 = [z2marker_2[int(indices[self.states_uc * i] / self.states_uc)] for i in range(int(len(indices) / self.states_uc))]
+            else:
+                lz2_1 = [np.sum([lz2_operator_1[indices[self.states_uc * i + j], indices[self.states_uc * i + j]] for j in range(self.states_uc)]) for i in range(int(len(indices) / self.states_uc))]
+                lz2_2 = [np.sum([lz2_operator_2[indices[self.states_uc * i + j], indices[self.states_uc * i + j]] for j in range(self.states_uc)]) for i in range(int(len(indices) / self.states_uc))]
+            
+            lz2_direction = [np.fmod(0.5 * (lz2_1[i] - lz2_2[i]), 2) for i in range(len(lz2_1))]
+
+            if not return_projector:
+                return np.array(np.abs(lz2_direction))
+            else:
+                return np.array(np.abs(lz2_direction)), [projector, trprojector]
+        
+        # If not macroscopic averages I sum the values of the Chern operators of the unit cell
+        if not macroscopic_average:
+            z2invariant_2 = [np.sum([lz2_operator_2[self.states_uc * i + j, self.states_uc * i + j] for j in range(self.states_uc)]) for i in range(int(len(lz2_operator_2) / self.states_uc))]
+            z2invariant_1 = [np.sum([lz2_operator_1[self.states_uc * i + j, self.states_uc * i + j] for j in range(self.states_uc)]) for i in range(int(len(lz2_operator_1) / self.states_uc))]
+            z2invariant_1 = np.repeat(z2invariant_1, self.states_uc)
+            z2invariant_2 = np.repeat(z2invariant_2, self.states_uc)
+
+        z2marker = np.fmod(0.5 * (np.array(z2invariant_2) - np.array(z2invariant_1)), 2)
+        if not return_projector:
+            return np.array(np.abs(z2marker))
+        else:
+            return np.array(np.abs(z2marker)), [projector, trprojector]
+    
+    #################################################
+    # Local Z2 marker auxiliary functions
+    #################################################
+
+    def _time_reversal_separation(self, eigenvectors, eigenvalues):
+        """
+        Separates the eigenvectors into two time-reversal conjugated subspaces
+        """
+        
+        def in_subspace(v, subspace):
+            # Check whether the vector v is in the subspace (apart from a phase)
+            for w in range(len(subspace)):
+                if np.abs(np.abs(np.vdot(v, subspace[w])) - 1) < 1e-10: return True, w
+            return False
+
+        def degenerate_subspaces_dimension(evals):
+            # Determine the dimensions of the degenerate subspaces
+            dimensions = []
+            dim = 1
+
+            for i in range(1, len(evals)):
+                if evals[i] - evals[i - 1] < 1e-10:
+                    dim += 1
+                else:
+                    dimensions.append(dim)
+                    dim = 1
+            
+            dimensions.append(dim)
+            return np.array(dimensions, dtype = int)
+
+        def orthogonalize(v, sub1, sub2):
+            # Orthogonalize vectors belonging to the same subspace
+            vec = np.copy(v)
+            already_orthogonal = True
+            
+            # Check orthogonality in subspace 1
+            for w in sub1:
+                if np.abs(np.abs(np.vdot(vec, w)) - 1) > 1e-10: already_orthogonal = False
+
+            # Check orthogonality in subspace 2
+            for w in sub2:
+                if np.abs(np.abs(np.vdot(vec, w)) - 1) > 1e-10: already_orthogonal = False
+
+            if not already_orthogonal:
+                # If the vector is not already orthogonal I orthogonalize wrt the two subspaces
+                for i in range(len(sub1)):
+                    alpha = np.vdot(sub1[i], vec)
+                    vec -= alpha * sub1[i]
+
+                    beta = np.vdot(sub2[i], vec)
+                    vec -= beta * sub2[i]
+
+                    if np.linalg.norm(vec) < 1e-10:
+                        return np.zeros_like(vec)
+
+                    vec /= np.linalg.norm(vec)
+            return vec
+
+        def is_generated_by(vec, sub1, sub2):
+            # Check whether a vector can be written as a liear combinations of the vectors in other subspaces
+            alphas = []; betas = []
+            if len(sub1) > 0:
+                for i in range(len(sub1)):
+                    alphas.append(np.vdot(sub1[i], vec))
+                    betas.append(np.vdot(sub2[i], vec))
+                if np.allclose(alphas, np.zeros_like(alphas)) and np.allclose(betas, np.zeros_like(betas)): return False
+                return True
+            else:
+                return False
+
+        def check_subspace_orthogonality(v, w):
+            # Check that the subspaces are orthogonal
+            for i in range(len(v)):
+                for j in range(i + 1, len(v)):
+                    if np.abs(np.vdot(v[i], v[j])) < 1e-10: continue
+                    if np.abs(np.vdot(v[i], v[j])) > 1e-10:
+                        raise RuntimeError("Vectors in the subspace are not orthogonal")
+            for i in range(len(w)):
+                for j in range(i + 1, len(w)):
+                    if np.abs(np.vdot(w[i], w[j])) < 1e-10: continue
+                    if np.abs(np.vdot(w[i], w[j])) > 1e-10:
+                        raise RuntimeError("Vectors in the time reversal conjugated subspace are not orthogonal")
+            for i in range(len(v)):
+                for j in range(i + 1, len(w)):
+                    if np.abs(np.vdot(v[i], w[j])) < 1e-10: continue
+                    if np.abs(np.vdot(v[i], w[j])) > 1e-10:
+                        raise RuntimeError("Subspaces are not orthogonal")
+            return True
+
+        # Eigenvectors by row
+        revecs = np.copy(eigenvectors)
+
+        # Split the eigenvectors in their degenerate subspaces
+        subspaces_occ = degenerate_subspaces_dimension(eigenvalues)
+
+        # Vectors of the half space to store (in rows)
+        vectors = []; tr_vectors = []
+
+        # Sigma y matrix
+        diagonal = np.array([[-1.j, 0] for jj in range(revecs.shape[1])], dtype = complex).flatten()
+        sigma_y = np.diag(diagonal, 1) + np.diag(diagonal.conjugate(), -1)
+        sigma_y = sigma_y[:revecs.shape[1], :revecs.shape[1]]
+
+        # Current state index
+        newk = 0
+
+        # Cycle over the number of degenerate subspaces
+        for i in range(len(subspaces_occ)):
+            if subspaces_occ[i] % 2 != 0: raise RuntimeError("Hamiltonian is not time reversal symmetryc since a degenerate subspace dimension is odd")
+
+            k = newk
+
+            # Eigenvector index
+            newk += int(subspaces_occ[i])
+
+            # If the dimension of the subspace is 2 I can choose one eigenvector and discard the other (perpendicular via TR symmetry)
+            trvec = 1.j * sigma_y @ (revecs[k].conjugate())
+            vectors.append(revecs[k])
+            tr_vectors.append(trvec)
+            if int(subspaces_occ[i]) == 2: continue
+
+            # Otherwise I orthogonalize --- This should not happen
+            subspace = []; tr_subspace = []
+            subspace.append(vectors[-1]); tr_subspace.append(tr_vectors[-1])
+
+            for j in range(subspaces_occ[i] - 1):
+                vec = revecs[k + j + 1]
+
+                # Check whether vec is already stored in subspace or time reversal subspace
+                present = in_subspace(vec, subspace)
+                present_tr = in_subspace(vec, tr_subspace)
+
+                # If the vector is already stored continue
+                if present or present_tr: continue
+
+                # If it is not stored, I first check that it is orthogonal with the previous vectors
+                vec = orthogonalize(vec, subspace, tr_subspace)
+                if np.allclose(vec, np.zeros_like(vec)): continue
+                if is_generated_by(vec, subspace, tr_subspace): continue
+
+                # I compute the time reversal and store vec and trvec
+                trvec = 1.j * sigma_y @ (vec.conjugate())
+
+                subspace.append(vec)
+                tr_subspace.append(trvec)
+                vectors.append(vec)
+                tr_vectors.append(trvec)
+
+            if not check_subspace_orthogonality(subspace, tr_subspace):
+                raise RuntimeError("Something went wrong: the subspace and its time reversal conjugated are not orthogonal")
+
+        return np.array(vectors, dtype = complex), np.array(tr_vectors, dtype = complex)
+
+
+    def _steepest_descent(self, vecs_orig, beta, epsilon, maxiterations):
+        """
+        Steepest descent minimization of the quadratic spread of the vectors
+        """
+        vecs = np.copy(vecs_orig)
+
+        def compute_var(states):
+            var = 0
+            for psi in states:
+                var += (np.vdot(psi, (self.r[0] ** 2) @ psi) - np.abs(np.vdot(psi, self.r[0] @ psi)) ** 2)
+                var += (np.vdot(psi, (self.r[1] ** 2) @ psi) - np.abs(np.vdot(psi, self.r[1] @ psi)) ** 2)
+            return var
+
+        def compute_gradient(states):
+            states = np.array(states)
+            xprime = states.conjugate() @ (x @ states.T)
+            yprime = states.conjugate() @ (y @ states.T)
+            xd = np.diag(np.diag(xprime))
+            yd = np.diag(np.diag(yprime))
+            comx = (xprime - xd) @ xd - xd @ (xprime - xd)
+            comy = (yprime - yd) @ yd - yd @ (yprime - yd)
+            return 2 * (comx + comy)
+
+        # Steepest descent minimizazion localizations
+        diff = 1e+3; var = compute_var(vecs); iterations = 0
+        minvar = var; saved = np.copy(vecs)
+        while True:
+            gradient = np.array(compute_gradient(vecs), dtype = np.complex128)
+
+            g = la.expm(-beta * gradient)
+            test = contract("ij,jk->ik", g, vecs)
+
+            newvar = compute_var(test)
+            diff = var - newvar
+            var = newvar
+
+            if var < minvar:
+                minvar = var
+                saved = np.copy(test)
+
+            # Max iterations check
+            if iterations > maxiterations: break
+            if diff <= epsilon: break
+            iterations += 1
+            vecs = np.copy(test)
+
+        return np.array(saved)
+
+
+    def _delta_projection(self, vecs):
+        """
+        Projection onto trial orbitals in order to build MLWF
+        """
+        one = np.zeros(shape = (vecs.shape[0], vecs.shape[0]))
+        projections = np.array([
+            [1, 0, 0, 0],
+            [0, 0, 1, 0],
+            [1, 0, 0, 0],
+            [0, 0, -1, 0]
+        ])
+        one = np.kron(np.eye(int(0.25*vecs.shape[0])), projections) / np.sqrt(2)
+        amatrix = np.array([[np.vdot(vecs[:, m], one[:, 2 * n]) for n in range(vecs.shape[1])] for m in range(vecs.shape[1])], dtype = np.complex128)
+
+        smatrix = np.array(la.sqrtm(la.pinv(amatrix.T.conjugate() @ amatrix)), dtype = np.complex128)
+        return contract("ki,ij->kj", vecs, amatrix @ smatrix).T

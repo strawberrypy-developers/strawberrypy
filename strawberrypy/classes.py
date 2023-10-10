@@ -229,6 +229,7 @@ class Model():
         self.disordered = True
         self.cart_positions = cart_pos.T
 
+
     def make_heterostructure(self, model2, direction : int = 0, start : int = 0, stop : int = 0):
         """
         Modify a FiniteModel by merging another model in it. The system will be split in the direction starting from start.
@@ -316,3 +317,100 @@ class Model():
         Convert [cell_x, cell_y, basis] to the internal indexing of the lattice sites
         """
         return self.Ly * self.states_uc * cellx + self.states_uc * celly + basis * (2 if self.spinful else 1)
+
+
+    def _xy_to_line(self, fixed_coordinate : str, xy : int):
+        """
+        Returns the indices of the sites of the lattice keeping fixed the direction fixed_coordinate starting from xy
+        """
+        if fixed_coordinate == 'x':
+            return np.array([self.states_uc * xy * self.Ly + i for i in range(self.states_uc * self.Ly) if self._mask[self.states_uc * xy * self.Ly + i]]).flatten().tolist()
+        elif fixed_coordinate == 'y':
+            indices = []
+            for i in range(self.Lx):
+                for j in range(self.states_uc):
+                    if self._mask[self.states_uc * xy + self.states_uc * self.Ly * i + j]:
+                        indices.append(self.states_uc * xy + self.states_uc * self.Ly * i + j)
+            return np.array(indices)
+        else:
+            raise RuntimeError("Direction not allowed, only 'x' or 'y'")
+
+    #################################################
+    # Macroscopic average functions
+    #################################################
+
+    def _lattice_contraction(self, cutoff : float):
+        """
+        Defines which atomic sites must be contracted on one site, for each site of the lattice
+        """
+        contraction = []
+
+        rx = self.cart_positions[:, 0]; ry = self.cart_positions[:, 1]
+        def within_range(current, trial):
+            return True if (rx[current] - rx[trial]) ** 2 + (ry[current] - ry[trial]) ** 2 - cutoff ** 2 < 1e-6 else False
+
+        for current in range(len(rx)):
+            contraction.append([trial for trial in range(len(rx)) if within_range(current, trial)])
+
+        return contraction
+    
+
+    def _PBC_lattice_contraction(self, cutoff):
+        """
+        Defines which atomic sites must be contracted on one site, for each site of the lattice within PBC (minimum convention image)
+        """
+        contraction = []
+
+        if isinstance(self.model, tbm.Model):
+            lvecs = np.copy(self.model.uc)
+        elif isinstance(self.model, ptb.tb_model):
+            lvecs = np.copy(self.model._lat)
+        else:
+            raise NotImplementedError("Invalid model instance.")
+
+        lvecs[0] /= self.Lx
+        lvecs[1] /= self.Ly
+        
+        # Compute reduced coordinates
+        reds = []
+        linv = np.linalg.inv(lvecs)
+        for r in range(len(self.cart_positions)):
+            reds.append(np.dot(np.array([self.cart_positions[r, 0], self.cart_positions[r, 1]]), linv))
+        reds = np.array(reds)
+        rx = reds[:, 0]; ry = reds[:, 1]
+
+        def within_range(current, trial):
+            trialorbitals = np.array([
+                [rx[trial], ry[trial]], [rx[trial], ry[trial] + self.Ly], [rx[trial], ry[trial] - self.Ly], [rx[trial] + self.Lx, ry[trial]],
+                [rx[trial] + self.Lx, ry[trial] + self.Ly], [rx[trial] + self.Lx, ry[trial] - self.Ly], [rx[trial] - self.Lx, ry[trial]],
+                [rx[trial] - self.Lx, ry[trial] + self.Ly], [rx[trial] - self.Lx, ry[trial] - self.Ly]
+            ])
+            for to in trialorbitals:
+                dr = np.dot(np.array([rx[current] - to[0], ry[current] - to[1]]), lvecs)
+                if np.dot(dr, dr) - cutoff ** 2 < 1e-6:
+                    return True
+            return False
+
+        for current in range(len(rx)):
+            contraction.append([trial for trial in range(len(rx)) if within_range(current, trial)])
+
+        return contraction
+
+
+    def _average_over_radius(self, vals, cutoff : float, contraction = None):
+        """
+        Average vals over the contraction of the lattice defined by the cutoff radius
+        """
+        return_vals = []
+        if contraction is None:
+            contraction = self._lattice_contraction(cutoff)
+
+        # Macroscopic average within a certain radius
+        for current in range(len(self.cart_positions[:, 0])):
+            tmp = [vals[ind] for ind in contraction[current]]
+            if not len(tmp) == 0:
+                return_vals.append(np.sum(tmp) / (len(tmp) / self.states_uc))
+            else:
+                raise RuntimeError("Unexpected error occourred in counting the neighbors of a lattice site, there are none")
+
+        return np.array(return_vals)
