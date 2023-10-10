@@ -410,7 +410,7 @@ class FiniteModel(Model):
         lz2_operator_2 *= -4 * np.pi / self.uc_vol
 
         # If macroscopic average I have to compute the lattice values with the averages first
-        if macroscopic_average:
+        if macroscopic_average or self.disordered:
             z2marker_1 = self._average_over_radius(np.diag(lz2_operator_1), cutoff)
             z2marker_2 = self._average_over_radius(np.diag(lz2_operator_2), cutoff)
         
@@ -434,13 +434,13 @@ class FiniteModel(Model):
                 return np.array(np.abs(lz2_direction)), [projector, trprojector]
         
         # If not macroscopic averages I sum the values of the Chern operators of the unit cell
-        if not macroscopic_average:
-            z2invariant_2 = [np.sum([lz2_operator_2[self.states_uc * i + j, self.states_uc * i + j] for j in range(self.states_uc)]) for i in range(int(len(lz2_operator_2) / self.states_uc))]
-            z2invariant_1 = [np.sum([lz2_operator_1[self.states_uc * i + j, self.states_uc * i + j] for j in range(self.states_uc)]) for i in range(int(len(lz2_operator_1) / self.states_uc))]
-            z2invariant_1 = np.repeat(z2invariant_1, self.states_uc)
-            z2invariant_2 = np.repeat(z2invariant_2, self.states_uc)
+        if not macroscopic_average and not self.disordered:
+            z2marker_1 = [np.sum([lz2_operator_2[self.states_uc * i + j, self.states_uc * i + j] for j in range(self.states_uc)]) for i in range(int(len(lz2_operator_2) / self.states_uc))]
+            z2marker_2 = [np.sum([lz2_operator_1[self.states_uc * i + j, self.states_uc * i + j] for j in range(self.states_uc)]) for i in range(int(len(lz2_operator_1) / self.states_uc))]
+            z2marker_1 = np.repeat(z2marker_1, self.states_uc)
+            z2marker_2 = np.repeat(z2marker_2, self.states_uc)
 
-        z2marker = np.fmod(0.5 * (np.array(z2invariant_2) - np.array(z2invariant_1)), 2)
+        z2marker = np.fmod(0.5 * (np.array(z2marker_2) - np.array(z2marker_1)), 2)
         if not return_projector:
             return np.array(np.abs(z2marker))
         else:
