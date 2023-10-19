@@ -8,3 +8,4 @@ tests/__pycache__
 .DS_Store
 build/
 strawberrypy.egg-info/
+tests/*.pdf

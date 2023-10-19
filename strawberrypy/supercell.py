@@ -294,7 +294,7 @@ class Supercell(Model):
 
         chern_operator = -np.imag(p @ gsp) * float((self.Lx * self.Ly) / (np.pi * (8 if formula == "symmetric" else 2)))
 
-        if macroscopic_average:
+        if macroscopic_average or self.disordered:
             contraction = self._PBC_lattice_contraction(cutoff)
             pbclcm = self._average_over_radius(np.diag(chern_operator), cutoff, contraction = contraction)
 
@@ -303,7 +303,7 @@ class Supercell(Model):
             indices = self._xy_to_index('x' if direction == 1 else 'y', start)
 
             # If macroscopic average consider the averaged lattice, else the Chern operators
-            if macroscopic_average:
+            if macroscopic_average or self.disordered:
                 pbclcm_line = [pbclcm[int(indices[self.states_uc * i] / self.states_uc)] for i in range(int(len(indices) / self.states_uc))]
             else:
                 pbclcm_line = [np.sum([chern_operator[indices[self.states_uc * i + j], indices[self.states_uc * i + j]] for j in range(self.states_uc)]) for i in range(int(len(indices) / self.states_uc))]
@@ -313,7 +313,7 @@ class Supercell(Model):
             else:
                 return np.array(pbclcm_line), np.array(return_proj)
 
-        if not macroscopic_average:
+        if not macroscopic_average and not self.disordered:
             pbclcm = [np.sum([chern_operator[self.states_uc * i + j, self.states_uc * i + j] for j in range(self.states_uc)]) for i in range(int(len(chern_operator) / self.states_uc))]
             pbclcm = np.repeat(pbclcm, self.states_uc)
         
