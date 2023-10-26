@@ -65,7 +65,7 @@ class FiniteModel(Model):
         elif isinstance(self.model, ptb.tb_model):
             return _pythtb.calc_uc_vol(self.model)
         else:
-            return NotImplementedError("Invalid model instance.")
+            raise NotImplementedError("Invalid model instance.")
         
         
     def _make_finite(self, model):
@@ -77,7 +77,7 @@ class FiniteModel(Model):
         elif isinstance(model, ptb.tb_model):
             return _pythtb.make_finite(model, self.Lx, self.Ly)
         else:
-            return NotImplementedError("Invalid model instance.")
+            raise NotImplementedError("Invalid model instance.")
         
     #################################################
     # Local markers

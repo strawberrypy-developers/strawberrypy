@@ -105,7 +105,7 @@ class Model():
         elif isinstance(model, ptb.tb_model):
             return _pythtb.calc_states_uc(model, spinful)
         else:
-            return NotImplementedError("Invalid model instance.")
+            raise NotImplementedError("Invalid model instance.")
         
         
     def _initialize_mask(self):
@@ -117,7 +117,7 @@ class Model():
         elif isinstance(self.model, ptb.tb_model):
             return _pythtb.initialize_mask(self.model, self.spinful)
         else:
-            return NotImplementedError("Invalid model instance.")
+            raise NotImplementedError("Invalid model instance.")
 
     #################################################
     # Lattice functions
@@ -232,7 +232,7 @@ class Model():
 
     def make_heterostructure(self, model2, direction : int = 0, start : int = 0, stop : int = 0):
         """
-        Modify a FiniteModel by merging another model in it. The system will be split in the direction starting from start.
+        Modify a model by merging another model in it. The system will be split in the direction starting from start.
         Beware: the previous model will be modified
 
         Args:

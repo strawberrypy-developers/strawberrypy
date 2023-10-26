@@ -195,7 +195,7 @@ class Supercell(Model):
     # Local PBC marker
     #################################################
 
-    def pbc_local_chern_marker(self, direction : int = None, start : int = 0, return_projector : bool = False, input_projector = None, formula : str = 'symmetric', smearing_temperature : float = 0, fermidirac_cutoff : float = 0.1, macroscopic_average : bool = False, cutoff : float = 0.8):
+    def pbc_local_chern_marker(self, direction : int = None, start : int = 0, return_projector : bool = False, input_projector = None, formula : str = "symmetric", smearing_temperature : float = 0, fermidirac_cutoff : float = 0.1, macroscopic_average : bool = False, cutoff : float = 0.8):
         """
         Evaluate the PBC local Chern marker on the whole lattice if direction is None. If direction is not None evaluates the Chern marker along direction starting from start.
         
@@ -253,30 +253,30 @@ class Supercell(Model):
             nocc = np.sum(fermidirac(eigenvals, smearing_temperature, mu) > fermidirac_cutoff)
 
             # Periodic gauge
-            b1, b2 = self.reciprocal_vec()
             eigenvecs_use = eigenvecs.T
 
-            u_nb1 = self.periodic_gauge(eigenvecs_use, b1)
-            u_nb2 = self.periodic_gauge(eigenvecs_use, b2)
+            b1, b2 = self.reciprocal_vec()
+            u_nb1 = self.periodic_gauge(eigenvecs_use, b1, n_occ = nocc)
+            u_nb2 = self.periodic_gauge(eigenvecs_use, b2, n_occ = nocc)
 
-            udual_b1 = self.dual_state(eigenvecs_use, u_nb1)
-            udual_b2 = self.dual_state(eigenvecs_use, u_nb2)
-
+            udual_b1 = self.dual_state(eigenvecs_use, u_nb1, n_sub = nocc)
+            udual_b2 = self.dual_state(eigenvecs_use, u_nb2, n_sub = nocc)
+        
             gsp = contract("ij,ik->jk", eigenvecs_use[:nocc, :], (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * eigenvecs_use[:nocc, :].conjugate().T).T)
-            pb1 = contract("ij,ik->jk", udual_b1, (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * udual_b1.conjugate().T).T)
-            pb2 = contract("ij,ik->jk", udual_b2, (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * udual_b2.conjugate().T).T)
+            pb1 = contract("ij,ik->jk", udual_b1, (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * (udual_b1.conjugate().T)).T)
+            pb2 = contract("ij,ik->jk", udual_b2, (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * (udual_b2.conjugate().T)).T)
             return_proj.append(gsp); return_proj.append(pb1); return_proj.append(pb2)
             p = pb1 @ pb2 - pb2 @ pb1
 
             if formula == "symmetric":
-                u_nmb1 = self.periodic_gauge(eigenvecs_use, -b1)
-                u_nmb2 = self.periodic_gauge(eigenvecs_use, -b2)
+                u_nmb1 = self.periodic_gauge(eigenvecs_use, -1 * b1, n_occ = nocc)
+                u_nmb2 = self.periodic_gauge(eigenvecs_use, -1 * b2, n_occ = nocc)
 
-                udual_mb1 = self.dual_state(eigenvecs_use, u_nmb1)
-                udual_mb2 = self.dual_state(eigenvecs_use, u_nmb2)
+                udual_mb1 = self.dual_state(eigenvecs_use, u_nmb1, n_sub = nocc)
+                udual_mb2 = self.dual_state(eigenvecs_use, u_nmb2, n_sub = nocc)
 
-                pmb1 = contract("ij,ik->jk", udual_mb1, (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * udual_mb1.conjugate().T).T)
-                pmb2 = contract("ij,ik->jk", udual_mb2, (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * udual_mb2.conjugate().T).T)
+                pmb1 = contract("ij,ik->jk", udual_mb1, (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * (udual_mb1.conjugate().T)).T)
+                pmb2 = contract("ij,ik->jk", udual_mb2, (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * (udual_mb2.conjugate().T)).T)
                 return_proj.append(pmb1)
                 return_proj.append(pmb2)
 
@@ -284,7 +284,7 @@ class Supercell(Model):
         else:
             gsp = input_projector[0]
             pb1 = input_projector[1]
-            pb1 = input_projector[2]
+            pb2 = input_projector[2]
             p = pb1 @ pb2 - pb2 @ pb1
 
             if formula == 'symmetric':
