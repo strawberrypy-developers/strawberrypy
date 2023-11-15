@@ -55,7 +55,7 @@ class Supercell(Model):
         return pszp
 
 
-    def periodic_gauge (self, u_n0, b, n_occ = None):
+    def periodic_gauge(self, u_n0, b, n_occ = None):
         """
         Returns the matrix of occupied eigenvectors at the edge of the Brillouin zone imposing periodic gauge upon the eigenvectors at Gamma
         """
