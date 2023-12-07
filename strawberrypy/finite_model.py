@@ -25,7 +25,7 @@ class FiniteModel(Model):
             Whether the model should be interpreted as spinful or not. Default is ``False``.
     """
 
-    def __init__(self, tbmodel : tbm.Model | ptb.tb_model = None, Lx : int = 1, Ly : int = 1, spinful : bool = False):
+    def __init__(self, tbmodel, Lx : int = 1, Ly : int = 1, spinful : bool = False):
         # Store local variables
         self.Lx = Lx
         self.Ly = Ly

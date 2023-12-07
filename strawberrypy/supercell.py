@@ -48,7 +48,7 @@ class Supercell(Model):
             raise NotImplementedError("Invalid model instance.")
 
 
-    def pszp_matrix (self, u_n0):
+    def pszp_matrix(self, u_n0):
         sz = self.sz
         #sz_un0 = (sz@u_n0).T
         pszp = np.ndarray([self.n_occ,self.n_occ],dtype=complex)
@@ -94,7 +94,7 @@ class Supercell(Model):
         return udual_nb
 
 
-    def single_point_chern(self, formula, return_ham_gap=False):
+    def single_point_chern(self, formula : str = 'both', return_ham_gap : bool = False):
 
         eig, u_n0 = la.eigh(self.hamiltonian)
         u_n0 = u_n0.T
@@ -134,7 +134,7 @@ class Supercell(Model):
         return chern
     
 
-    def single_point_spin_chern(self, spin='down', formula='both', return_pszp_gap=False, return_ham_gap=False):
+    def single_point_spin_chern(self, spin : str = 'down', formula : str = 'both', return_pszp_gap : bool = False, return_ham_gap : bool = False):
         n_sub = self.n_occ//2
 
         eig, u_n0 = la.eigh(self.hamiltonian)

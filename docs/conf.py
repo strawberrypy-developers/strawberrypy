@@ -42,7 +42,7 @@ if html_theme == 'alabaster':
     pygments_style = 'friendly'
     html_static_path = ['_static/custom.css']
     html_theme_options = {
-        'description': 'Code description',
+        'description': 'Single-poinT and local invaRiAnts for Wannier Berriologies in Python',
         'fixed_sidebar': True,
         'sidebar_collapse': True,
         'extra_nav_links': {},

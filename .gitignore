@@ -9,3 +9,8 @@ tests/__pycache__
 build/
 strawberrypy.egg-info/
 tests/*.pdf
+tests/test_pbclscm.py
+tests/localchernmarker_test.py
+out.pdf
+pbclcmtest.py
+logo.py
