@@ -132,16 +132,16 @@ class FiniteModel(Model):
 
         # Check input variables
         if direction not in [None, 0, 1]:
-            raise RuntimeError("Direction allowed are None, 0 (which stands for x), and 1 (which stands for y)")
+            raise RuntimeError("Direction allowed are None, 0 (which stands for x), and 1 (which stands for y).")
         
         if direction is not None:
             if direction == 0:
-                if start not in range(self.Ly): raise RuntimeError("Invalid start parameter (must be within [0, Ly - 1])")
+                if start not in range(self.Ly): raise RuntimeError("Invalid start parameter (must be within [0, Ly - 1]).")
             else:
-                if start not in range(self.Lx): raise RuntimeError("Invalid start parameter (must be within [0, Lx - 1])")
+                if start not in range(self.Lx): raise RuntimeError("Invalid start parameter (must be within [0, Lx - 1]).")
 
         if len(self.r) != 2:
-            raise NotImplementedError("The local Chern marker is not yet implemented for dimensionality different than 2")
+            raise NotImplementedError("The local Chern marker is not yet implemented for dimensionality different than 2.")
 
         if input_projector is None:
             # Eigenvectors at \Gamma
@@ -157,7 +157,7 @@ class FiniteModel(Model):
                 rank = self.n_occ
 
             # Build the ground state projector
-            gs_projector = contract("ji,ki->jk", smearing(eigenvecs[:, :rank], eigenvecs, smearing_temperature, mu) * eigenvecs[:, :rank], eigenvecs[:, :rank].conjugate())
+            gs_projector = contract("ji,ki->jk", smearing(eigenvecs[:, :rank], eigenvecs, eigenvals, smearing_temperature, mu) * eigenvecs[:, :rank], eigenvecs[:, :rank].conjugate())
         else:
             gs_projector = input_projector
 
@@ -236,13 +236,13 @@ class FiniteModel(Model):
 
         # Check input variables
         if direction not in [None, 0, 1]:
-            raise RuntimeError("Direction allowed are None, 0 (which stands for x), and 1 (which stands for y)")
+            raise RuntimeError("Direction allowed are None, 0 (which stands for x), and 1 (which stands for y).")
         
         if direction is not None:
             if direction == 0:
-                if start not in range(self.Ly): raise RuntimeError("Invalid start parameter (must be within [0, ny_sites - 1])")
+                if start not in range(self.Ly): raise RuntimeError("Invalid start parameter (must be within [0, ny_sites - 1]).")
             else:
-                if start not in range(self.Lx): raise RuntimeError("Invalid start parameter (must be within [0, nx_sites - 1])")
+                if start not in range(self.Lx): raise RuntimeError("Invalid start parameter (must be within [0, nx_sites - 1]).")
 
         if input_projector is None:
             # Eigenvectors at \Gamma
