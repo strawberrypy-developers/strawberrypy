@@ -7,6 +7,25 @@ from . import _tbmodels
 from . import _pythtb
 
 class Model():
+    r"""
+    Generic ``Model`` class from which are constructed ``Supercell`` and ``FiniteModel``. This should *not* be called explicitly since it is already called from both ``Supercell`` and ``FiniteModel`` upon creation. Contains the functions needed to load spin, positions, Hamiltonian matrices and other useful information.
+
+    Parameters
+    ----------
+        tbmodel :
+            Model instance.
+        spinful :
+            Whether the model is spinful or not. Default is ``False``.
+        states_uc :
+            Number of states per unit cell (if the model is spinful, this should be twice the dimension of the basis). Default is ``None``, which means it is computed from ``tbmodel``.
+        dim :
+            Dimensionality of the model. Default is ``None``, which means it is computed from ``tbmodel``.
+        Lx :
+            Number of unit cell repeated along the :math:`\mathbf{a}_1` direction. Default is ``1``.
+        Ly :
+            Number of unit cell repeated along the :math:`\mathbf{a}_2` direction. Default is ``1``.
+    """
+
     def __init__(self, tbmodel = None, spinful : bool = False, states_uc : int = None, dim : int = None, Lx : int = 1, Ly : int = 1):
         
         # Store local variables
@@ -48,8 +67,8 @@ class Model():
     #################################################
 
     def _get_positions(self):
-        """
-        Returns the cartesian coordinates of the states in a finite sample
+        r"""
+        Returns the cartesian coordinates of the states in the sample.
         """
         if isinstance(self.model, tbm.Model):
             return _tbmodels.get_positions(self.model)
@@ -59,11 +78,11 @@ class Model():
             raise NotImplementedError("Invalid model instance.")
 
     
-    def _get_hamiltonian(self, external_model = None):
+    def _get_hamiltonian(self):
+        r"""
+        Returns the hamiltonian matrix at the :math:`\Gamma`-point.
         """
-        Returns the hamiltonian matrix at Gamma point
-        """
-        model_use = self.model if external_model is None else external_model
+        model_use = self.model
         if isinstance(model_use, tbm.Model):
             gamma_point = np.zeros(self.dim)
             return _tbmodels.get_hamiltonian(model_use, gamma_point)
@@ -75,8 +94,8 @@ class Model():
         
 
     def _get_spin(self):
-        """
-        Returns the spin matrix elements in the basis of TB orbitals which are diagonal in the spin z
+        r"""
+        Returns the spin matrix elements in the basis of tight-binding orbitals which are diagonal in the spin operator :math:`S_z`.
         """
         if isinstance(self.model, tbm.Model) or isinstance(self.model, ptb.tb_model):
             return np.diag([1, -1] * (self.n_orb//2))
@@ -85,8 +104,13 @@ class Model():
         
 
     def _get_dim(self, model):
-        """
-        Returns the dimensionaloty of the model
+        r"""
+        Returns the dimensionality of the model.
+
+        Parameters
+        ----------
+            model :
+                Model instance.
         """
         if isinstance(model, tbm.Model):
             return model.dim
@@ -97,8 +121,15 @@ class Model():
         
 
     def _calc_states_uc(self, model, spinful):
-        """
-        Returns number of states per unit cell
+        r"""
+        Returns number of states per unit cell.
+
+        Parameters
+        ----------
+            model :
+                Model instance.
+            spinful :
+                Whether the model is spinful or not.
         """
         if isinstance(model, tbm.Model):
             return _tbmodels.calc_states_uc(model)
@@ -109,8 +140,8 @@ class Model():
         
         
     def _initialize_mask(self):
-        """
-        Returns a list of True values with the dimension of the lattice
+        r"""
+        Returns a list of ``True`` values with length the dimension of the lattice.
         """
         if isinstance(self.model, tbm.Model):
             return _tbmodels.initialize_mask(self.model)
@@ -124,12 +155,15 @@ class Model():
     #################################################
 
     def add_onsite_disorder(self, w : float = 0, seed : int = None):
-        """
-        Add onsite (Anderson) disorder to the specified model. The disorder amplitude per site is taken randomly in [-w/2, w/2].
+        r"""
+        Add on-site Anderson disorder to the model. The addition of Anderson disorder consists in a diagonal term in the Hamiltonian :math:`\mathcal H_{Anderson}=\sum_i w_ic_i^{\dagger}c_i` where :math:`w_i` are random variables uniformly distributed in the interval :math:`[-\frac{W}{2},\frac{W}{2}]`.
 
-        Args:
-            - w : disorder amplitude
-            - seed : seed for random number generator
+        Parameters
+        ----------
+            w :
+                Disorder amplitude, defining the extrema of the interval :math:`[-\frac{W}{2},\frac{W}{2}]`. Default is ``0``.
+            seed :
+                Seed to be used in the random number generation. Default is ``None``, which result in the default Numpy seed.
         """
         if w != 0: self.disordered = True
 
@@ -142,19 +176,25 @@ class Model():
         else:
             spinstates = 1
 
-        d = 0.5*w*(2*np.random.rand(self.n_orb//spinstates)-1.0)                   #create an array of random numbers in (-w/2,w/2)
+        # Create an array of random numbers uniformly distributed in (-w/2, w/2)
+        d = 0.5 * w * (2 * np.random.rand(self.n_orb // spinstates) - 1.0)
         dis = np.repeat(d,spinstates)
 
-        np.fill_diagonal(self.hamiltonian,self.hamiltonian.diagonal()+dis)         #function returns None, modifies self.hamiltonian
+        # This function returns None, modify self.hamiltonian
+        np.fill_diagonal(self.hamiltonian,self.hamiltonian.diagonal() + dis)
 
 
     def add_vacancies(self, vacancies_list):
-        """
-        Add vacancies in the systems by removing a site in the lattice. In order to enforce the half-filling, if the model is not
-        spinful, an even number ov vacancies is required.
+        r"""
+        Add vacancies in the system by removing a site in the lattice.
 
-        Args:
-            - vacancies_list: a list of [cell_x, cell_y, basis] pointing to the cell and atom to be removed. Multiple values at once are allowed
+        Parameters
+        ----------
+            vacancies_list:
+                A list of [cell_x, cell_y, basis] pointing to the cell and atom to be removed. Multiple values at once are allowed. For instance, consider a :math:`L_x\times L_y` lattice with a basis of :math:`N_b` atoms, and :math:`M` sites needs to be removed. Then, the list ``[[np.random.randint(L_x), np.random.randint(L_y), np.random.randint(N_b)] for _ in range(M)]`` can be passed as argument.
+
+        .. note::
+            In order to enforce half-filling, if the model is not spinful, an even number of vacancies is required.
         """
         ham = self.hamiltonian
         pos = self.r
@@ -175,7 +215,7 @@ class Model():
         if np.array(vacancies).shape == ():
             self._mask[vacancies] = False
             if not self.spinful:
-                raise RuntimeError("Adding an odd number of vacancies causes the model to no longer be half-filled")
+                raise RuntimeError("Adding an odd number of vacancies causes the model to no longer be half-filled.")
             else:
                 self._mask[vacancies + 1] = False
                 for _ in range(2):
@@ -195,7 +235,7 @@ class Model():
 
             # Check if the number of vacancies is odd if the model is not spinful
             if (not self.spinful) and (len(vacancies) % 2 == 1):
-                raise RuntimeError("Adding an odd number of vacancies causes the model to no longer be half-filled")
+                raise RuntimeError("Adding an odd number of vacancies causes the model to no longer be half-filled.")
 
             for h in vacancies:
                 self._mask[h] = False
@@ -231,42 +271,53 @@ class Model():
 
 
     def make_heterostructure(self, model2, direction : int = 0, start : int = 0, stop : int = 0):
-        """
-        Modify a model by merging another model in it. The system will be split in the direction starting from start.
-        Beware: the previous model will be modified
+        r"""
+        Create an heterostructure by substtuting the parameters of ``model2`` into the model. The system will be split in the direction ``direction`` starting from the unit cell whose index is ``start`` and stopping at the cell indexed as ``end``.
 
-        Args:
-            - model2: the model that has to be merged into the existing one
-            - direction : direction in which the splitting happen, allowed 0 for 'x' or 1 for 'y'
-            - start : starting point for the splitting in the 'direction' direction
-            - end : end point of the splitting in the 'direction' direction
+        Parameters
+        ----------
+            model2 :
+                The model whose Hamiltonian has to be used when constructing the heterostructure.
+            direction  :
+                Direction in which the splitting happens, allowed values are ``0`` for the :math:`\mathbf{a}_1` direction or ``1`` for the :math:`\mathbf{a}_2` direction. Default is ``0``.
+            start :
+                Starting point for the splitting in the ``direction`` direction. Default is ``0``.
+            end :
+                End point of the splitting in the ``direction`` direction. Default is ``0``.
+
+        .. warning::
+            The current instance of the model will be modified.
         """
+
+        # Ensure start <= stop
+        if start > stop:
+            tmp = start
+            start = stop
+            stop = tmp
 
         # Check input data are ok
-        if not start < stop:
-            raise RuntimeError("Starting point is greater or equal to the end point")
         if not (start >= 0 and start < (self.Lx if direction == 0 else self.Ly)):
-            raise RuntimeError("Start point value not allowed")
+            raise RuntimeError("Start point value not allowed.")
         if not (stop > 0 and stop < (self.Lx if direction == 0 else self.Ly)):
-            raise RuntimeError("End point value not allowed")
+            raise RuntimeError("End point value not allowed.")
         if direction not in [0, 1]:
-            raise RuntimeError("Direction not allowed: insert 0 for 'x' and 1 for 'y'")
+            raise RuntimeError("Direction not allowed: insert 0 for 'x' and 1 for 'y'.")
         
         if not issubclass(type(model2), Model):
-            raise RuntimeError("The two models must be instances of Model, Supercell or FiniteModel")
+            raise RuntimeError("The two models must be instances of Model, Supercell or FiniteModel.")
         
         if not (self.Lx == model2.Lx and self.Ly == model2.Ly and np.allclose(self.r, model2.r)):
-            raise RuntimeError("You can only build heterostructures of the same model")
+            raise RuntimeError("You can only build heterostructures of the same model.")
         
         # Generate the Hamiltonian of the second model
         hamilt_model2 = np.copy(model2.hamiltonian)
 
-        # Check if only the onsite terms are changed
+        # Check if only the on-site terms are changed (if so, avoid checking all the matrix elements)
         onsite_only = False
         if np.allclose( self.hamiltonian - np.diag(np.diag(self.hamiltonian)), hamilt_model2 - np.diag(np.diag(hamilt_model2)) ):
             onsite_only = True
 
-        # Remove onsite terms from the model
+        # Remove on-site terms from the model
         onsite1 = np.diag(self.hamiltonian).copy()
         onsite2 = np.diag(hamilt_model2).copy()
         self.hamiltonian -= np.diag(onsite1)
@@ -282,7 +333,7 @@ class Model():
             for j in range(self.states_uc):
                 onsite1[i + j] = onsite2[i + j]
 
-        # Add the new onsite terms
+        # Add the new on-site terms
         self.hamiltonian += np.diag(onsite1)
         
         # If other matrix element are changed
@@ -313,15 +364,44 @@ class Model():
     #################################################
 
     def _xy_to_index(self, cellx : int, celly : int, basis : int):
-        """
-        Convert [cell_x, cell_y, basis] to the internal indexing of the lattice sites
+        r"""
+        Convert ``[cell_x, cell_y, basis]`` to the internal indexing of the lattice sites.
+
+        Parameters
+        ----------
+            cellx :
+                Index of the unit cell along the :math:`\mathbf{a}_1` direction.
+            celly :
+                Index of the unit cell along the :math:`\mathbf{a}_2` direction.
+            basis :
+                Index of the atom in the basis of the lattice. This index is defined when creating the model.
+
+        Returns
+        -------
+            index :
+                The index of an atom in the lattice according to the internal indexing.
+
+        .. note::
+            The conventional internal indexing is the one also used in PythTB and TBmodels when dealing with supercells: the first index is the bottom-left corner of the lattice and the last one is the top-right. The indices increase first along the :math:`\mathbf{a}_2` direction, then along :math:`\mathbf{a}_1`.
         """
         return self.Ly * self.states_uc * cellx + self.states_uc * celly + basis * (2 if self.spinful else 1)
 
 
     def _xy_to_line(self, fixed_coordinate : str, xy : int):
-        """
-        Returns the indices of the sites of the lattice keeping fixed the direction fixed_coordinate starting from xy
+        r"""
+        Returns the indices of the sites of the lattice along the fixed direction ``fixed_coordinate`` starting from ``xy``.
+
+        Parameters
+        ----------
+            fixed_coordinate :
+                Coordinate that has to be kept fixed. If one is interested in the indices along the :math:`\mathbf{a}_1` direction, this has to be set ``'y'`` else ``'x'``.
+            xy :
+                Index of the unit cell along the direction ``fixed_coordiante`` from which the indices are returned.
+
+        Returns
+        -------
+            index_list :
+                The list of indices of the atoms in the lattice keeping fixed ``fixed_direction`` from the cell ``xy``.             
         """
         if fixed_coordinate == 'x':
             return np.array([self.states_uc * xy * self.Ly + i for i in range(self.states_uc * self.Ly) if self._mask[self.states_uc * xy * self.Ly + i]]).flatten().tolist()
@@ -333,22 +413,36 @@ class Model():
                         indices.append(self.states_uc * xy + self.states_uc * self.Ly * i + j)
             return np.array(indices)
         else:
-            raise RuntimeError("Direction not allowed, only 'x' or 'y'")
+            raise RuntimeError("Direction not allowed, only 'x' or 'y'.")
 
     #################################################
     # Macroscopic average functions
     #################################################
 
     def _lattice_contraction(self, cutoff : float):
-        """
-        Defines which atomic sites must be contracted on one site, for each site of the lattice
+        r"""
+        Defines which atomic sites must be contracted on one site, for each site of the lattice.
+
+        Parameters
+        ----------
+            cutoff :
+                Real-space cutoff for the contraction window.
+
+        Returns
+        -------
+            contraction :
+                List of the indices of the atoms that are within cutoff from each other, per atom.
         """
         contraction = []
 
+        # Diagonal position matrix elements
         rx = self.cart_positions[:, 0]; ry = self.cart_positions[:, 1]
+        
+        # Return True if current is close to trial within cutoff
         def within_range(current, trial):
             return True if (rx[current] - rx[trial]) ** 2 + (ry[current] - ry[trial]) ** 2 - cutoff ** 2 < 1e-6 else False
 
+        # Store the lattice sites closer than cutoff for each lattice site
         for current in range(len(rx)):
             contraction.append([trial for trial in range(len(rx)) if within_range(current, trial)])
 
@@ -356,11 +450,22 @@ class Model():
     
 
     def _PBC_lattice_contraction(self, cutoff):
-        """
-        Defines which atomic sites must be contracted on one site, for each site of the lattice within PBC (minimum convention image)
+        r"""
+        Defines which atomic sites must be contracted on one site, for each site of the lattice within PBCs (minimum convention image).
+
+        Parameters
+        ----------
+            cutoff :
+                Real-space cutoff for the contraction window.
+
+        Returns
+        -------
+            contraction :
+                List of the indices of the atoms that are within cutoff from each other, per atom.
         """
         contraction = []
 
+        # Compute the primitive lattice vectors
         if isinstance(self.model, tbm.Model):
             lvecs = np.copy(self.model.uc)
         elif isinstance(self.model, ptb.tb_model):
@@ -379,6 +484,7 @@ class Model():
         reds = np.array(reds)
         rx = reds[:, 0]; ry = reds[:, 1]
 
+        # Return True if current is close to trial within cutoff (trial comprise minimum image convention)
         def within_range(current, trial):
             trialorbitals = np.array([
                 [rx[trial], ry[trial]], [rx[trial], ry[trial] + self.Ly], [rx[trial], ry[trial] - self.Ly], [rx[trial] + self.Lx, ry[trial]],
@@ -386,11 +492,13 @@ class Model():
                 [rx[trial] - self.Lx, ry[trial] + self.Ly], [rx[trial] - self.Lx, ry[trial] - self.Ly]
             ])
             for to in trialorbitals:
+                # Go back to real space coordinates to compute the distance
                 dr = np.dot(np.array([rx[current] - to[0], ry[current] - to[1]]), lvecs)
                 if np.dot(dr, dr) - cutoff ** 2 < 1e-6:
                     return True
             return False
 
+        # Store the lattice sites closer than cutoff for each lattice site
         for current in range(len(rx)):
             contraction.append([trial for trial in range(len(rx)) if within_range(current, trial)])
 
@@ -398,19 +506,35 @@ class Model():
 
 
     def _average_over_radius(self, vals, cutoff : float, contraction = None):
-        """
-        Average vals over the contraction of the lattice defined by the cutoff radius
+        r"""
+        Evaluate the average of ``vals`` according to a certain ``cutoff`` in real space.
+
+        Parameters
+        ----------
+            vals :
+                Values that have to be averaged.
+            cutoff :
+                Real space cutoff for the real space average.
+            contraction :
+                List of atoms that have to be considered in the macroscopic average, per atom. Default is ``None``, which means it is computed from the positions of the atoms in the lattice.
+
+        Returns
+        -------
+            return_vals :
+                List of averaged values per lattice site within a cutoff.
         """
         return_vals = []
+
+        # If no contraction list is passed, it is computed from the lattice position (default OBC contraction)
         if contraction is None:
             contraction = self._lattice_contraction(cutoff)
 
-        # Macroscopic average within a certain radius
+        # Macroscopic average within a certain radius = cutoff
         for current in range(len(self.cart_positions[:, 0])):
             tmp = [vals[ind] for ind in contraction[current]]
             if not len(tmp) == 0:
                 return_vals.append(np.sum(tmp) / (len(tmp) / self.states_uc))
             else:
-                raise RuntimeError("Unexpected error occourred in counting the neighbors of a lattice site, there are none")
+                raise RuntimeError("Unexpected error occourred in counting the neighbors of a lattice site, there are none.")
 
         return np.array(return_vals)

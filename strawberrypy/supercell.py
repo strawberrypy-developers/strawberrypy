@@ -10,6 +10,7 @@ from . import _pythtb
 
 import scipy.linalg as la
 from opt_einsum import contract
+from .utils import *
 
 class Supercell(Model):
     def __init__(self, tbmodel, Lx : int, Ly : int, spinful : bool = False):
@@ -195,88 +196,81 @@ class Supercell(Model):
     # Local PBC marker
     #################################################
 
-    def pbc_local_chern_marker(self, direction : int = None, start : int = 0, return_projector : bool = False, input_projector = None, formula : str = "symmetric", smearing_temperature : float = 0, fermidirac_cutoff : float = 0.1, macroscopic_average : bool = False, cutoff : float = 0.8):
-        """
-        Evaluate the PBC local Chern marker on the whole lattice if direction is None. If direction is not None evaluates the Chern marker along direction starting from start.
+    def pbc_local_chern_marker(self, direction : int = None, start : int = 0, return_projector : bool = False, input_projector = None, formula : str = "symmetric", macroscopic_average : bool = False, cutoff : float = 0.8, smearing_temperature : float = 0, fermidirac_cutoff : float = 0.1):
+        r"""
+        Evaluate the local Chern marker on the whole supercell if ``direction`` is ``None``. If ``direction`` is not ``None`` evaluates the PBC local Chern marker along ``direction`` starting from ``start``. Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
         
-        Args:
-            - direction : direction along which compute the PBC local Chern marker, default is None (returns the marker on the whole lattice), allowed values are 0 for 'x' direction and 1 for 'y' direction
-            - start : if direction is not None, is the coordinate of the unit cell at the start of the evaluation of the PBC Chern marker
-            - return_projector : if True, returns the ground state projector at the end of the calculation, default is False
-            - input_projector : input the list of projectors [P, P1, P2] (or [P, P1, P2, P-1, P-2] if formula is symmetric) used in the calcualtions. Default is None, which means they are computed from the model
-            - formula : 'symmetric' or 'asymmetric' PBC local Chern marker formula
-            - smearing_temperature : if smearing is needed, the temperature to use in the Fermi-Dirac distribution
-            - fermidirac_cutoff : if smearing is introduced, the cutoff on the occupied states for the Fermi-Dirac distribution
-            - macroscopic_average : if True, returns the PBC local Chern marker averaged over a radius equal to the cutoff
-            - cutoff : cutoff set for the calculation of averages
+        Parameters
+        ----------
+            direction :
+                Direction along which to compute the PBC local Chern marker. Default is ``None`` (returns the marker on the whole supercell). Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
+            start :
+                If ``direction`` is not ``None``, is the coordinate of the unit cell from which the evaluation of the PBC local Chern marker starts. For instance, if interested on the value of the PBC local marker along the :math:`\mathbf{a}_1` direction at half height, it should be set ``direction = 0`` and ``start = Ly // 2``.
+            return_projector :
+                If ``True``, returns the ground state projector at the end of the calculation. Default is ``False``.
+            input_projector :
+                Input the list of projectors :math:`[\mathcal{P}_{\Gamma},\mathcal{P}_{\mathbf{b}_1},\mathcal{P}_{\mathbf{b}_2}]` (or :math:`[\mathcal{P}_{\Gamma},\mathcal{P}_{\mathbf{b}_1},\mathcal{P}_{\mathbf{b}_2},\mathcal{P}_{-\mathbf{b}_1},\mathcal{P}_{-\mathbf{b}_2}]` if ``formula == 'symmetric'``) to be used in the calculation. Default is ``None``, which means that it is computed from the model stored in the class.
+            formula :
+                Formula to be used. Default is ``'symmetric'``, which is computationally more demanding but converges faster. Any other input will result in the ``'asymetric'`` formulation.
+            macroscopic_average :
+                If ``True``, returns the PBC local Chern marker averaged in real space over a radius equal to ``cutoff``. Default is ``False``.
+            cutoff :
+                Cutoff set for the calculation of the macroscopic average in real space of the PBC local Chern marker.
+            smearing_temperature :
+                Set a fictitious temperature :math:`T_s` to be used when weighting the eigenstates of the Hamiltonian comprising the ground state projector. In particular, the ground state projector is computed as :math:`\mathcal P=\sum_{n}f(\epsilon_n, T_s, \mu)|u_n\rangle\langle u_n|` where :math:`f(\epsilon_n, T_s, \mu)` is the Fermi-Dirac distribution, :math:`\mu` is the chemical potential and :math:`\mathcal{H}_{\mathbf{k}}|u_n\rangle=\epsilon_n|u_n\rangle`. Introducing some smearing is particularly useful when dealing with heterojunctions o inhomogeneous models whose insulating gap is small in order to improve the convergence of the local marker. Default is ``0``, so no smearing is introduced and a model half-filled is implied.
+            fermidirac_cutoff :
+                Cutoff imposed on the Fermi-Dirac distribution to further improve the convergence, mostly when :math:`T_s\neq0`. Default is ``0.1``, which looks appropriate in most cases.
 
-        Returns:
-            - lattice_chern : local Chern marker of the whole lattice if direction is None
-            - lcm_direction : local Chern marker along direction starting from start
-            - projector : a list of prjectors [P, P1, P2] (or [P, P1, P2, P-1, P-2] if formula is symmetric), returned if return_projector is set True (default is False)
+        Returns
+        -------
+            lattice_chern :
+                PBC local Chern marker evaluated on the whole lattice if ``direction`` is ``None``.
+            lcm_direction :
+                PBC local Chern marker evaluated along ``direction`` starting from ``start``.
+            return_proj :
+                List of projectors :math:`[\mathcal{P}_{\Gamma},\mathcal{P}_{\mathbf{b}_1},\mathcal{P}_{\mathbf{b}_2}]` (or :math:`[\mathcal{P}_{\Gamma},\mathcal{P}_{\mathbf{b}_1},\mathcal{P}_{\mathbf{b}_2},\mathcal{P}_{-\mathbf{b}_1},\mathcal{P}_{-\mathbf{b}_2}]` if ``formula == 'symmetric'``) used in the calculation.
         """
-        
-        # Auxiliary functions
-        def fermidirac(e, t, mu):
-            if t == 0:
-                out = []
-                for en in e:
-                    out.append(1 if en < mu else 0)
-                return np.array(out)
-            else:
-                return 1 / ( 1 + np.exp((e - mu) / t) )
-        
         return_proj = []
 
         if input_projector is None:
             eigenvals, eigenvecs = la.eigh(self.hamiltonian)
 
             # Find the chemical potential
-            mu_min = np.min(eigenvals); mu_max = np.max(eigenvals); mu = 0
-            numatoms = self.n_occ; niter = 0; maxiter = 200
-            while True:
-                mu = 0.5 * (mu_min + mu_max)
-                n_exp = np.sum(fermidirac(eigenvals, smearing_temperature, mu))
+            mu = chemical_potential(eigenvals, smearing_temperature, self.n_occ)
 
-                if n_exp < numatoms:
-                    mu_min = mu
-                else:
-                    mu_max = mu
-                
-                if np.abs(n_exp - numatoms) < 1e-6:
-                    break
+            # Evaluate the effective number of occupied states whose occupation is greater than the Fermi-Dirac cutoff
+            rank = np.sum(fermidirac(eigenvals, smearing_temperature, mu) > fermidirac_cutoff)
 
-                niter += 1
-                if niter > maxiter:
-                    raise RuntimeError("Bisection method did not converge")
-
-            nocc = np.sum(fermidirac(eigenvals, smearing_temperature, mu) > fermidirac_cutoff)
-
-            # Periodic gauge
             eigenvecs_use = eigenvecs.T
 
+            # Reciprocal lattice vectors
             b1, b2 = self.reciprocal_vec()
-            u_nb1 = self.periodic_gauge(eigenvecs_use, b1, n_occ = nocc)
-            u_nb2 = self.periodic_gauge(eigenvecs_use, b2, n_occ = nocc)
 
-            udual_b1 = self.dual_state(eigenvecs_use, u_nb1, n_sub = nocc)
-            udual_b2 = self.dual_state(eigenvecs_use, u_nb2, n_sub = nocc)
+            # Periodic gauge along b_1 and b_2
+            u_nb1 = self.periodic_gauge(eigenvecs_use, b1, n_occ = rank)
+            u_nb2 = self.periodic_gauge(eigenvecs_use, b2, n_occ = rank)
+
+            # Dual states at b_1 and b_2
+            udual_b1 = self.dual_state(eigenvecs_use, u_nb1, n_sub = rank)
+            udual_b2 = self.dual_state(eigenvecs_use, u_nb2, n_sub = rank)
         
-            gsp = contract("ij,ik->jk", eigenvecs_use[:nocc, :], (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * eigenvecs_use[:nocc, :].conjugate().T).T)
-            pb1 = contract("ij,ik->jk", udual_b1, (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * (udual_b1.conjugate().T)).T)
-            pb2 = contract("ij,ik->jk", udual_b2, (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * (udual_b2.conjugate().T)).T)
+            # Evaulate the ground state projector, and projectors P_b1 and P_b2
+            gsp = contract("ij,ik->jk", eigenvecs_use[:rank, :], (fermidirac(eigenvals[:rank], smearing_temperature, mu) * eigenvecs_use[:rank, :].conjugate().T).T)
+            pb1 = contract("ij,ik->jk", udual_b1, (fermidirac(eigenvals[:rank], smearing_temperature, mu) * (udual_b1.conjugate().T)).T)
+            pb2 = contract("ij,ik->jk", udual_b2, (fermidirac(eigenvals[:rank], smearing_temperature, mu) * (udual_b2.conjugate().T)).T)
             return_proj.append(gsp); return_proj.append(pb1); return_proj.append(pb2)
             p = pb1 @ pb2 - pb2 @ pb1
 
+            # If I want the symmetric formula I need to do the same also for -b_1 and -b_2
             if formula == "symmetric":
-                u_nmb1 = self.periodic_gauge(eigenvecs_use, -1 * b1, n_occ = nocc)
-                u_nmb2 = self.periodic_gauge(eigenvecs_use, -1 * b2, n_occ = nocc)
+                u_nmb1 = self.periodic_gauge(eigenvecs_use, -1 * b1, n_occ = rank)
+                u_nmb2 = self.periodic_gauge(eigenvecs_use, -1 * b2, n_occ = rank)
 
-                udual_mb1 = self.dual_state(eigenvecs_use, u_nmb1, n_sub = nocc)
-                udual_mb2 = self.dual_state(eigenvecs_use, u_nmb2, n_sub = nocc)
+                udual_mb1 = self.dual_state(eigenvecs_use, u_nmb1, n_sub = rank)
+                udual_mb2 = self.dual_state(eigenvecs_use, u_nmb2, n_sub = rank)
 
-                pmb1 = contract("ij,ik->jk", udual_mb1, (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * (udual_mb1.conjugate().T)).T)
-                pmb2 = contract("ij,ik->jk", udual_mb2, (fermidirac(eigenvals[:nocc], smearing_temperature, mu) * (udual_mb2.conjugate().T)).T)
+                pmb1 = contract("ij,ik->jk", udual_mb1, (fermidirac(eigenvals[:rank], smearing_temperature, mu) * (udual_mb1.conjugate().T)).T)
+                pmb2 = contract("ij,ik->jk", udual_mb2, (fermidirac(eigenvals[:rank], smearing_temperature, mu) * (udual_mb2.conjugate().T)).T)
                 return_proj.append(pmb1)
                 return_proj.append(pmb2)
 
@@ -292,8 +286,10 @@ class Supercell(Model):
                 pmb2 = input_projector[4]
                 p += ( (pmb1 @ pmb2 - pmb2 @ pmb1) - (pb1 @ pmb2 - pmb2 @ pb1) - (pmb1 @ pb2 - pb2 @ pmb1) )
 
+        # PBC Chern marker operator
         chern_operator = -np.imag(p @ gsp) * float((self.Lx * self.Ly) / (np.pi * (8 if formula == "symmetric" else 2)))
 
+        # If macroscopic_average I have to compute the lattice values with the averages first (explicit PBC contraction passed)
         if macroscopic_average or self.disordered:
             contraction = self._PBC_lattice_contraction(cutoff)
             pbclcm = self._average_over_radius(np.diag(chern_operator), cutoff, contraction = contraction)
@@ -302,7 +298,7 @@ class Supercell(Model):
             # Evaluate index of the selected direction
             indices = self._xy_to_index('x' if direction == 1 else 'y', start)
 
-            # If macroscopic average consider the averaged lattice, else the Chern operators
+            # If macroscopic_average consider the averaged lattice, else the Chern operators
             if macroscopic_average or self.disordered:
                 pbclcm_line = [pbclcm[int(indices[self.states_uc * i] / self.states_uc)] for i in range(int(len(indices) / self.states_uc))]
             else:
@@ -314,7 +310,10 @@ class Supercell(Model):
                 return np.array(pbclcm_line), np.array(return_proj)
 
         if not macroscopic_average and not self.disordered:
-            pbclcm = [np.sum([chern_operator[self.states_uc * i + j, self.states_uc * i + j] for j in range(self.states_uc)]) for i in range(int(len(chern_operator) / self.states_uc))]
+            pbclcm = [np.sum([chern_operator[self.states_uc * i + j, self.states_uc * i + j] for j in range(self.
+            states_uc)]) for i in range(int(len(chern_operator) / self.states_uc))]
+
+            # Repeat to ensure that the dimension of the marker matches the dimension of the position matrices, since if not macroscopic_average the value of the marker is defined per unit cell
             pbclcm = np.repeat(pbclcm, self.states_uc)
         
         if not return_projector:

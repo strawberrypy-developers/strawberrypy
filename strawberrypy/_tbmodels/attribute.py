@@ -3,7 +3,17 @@ import tbmodels as tbm
 
 def _reciprocal_vec(model):
     """
-    Returns the cartesian coordinates of the reciprocal lattice vectors
+    Returns reciprocal lattice vectors in cartesian coordinates. ``tbmodels.Model`` version.
+
+    Parameters
+    ----------
+        model :
+            A ``tbmodels.Model`` instance.
+
+    Returns
+    -------
+        b1, b2 :
+            Reciprocal lattice vectors.
     """
     b_matrix = model.reciprocal_lattice
     b1 = b_matrix[0,:]
@@ -12,7 +22,21 @@ def _reciprocal_vec(model):
 
 def get_positions(model, nx_sites = 1, ny_sites = 1):
     """
-    Returns the cartesian coordinates of the orbitals centers states for a tbmodels.Model
+    Returns the cartesian coordinates of the orbitals of a model. ``tbmodels.Model`` version.
+
+    Parameters
+    ----------
+        model :
+            A ``tbmodels.model`` instance.
+        nx_sites :
+            Number of unit cells in the model along the :math:`\mathbf{a}_1` direction.
+        ny_sites :
+            Number of unit cells in the model along the :math:`\mathbf{a}_2` direction.
+
+    Returns
+    -------
+        positions :
+            Cartesian coordinates of the lattice sites.
     """
     positions = np.copy(model.pos)
     for i in range(model.pos.shape[0]):
@@ -23,6 +47,7 @@ def get_positions(model, nx_sites = 1, ny_sites = 1):
 
     return positions
 
+""" N: is this needed?
 def _orb_cart(model):
     #returns position of orbitals in cartesian coordinates
     orb_red = model.pos
@@ -33,49 +58,99 @@ def _orb_cart(model):
     for i in range (n_orb):
         orb_c.append((np.matmul(lat_super.transpose(),orb_red[i].reshape(-1,1))).squeeze())
     orb_c = np.array(orb_c)
-    return orb_c
+    return orb_c"""
 
 def get_hamiltonian(model, point):
     """
-    Returns the hamiltonian at the given k point and the number of occupied states for a tbmodels.Model
-    """
+    Returns the Hamiltonian at the given k-point and the number of occupied states (half-filling is assumed). ``tbmodels.Model`` version.
 
+    Parameters
+    ----------
+        model :
+            A ``tbmodels.Model`` instance.
+        point :
+            A point in the reciprocal space.
+
+    Returns
+    -------
+        hamilton :
+            Hamiltonian matrix calculated in ``point``.
+        nocc :
+            Number of occupied states (half-filling is assumed).
+    """
     return model.hamilton(point, convention = 1), model.occ
 
 def calc_states_uc(model):
     """
-    Returns the number of states per unit cell of a tbmodels.Model
+    Returns the number of states per unit cell. ``tbmodels.Model`` version.
+
+    Parameters
+    ----------
+        model :
+            A ``tbmodels.Model`` instance.
+
+    Returns
+    -------
+        size :
+            Number of states per unit cell in the model.
     """
     return model.size
 
 def initialize_mask(model):
     """
-    Returns a list of True for each state of the model
+    Returns a list of True for each state of the model. ``tbmodels.Model`` version.
+
+    Parameters
+    ----------
+        model :
+            A ``tbmodels.Model`` instance.
+
+    Returns
+    -------
+        mask :
+            A list of ``True`` values with the same dimension of the total number of orbitals in the model.
     """
     return np.array([True for _ in range(model.size)])
 
 def calc_uc_vol(model):
     """
-    Returns the volume of a 2D unit cell
+    Returns the volume of a 2D unit cell. ``tbmodels.Model`` version.
+
+    Parameters
+    ----------
+        model :
+            A ``tbmodels.Model`` instance.
+
+    Returns
+    -------
+        vol_uc :
+            Volume of the 2D unit cell of the model.
     """
     return np.linalg.norm(np.cross(model.uc[0], model.uc[1]))
 
 def cut_piece_tbm(source_model, num : int, fin_dir : int, dimk : int, glue : bool = False):
     """
-    Reduce by 1 the dimension of a model in TBModels in a given direction, building a supercell made by a given number of atoms. If a zero dimensional system, is needed it is required to run twice the function with dimk = 1 and then dimk = 0.
+    Remove the periodic hoppings of a ``tbmodels.Model`` along a given direction, building a supercell made with given number of unit cells in the finite direction. If a zero-dimensional system is needed, it is required to run twice the function with ``dimk = 1`` first, and then ``dimk = 0``. This is implemented in ``make_finte``.
     
-        Args:
-        - source_model: the model to reduce
-        - num: number of cell to keep in the finite direction
-        - fin_dir: finite direction (ie, 0 = x, 1 = y)
-        - dimk: number of periodic directions after the cut
-        - glue: glue edges to make periodicity
+    Parameters
+    ----------
+        source_model :
+            A ``tbmodels.Model`` instance.
+        num :
+            The number of unit cells composing the supercell along the finite direction.
+        fin_dir :
+            The finite direction (allowed values are ``0``, meaning the :math:`\mathbf{a}_1` direction, and ``1`` for the :math:`\mathbf{a}_2` direction).
+        dimk :
+            Number of periodic directions after the cut. For instance, if a xy-periodic system is given, and a x-periodic and y-finite system is returned, ``dimk`` should be set to ``1``.
+        glue :
+            Whether to glue the finite edges to impose the periodicity again (supercell).
 
-        Returns:
-        - tbmodels.Model finite along fin_dir
+    Returns
+    -------
+        model :
+            A ``tbmodels.Model`` whose periodic hoppings along ``fin_dir`` are removed (if ``glue = False``).
     """
-
-    # Ensure the condition the function has been built for
+    # Check input variables
     if num <= 0:
         raise RuntimeError("Negative number of cells in the finite direction required.")
     if fin_dir not in [0, 1]:
@@ -99,10 +174,9 @@ def cut_piece_tbm(source_model, num : int, fin_dir : int, dimk : int, glue : boo
             orb_tmp[fin_dir] += float(i)
             orb_tmp[fin_dir] /= num
 
-            # Convert the coordinates back into lattice coordinates
             newpos.append(orb_tmp)
 
-    # Onsite energies per unit cell (2 is by convention with TBModels)
+    # On-site energies per unit cell (2 is by convention with TBmodels)
     onsite = num * [2 * np.real(source_model.hop[source_model._zero_vec][j][j]) for j in range(norbs)]
 
     # Hopping amplitudes and positions
@@ -120,8 +194,7 @@ def cut_piece_tbm(source_model, num : int, fin_dir : int, dimk : int, glue : boo
         # Maximum bond length
         jump_fin = hoppings[j][0][fin_dir]
 
-        # If I have a finite direction I make the hopping vector finite, and
-        #   if I have no periodic direction, I but every hopping in the [zero] cell
+        # If I have a finite direction I make the hopping vector finite, and if I have no periodic direction, I put every hopping to the [zero] cell
         if dimk != 0:
             objective[fin_dir] = 0
         else:
@@ -152,7 +225,7 @@ def cut_piece_tbm(source_model, num : int, fin_dir : int, dimk : int, glue : boo
                     else:
                         ending = int(ending) % int(norbs * num)
 
-                    # Avoid setting twice onsite energies
+                    # Avoid setting on-site energies twice
                     if starting == ending and (objective == [0 for i in range(source_model.dim)]).all():
                         continue
 
@@ -166,9 +239,22 @@ def cut_piece_tbm(source_model, num : int, fin_dir : int, dimk : int, glue : boo
 
 def make_finite(model, lx, ly):
     """
-    Returns an instance of a tbmodels.Model with OBCs
-    """
+    Returns an instance of a model with every periodic hopping removed (a finite model within open boundary conditions). ``tbmodels.Model`` version.
 
+    Parameters
+    ----------
+        model :
+            A ``tbmodels.Model`` instance.
+        lx :
+            Number of unit cells of the sample along the :math:`\mathbf{a}_1` direction.
+        ly :
+            Number of unit cells of the sample along the :math:`\mathbf{a}_2` direction.
+
+    Returns
+    -------
+        finite :
+            A model whose periodic hoppings have been removed (OBC model).
+    """
     if not (lx > 0 and ly > 0):
         raise RuntimeError("Number of sites along finite direction must be greater than 0")
 
