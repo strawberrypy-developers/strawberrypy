@@ -35,6 +35,9 @@ pre {
 pre, tt, code {
   font-size: 0.9em;
 }
+code {
+    background-color: rgba(0, 0, 0, 0)
+}
 div.admonition code {
     background: #c9dbe8;
     /* color: #60a0b0; */

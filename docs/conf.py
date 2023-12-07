@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'StrawberryPy'
+project = 'StraWBerryPy'
 copyright = '2023, Roberta Favata, Nicolas Baù and Antimo Marrazzo'
 author = 'Roberta Favata, Nicolas Baù and Antimo Marrazzo'
 release = '0.2.0'
@@ -20,13 +20,15 @@ release = '0.2.0'
 extensions = [
 	'sphinx.ext.autodoc',
 	'sphinx.ext.viewcode',
-	'sphinx.ext.napoleon'
+	'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx'
 ]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 highlight_language = 'python3'
-root_doc = 'index'
+master_doc = 'index'
+#html_additional_pages = {'index': 'index.html'}
 
 
 # -- Options for HTML output -------------------------------------------------

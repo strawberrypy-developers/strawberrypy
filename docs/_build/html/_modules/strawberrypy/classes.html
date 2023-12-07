@@ -1,15 +1,18 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>strawberrypy.classes &#8212; StrawberryPy 0.2.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=649a27d8" />
-    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=343c9f17" />
-    <script src="../../_static/documentation_options.js?v=938c9ccc"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>strawberrypy.classes &#8212; StraWBerryPy 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -23,7 +26,7 @@
     
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../index.html">StrawberryPy</a></h1>
+<h1 class="logo"><a href="../../index.html">StraWBerryPy</a></h1>
 
 
 
@@ -85,9 +88,7 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_tbmodels</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_pythtb</span>
 
-<div class="viewcode-block" id="Model">
-<a class="viewcode-back" href="../../strawberrypy.html#strawberrypy.classes.Model">[docs]</a>
-<span class="k">class</span> <span class="nc">Model</span><span class="p">():</span>
+<div class="viewcode-block" id="Model"><a class="viewcode-back" href="../../strawberrypy.html#strawberrypy.classes.Model">[docs]</a><span class="k">class</span> <span class="nc">Model</span><span class="p">():</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generic ``Model`` class from which are constructed ``Supercell`` and ``FiniteModel``. This should *not* be called explicitly since it is already called from both ``Supercell`` and ``FiniteModel`` upon creation. Contains the functions needed to load spin, positions, Hamiltonian matrices and other useful information.</span>
 
@@ -235,9 +236,7 @@
     <span class="c1"># Lattice functions</span>
     <span class="c1">#################################################</span>
 
-<div class="viewcode-block" id="Model.add_onsite_disorder">
-<a class="viewcode-back" href="../../strawberrypy.html#strawberrypy.classes.Model.add_onsite_disorder">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_onsite_disorder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">seed</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Model.add_onsite_disorder"><a class="viewcode-back" href="../../strawberrypy.html#strawberrypy.classes.Model.add_onsite_disorder">[docs]</a>    <span class="k">def</span> <span class="nf">add_onsite_disorder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">seed</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add on-site Anderson disorder to the model. The addition of Anderson disorder consists in a diagonal term in the Hamiltonian :math:`\mathcal H_{Anderson}=\sum_i w_ic_i^{\dagger}c_i` where :math:`w_i` are random variables uniformly distributed in the interval :math:`[-\frac{W}{2},\frac{W}{2}]`.</span>
 
@@ -267,10 +266,7 @@
         <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">diagonal</span><span class="p">()</span> <span class="o">+</span> <span class="n">dis</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="Model.add_vacancies">
-<a class="viewcode-back" href="../../strawberrypy.html#strawberrypy.classes.Model.add_vacancies">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_vacancies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vacancies_list</span><span class="p">):</span>
+<div class="viewcode-block" id="Model.add_vacancies"><a class="viewcode-back" href="../../strawberrypy.html#strawberrypy.classes.Model.add_vacancies">[docs]</a>    <span class="k">def</span> <span class="nf">add_vacancies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vacancies_list</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add vacancies in the system by removing a site in the lattice.</span>
 
@@ -356,10 +352,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span> <span class="o">=</span> <span class="n">cart_pos</span><span class="o">.</span><span class="n">T</span></div>
 
 
-
-<div class="viewcode-block" id="Model.make_heterostructure">
-<a class="viewcode-back" href="../../strawberrypy.html#strawberrypy.classes.Model.make_heterostructure">[docs]</a>
-    <span class="k">def</span> <span class="nf">make_heterostructure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model2</span><span class="p">,</span> <span class="n">direction</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">start</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stop</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="Model.make_heterostructure"><a class="viewcode-back" href="../../strawberrypy.html#strawberrypy.classes.Model.make_heterostructure">[docs]</a>    <span class="k">def</span> <span class="nf">make_heterostructure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model2</span><span class="p">,</span> <span class="n">direction</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">start</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stop</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create an heterostructure by substtuting the parameters of ``model2`` into the model. The system will be split in the direction ``direction`` starting from the unit cell whose index is ``start`` and stopping at the cell indexed as ``end``.</span>
 
@@ -447,7 +440,6 @@
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">amplitude1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span> <span class="k">continue</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">amplitude1</span></div>
-
 
     <span class="c1">#################################################</span>
     <span class="c1"># Utility functions</span>
@@ -628,7 +620,6 @@
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unexpected error occourred in counting the neighbors of a lattice site, there are none.&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">return_vals</span><span class="p">)</span></div>
-
 </pre></div>
 
           </div>
@@ -641,7 +632,7 @@
       &copy;2023, Roberta Favata, Nicolas Baù and Antimo Marrazzo.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>

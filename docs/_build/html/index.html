@@ -1,16 +1,19 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Welcome to StrawberryPy’s documentation! &#8212; StrawberryPy 0.2.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=649a27d8" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=343c9f17" />
-    <script src="_static/documentation_options.js?v=938c9ccc"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>Welcome to StraWBerryPy! &#8212; StraWBerryPy 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="strawberrypy" href="modules.html" />
@@ -25,7 +28,7 @@
     
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="#">StrawberryPy</a></h1>
+<h1 class="logo"><a href="#">StraWBerryPy</a></h1>
 
 
 
@@ -77,8 +80,178 @@
 
           <div class="body" role="main">
             
-  <section id="welcome-to-strawberrypy-s-documentation">
-<h1>Welcome to StrawberryPy’s documentation!<a class="headerlink" href="#welcome-to-strawberrypy-s-documentation" title="Link to this heading">¶</a></h1>
+  <section id="welcome-to-strawberrypy">
+<h1>Welcome to StraWBerryPy!<a class="headerlink" href="#welcome-to-strawberrypy" title="Permalink to this heading">¶</a></h1>
+<p><strong>StraWBerryPy</strong> (Single-poinT and local invaRiAnts for Wannier Berriologies in Python) is a Python package calculating topological invariants for non-crystalline 2D topological insulators. The single-point formulas in the supercell framework for the Chern number <a class="reference external" href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.012405">Ceresoli-Resta</a> and for the spin Chern number <a class="reference external" href="https://iopscience.iop.org/article/10.1088/2516-1075/acba6f/meta">Favata-Marrazzo</a> are implemented in StraWBerryPy.
+In addition, StraWBerryPy can handle finite systems (such as bounded samples and heterostructures) and compute the local Chern marker <a class="reference external" href="https://journals.aps.org/prb/abstract/10.1103/PhysRevB.84.241106">Bianco-Resta</a>.
+The code provides dedicated interfaces to tight-binding packages <a class="reference external" href="http://www.physics.rutgers.edu/pythtb/">PythTB</a> and <a class="reference external" href="https://tbmodels.greschd.ch/en/latest/">Tbmodels</a>.</p>
+<section id="quick-installation">
+<h2>Quick installation<a class="headerlink" href="#quick-installation" title="Permalink to this heading">¶</a></h2>
+<p>Clone <a class="reference external" href="https://github.com/strawberrypy-developers/strawberrypy.git">this</a> Github repository and install using the following instructions:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/strawberrypy-developers/strawberrypy.git
+<span class="nb">cd</span><span class="w"> </span>strawberrypy
+pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+</section>
+<section id="quick-start">
+<h2>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this heading">¶</a></h2>
+<p>Here, two examples for calculating the single-point topological invariant in the supercell framework for tight-binding models in presence of Anderson disorder.</p>
+<section id="kane-mele-example">
+<h3>Kane-Mele example<a class="headerlink" href="#kane-mele-example" title="Permalink to this heading">¶</a></h3>
+<p>Let’s consider as prototype of quantum spin Hall insulator the Kane-Mele model and calculate the topological invariant through the single-point spin Chern number formulation.</p>
+<p>First create the tight-binding model in primitive cell using PythTB and Tbmodels packages. Create a supercell, for example including L lattice points in each lattice vector direction.
+Then add disorder in the supercell, for instance Anderson disorder which is a uniformly distributed random on site potential.
+For a reference implementation, look at <a class="reference download internal" download="" href="_downloads/910ff277015bcb962d866f816178d282/kane_mele.py"><code class="xref download docutils literal notranslate"><span class="pre">Kane-Mele</span> <span class="pre">example</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">strawberrypy</span> <span class="kn">import</span> <span class="n">single_point_spin_chern</span>
+<span class="kn">from</span> <span class="nn">strawberrypy.example_models</span> <span class="kn">import</span> <span class="n">kane_mele_pythtb</span><span class="p">,</span> <span class="n">kane_mele_tbmodels</span><span class="p">,</span> <span class="n">km_anderson_disorder_pythtb</span><span class="p">,</span> <span class="n">km_anderson_disorder_tbmodels</span>
+
+<span class="n">L</span> <span class="o">=</span> <span class="mi">12</span>              <span class="c1"># supercell LxL linear size</span>
+
+<span class="c1"># Topological phase</span>
+<span class="n">r</span> <span class="o">=</span> <span class="mf">1.</span>              <span class="c1"># r = rashba/spin_orb</span>
+<span class="n">e</span> <span class="o">=</span> <span class="mf">3.</span>              <span class="c1"># e = e_onsite/spin_orb</span>
+<span class="n">spin_o</span> <span class="o">=</span> <span class="mf">0.3</span>        <span class="c1"># spin_orb = spin_orb/t (t=1)</span>
+
+<span class="c1"># # Trivial phase</span>
+<span class="c1"># r = 3.</span>
+<span class="c1"># e = 5.5</span>
+<span class="c1"># spin_o = 0.3</span>
+
+<span class="c1"># Create Kane-Mele model in supercell LxL through PythTB package</span>
+<span class="n">km_pythtb_model</span> <span class="o">=</span> <span class="n">kane_mele_pythtb</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">spin_o</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+
+<span class="c1"># Create Kane-Mele model in supercell LxL through TBmodels package</span>
+<span class="n">km_tbmodels_model</span> <span class="o">=</span> <span class="n">kane_mele_tbmodels</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">spin_o</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="mf">1.</span>              <span class="c1"># w = disorder strength such that random potential is in [-w/2, w/2]</span>
+
+<span class="c1"># Add Anderson disorder in PythTB model</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">km_pythtb_model</span> <span class="o">=</span> <span class="n">km_anderson_disorder_pythtb</span><span class="p">(</span><span class="n">km_pythtb_model</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+
+<span class="c1"># Add Anderson disorder in TBmodels model</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">km_tbmodels_model</span> <span class="o">=</span> <span class="n">km_anderson_disorder_tbmodels</span><span class="p">(</span><span class="n">km_tbmodels_model</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, use single_point_spin_chern function to calculate the single-point invariant for the disordered model in the supercell framework.
+The function takes as inputs:</p>
+<ul class="simple">
+<li><p>the model created with PythTB or TBmodels packages</p></li>
+<li><p>variable “spin” indicating which spin Chern number we want to calculate : ‘up’ or ‘down’</p></li>
+<li><p>variable “formula” selecting which single-point formula we want to calculate : ‘asymmetric’, ‘symmetric’ or ‘both’</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">spin_chern</span> <span class="o">=</span> <span class="s1">&#39;down&#39;</span>
+<span class="n">which_formula</span> <span class="o">=</span> <span class="s1">&#39;symmetric&#39;</span>
+
+<span class="c1"># Single Point Spin Chern Number (SPSCN) calculation for Pythtb model</span>
+<span class="n">spin_chern_pythtb</span> <span class="o">=</span> <span class="n">single_point_spin_chern</span><span class="p">(</span><span class="n">km_pythtb_model</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="n">spin_chern</span><span class="p">,</span> <span class="n">formula</span><span class="o">=</span><span class="n">which_formula</span><span class="p">)</span>
+
+<span class="c1"># Single Point Spin Chern Number (SPSCN) calculation for TBmodels model</span>
+<span class="n">spin_chern_tbmodels</span> <span class="o">=</span> <span class="n">single_point_spin_chern</span><span class="p">(</span><span class="n">km_tbmodels_model</span><span class="p">,</span> <span class="n">spin</span><span class="o">=</span><span class="n">spin_chern</span><span class="p">,</span> <span class="n">formula</span><span class="o">=</span><span class="n">which_formula</span><span class="p">)</span>
+
+<span class="c1"># If which_formula = &#39;both&#39;, then Single Point Spin Chern numbers are printed as follows : &#39;asymmetric&#39; &#39;symmetric&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;PythTB package, supercell size L =&#39;</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="s1">&#39; disorder strength = &#39;</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>  <span class="s1">&#39; SPSCN :&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">spin_chern_pythtb</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;TBmodels package, supercell size L =&#39;</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="s1">&#39; disorder strength = &#39;</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>  <span class="s1">&#39; SPSCN :&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">spin_chern_tbmodels</span> <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="haldane-example">
+<h3>Haldane example<a class="headerlink" href="#haldane-example" title="Permalink to this heading">¶</a></h3>
+<p>The single-point invariant calculation can be also performed for a Chern insulator, like the Haldane model, using single_point_chern function.
+For the model implementation, look at <a class="reference download internal" download="" href="_downloads/1ea6620313c20f64b569a859b64d5db2/haldane.py"><code class="xref download docutils literal notranslate"><span class="pre">Haldane</span> <span class="pre">example</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">strawberrypy</span> <span class="kn">import</span> <span class="n">single_point_chern</span>
+<span class="kn">from</span> <span class="nn">strawberrypy.example_models</span> <span class="kn">import</span> <span class="n">haldane_pythtb</span><span class="p">,</span> <span class="n">haldane_tbmodels</span><span class="p">,</span> <span class="n">h_anderson_disorder_pythtb</span><span class="p">,</span> <span class="n">h_anderson_disorder_tbmodels</span>
+
+<span class="n">L</span> <span class="o">=</span> <span class="mi">12</span>              <span class="c1"># supercell LxL linear size</span>
+
+<span class="c1"># Topological phase</span>
+<span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.</span>                   <span class="c1"># t = first neighbours real hopping</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="mf">1.</span>                   <span class="c1"># t2 = second neighbours hopping</span>
+<span class="n">delta</span> <span class="o">=</span> <span class="mf">2.</span>                <span class="c1"># delta = energy on site</span>
+<span class="n">phi</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.0</span>          <span class="c1"># phi = second neighbours hopping phase</span>
+
+<span class="c1"># # Trivial phase</span>
+<span class="c1"># t = -4.                   # t = first neighbours real hopping</span>
+<span class="c1"># t2 = 1.                   # t2 = second neighbours hopping</span>
+<span class="c1"># delta = 4.5               # delta = energy on site</span>
+<span class="c1"># phi = -np.pi/6.0          # phi = second neighbours hopping phase</span>
+
+<span class="c1"># Create Haldane model in supercell LxL through PythTB package</span>
+<span class="n">h_pythtb_model</span> <span class="o">=</span> <span class="n">haldane_pythtb</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+
+<span class="c1"># Create Haldane model in supercell LxL through TBmodels package</span>
+<span class="n">h_tbmodels_model</span> <span class="o">=</span> <span class="n">haldane_tbmodels</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="mf">1.</span>                      <span class="c1"># w = disorder strength such that random potential is in [-w/2, w/2]</span>
+
+<span class="c1"># Add Anderson disorder in PythTB model</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">h_pythtb_model</span> <span class="o">=</span> <span class="n">h_anderson_disorder_pythtb</span><span class="p">(</span><span class="n">h_pythtb_model</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+
+<span class="c1"># Add Anderson disorder in TBmodels model</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">h_tbmodels_model</span> <span class="o">=</span> <span class="n">h_anderson_disorder_tbmodels</span><span class="p">(</span><span class="n">h_tbmodels_model</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+
+<span class="n">which_formula</span> <span class="o">=</span> <span class="s1">&#39;both&#39;</span>
+
+<span class="c1"># Single Point Chern Number (SPCN) calculation for Pythtb model</span>
+<span class="n">chern_pythtb</span> <span class="o">=</span> <span class="n">single_point_chern</span><span class="p">(</span><span class="n">h_pythtb_model</span><span class="p">,</span> <span class="n">formula</span><span class="o">=</span><span class="n">which_formula</span><span class="p">)</span>
+
+<span class="c1"># Single Point Chern Number (SPCN) calculation for TBmodels model</span>
+<span class="n">chern_tbmodels</span> <span class="o">=</span> <span class="n">single_point_chern</span><span class="p">(</span><span class="n">h_tbmodels_model</span><span class="p">,</span> <span class="n">formula</span><span class="o">=</span><span class="n">which_formula</span><span class="p">)</span>
+
+<span class="c1"># If which_formula = &#39;both&#39;, then Single Point Chern Numbers are printed as follows : &#39;asymmetric&#39; &#39;symmetric&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;PythTB package, supercell size L =&#39;</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="s1">&#39; disorder strength = &#39;</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>  <span class="s1">&#39; SPCN :&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">chern_pythtb</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;TBmodels package, supercell size L =&#39;</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="s1">&#39; disorder strength = &#39;</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span>  <span class="s1">&#39; SPCN :&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">chern_tbmodels</span> <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="local-invariants">
+<h2>Local invariants<a class="headerlink" href="#local-invariants" title="Permalink to this heading">¶</a></h2>
+<p>Here an example for calculating the local Chern marker for a bounded Haldane model in presence of Anderson disorder. First create the tight-binding model in the primitive cell using PythTB and TBmodels packages. Then, the models has to be cut in both x and y directions specifying the size of the resulting samples.
+To conclude the construction of the models the disorder can be added, for instance Anderson disorder which is a uniformly distributed random on site potential.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">strawberrypy</span> <span class="kn">import</span> <span class="n">local_chern_marker</span><span class="p">,</span> <span class="n">make_finite</span><span class="p">,</span> <span class="n">onsite_disorder</span>
+<span class="kn">from</span> <span class="nn">strawberrypy.example_models</span> <span class="kn">import</span> <span class="n">haldane_pythtb</span><span class="p">,</span> <span class="n">haldane_tbmodels</span>
+
+<span class="c1"># Create Haldane models through PythTB and TBmodels packages</span>
+<span class="n">hmodel_pbc_tbmodels</span> <span class="o">=</span> <span class="n">haldane_tbmodels</span><span class="p">(</span><span class="n">delta</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">hmodel_pbc_pythtb</span> <span class="o">=</span> <span class="n">haldane_pythtb</span><span class="p">(</span><span class="n">delta</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Cut the models to make a sample of size 10 x 10</span>
+<span class="n">hmodel_obc_tbmodels</span> <span class="o">=</span> <span class="n">make_finite</span><span class="p">(</span><span class="n">model</span> <span class="o">=</span> <span class="n">hmodel_pbc_tbmodels</span><span class="p">,</span> <span class="n">nx_sites</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ny_sites</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">hmodel_obc_pythtb</span> <span class="o">=</span> <span class="n">make_finite</span><span class="p">(</span><span class="n">model</span> <span class="o">=</span> <span class="n">hmodel_pbc_pythtb</span><span class="p">,</span> <span class="n">nx_sites</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ny_sites</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Add Anderson disorder within [-w/2, w/2] to the samples. The argument spinstates specifies the spin of the model</span>
+<span class="n">hmodel_tbm_disorder</span> <span class="o">=</span> <span class="n">onsite_disorder</span><span class="p">(</span><span class="n">model</span> <span class="o">=</span> <span class="n">hmodel_tbm</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">spinstates</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">184</span><span class="p">)</span>
+<span class="n">hmodel_pythtb_disorder</span> <span class="o">=</span> <span class="n">onsite_disorder</span><span class="p">(</span><span class="n">model</span> <span class="o">=</span> <span class="n">hmodel_pythtb</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">spinstates</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">184</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally the local Chern marker can be computed using <code class="docutils literal notranslate"><span class="pre">local_chern_marker</span></code>, which takes as arguments:</p>
+<ul class="simple">
+<li><p>the model created using PythTB or TBmodels (using <code class="docutils literal notranslate"><span class="pre">model</span></code>)</p></li>
+<li><p>the size of the bounded sample (via <code class="docutils literal notranslate"><span class="pre">nx_sites</span></code> and <code class="docutils literal notranslate"><span class="pre">ny_sites</span></code>)</p></li>
+<li><p>the direction along which to compute the local marker (if not specified otherwise the function computes the local marker for the whole lattice) using the argument <code class="docutils literal notranslate"><span class="pre">direction</span></code>, and the cell along the orthogonal direction from which to start (via <code class="docutils literal notranslate"><span class="pre">start</span></code>)</p></li>
+<li><p>a boolean value, <code class="docutils literal notranslate"><span class="pre">return_projector</span></code>, which specifies if return also the ground state projector of the model, and the argument <code class="docutils literal notranslate"><span class="pre">projector</span></code> to input it in order to avoid recalculation of heavy objects</p></li>
+<li><p>the possibility to perform macroscopic averages for disordered samples, via the boolean <code class="docutils literal notranslate"><span class="pre">macroscopic_average</span></code>, and the cutoff radius of the average using the argument <code class="docutils literal notranslate"><span class="pre">cutoff</span></code></p></li>
+</ul>
+<p>In the example below, the local Chern marker is evaluated along the x direction, starting from the cell whose y reduced coordinate is half the dimension of the lattice, and is averaged over a region with cutoff 2:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compute the local Chern markers for TBmodels and PythTB</span>
+<span class="n">lcm_tbmodels</span> <span class="o">=</span> <span class="n">local_chern_marker</span><span class="p">(</span><span class="n">model</span> <span class="o">=</span> <span class="n">hmodel_tbm_disorder</span><span class="p">,</span> <span class="n">nx_sites</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ny_sites</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">macroscopic_average</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">cutoff</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">lcm_pythtb</span> <span class="o">=</span> <span class="n">local_chern_marker</span><span class="p">(</span><span class="n">model</span> <span class="o">=</span> <span class="n">hmodel_pythtb_disorder</span><span class="p">,</span> <span class="n">nx_sites</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">ny_sites</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">macroscopic_average</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">cutoff</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Local Chern marker along the x direction starting from y=5, computed using TBmodels: &quot;</span><span class="p">,</span> <span class="n">lcm_tbmodels</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Local Chern marker along the x direction starting from y=5, computed using PythTB: &quot;</span><span class="p">,</span> <span class="n">lcm_pythtb</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
@@ -90,12 +263,13 @@
 </div>
 </section>
 <section id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">¶</a></h1>
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
+</section>
 </section>
 
 
@@ -109,7 +283,7 @@
       &copy;2023, Roberta Favata, Nicolas Baù and Antimo Marrazzo.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
