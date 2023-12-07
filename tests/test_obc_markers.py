@@ -38,8 +38,8 @@ def test_local_chern_marker_haldane_tbmodels_pythtb():
     assert np.allclose(lcm_ptb, lcm_tbm)
 
 def test_local_chern_marker_haldane_static():
-    check_lcm = np.loadtxt("./check/lcm_uniform_disorder.check")
-    check_positions = np.loadtxt("./check/positions_haldane_uniform.check")
+    check_lcm = np.loadtxt("./tests/check/lcm_uniform_disorder.check")
+    check_positions = np.loadtxt("./tests/check/positions_haldane_uniform.check")
 
     # Arbitrary order to check equality
     check_x, check_y, check_lcm = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_lcm)))
@@ -62,8 +62,8 @@ def test_local_chern_marker_haldane_static():
     assert np.allclose(check_lcm, lcm)
 
 def test_local_chern_marker_haldane_heterostructure_static():
-    check_lcm = np.loadtxt("./check/lcm_heterostructure.check")
-    check_positions = np.loadtxt("./check/positions_haldane_heterostructure.check")
+    check_lcm = np.loadtxt("./tests/check/lcm_heterostructure.check")
+    check_positions = np.loadtxt("./tests/tests/check/positions_haldane_heterostructure.check")
 
     # Arbitrary order to check equality
     check_x, check_y, check_lcm = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_lcm)))
@@ -88,8 +88,8 @@ def test_local_chern_marker_haldane_heterostructure_static():
     assert np.allclose(check_lcm, lcm)
 
 def test_local_chern_marker_haldane_vacancies_static():
-    check_lcm = np.loadtxt("./check/lcm_vacancies.check")
-    check_positions = np.loadtxt("./check/positions_vacancies.check")
+    check_lcm = np.loadtxt("./tests/check/lcm_vacancies.check")
+    check_positions = np.loadtxt("./tests/check/positions_vacancies.check")
 
     # Arbitrary order to check equality
     check_x, check_y, check_lcm = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_lcm)))
@@ -142,8 +142,8 @@ def test_localization_marker_haldane_tbmodels_pythtb():
     assert np.allclose(lm_ptb, lm_tbm)
 
 def test_localization_marker_haldane_static():
-    check_loc = np.loadtxt("./check/loc_haldane_uniform_disorder.check")
-    check_positions = np.loadtxt("./check/positions_haldane_uniform.check")
+    check_loc = np.loadtxt("./tests/tests/check/loc_haldane_uniform_disorder.check")
+    check_positions = np.loadtxt("./tests/tests/check/positions_haldane_uniform.check")
 
     # Arbitrary order to check equality
     check_x, check_y, check_loc = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_loc)))
@@ -166,8 +166,8 @@ def test_localization_marker_haldane_static():
     assert np.allclose(check_loc, loc)
 
 def test_localization_marker_haldane_heterostructure_static():
-    check_loc = np.loadtxt("./check/loc_haldane_heterostructure.check")
-    check_positions = np.loadtxt("./check/positions_haldane_heterostructure.check")
+    check_loc = np.loadtxt("./tests/check/loc_haldane_heterostructure.check")
+    check_positions = np.loadtxt("./tests/check/positions_haldane_heterostructure.check")
 
     # Arbitrary order to check equality
     check_x, check_y, check_loc = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_loc)))
@@ -221,8 +221,8 @@ def test_localization_marker_kane_mele_tbmodels_pythtb():
     assert np.allclose(lm_ptb, lm_tbm)
 
 def test_localization_marker_kanemele_static():
-    check_loc = np.loadtxt("./check/loc_kanemele_uniform_disorder.check")
-    check_positions = np.loadtxt("./check/positions_kanemele_uniform.check")
+    check_loc = np.loadtxt("./tests/check/loc_kanemele_uniform_disorder.check")
+    check_positions = np.loadtxt("./tests/check/positions_kanemele_uniform.check")
 
     # Arbitrary order to check equality
     check_x, check_y, check_loc = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_loc)))
@@ -245,8 +245,8 @@ def test_localization_marker_kanemele_static():
     assert np.allclose(check_loc, loc)
 
 def test_localization_marker_kanemele_heterostructure_static():
-    check_loc = np.loadtxt("./check/loc_kanemele_heterostructure.check")
-    check_positions = np.loadtxt("./check/positions_kanemele_heterostructure.check")
+    check_loc = np.loadtxt("./tests/check/loc_kanemele_heterostructure.check")
+    check_positions = np.loadtxt("./tests/check/positions_kanemele_heterostructure.check")
 
     # Arbitrary order to check equality
     check_x, check_y, check_loc = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_loc)))
