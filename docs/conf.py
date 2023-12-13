@@ -21,7 +21,8 @@ extensions = [
 	'sphinx.ext.autodoc',
 	'sphinx.ext.viewcode',
 	'sphinx.ext.napoleon',
-    'sphinx.ext.intersphinx'
+    'sphinx.ext.intersphinx',
+    #'sphinx_favicon'
 ]
 
 templates_path = ['_templates']
@@ -51,6 +52,10 @@ if html_theme == 'alabaster':
         'body_max_width': 'auto',
         'page_width': '1000px',
     }
+    html_logo = "_static/media/logo.png"
+    
+    html_favicon = "favicon.ico"
+    #favicon = [{"href": "_static/media/favicon.ico"}]
 
     html_sidebars = {
         '**': [

@@ -11,6 +11,7 @@
     <script src="_static/documentation_options.js?v=938c9ccc"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="strawberrypy" href="modules.html" />
@@ -25,6 +26,9 @@
     
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="#">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
 <h1 class="logo"><a href="#">StraWBerryPy</a></h1>
 
 
@@ -93,17 +97,24 @@ pip<span class="w"> </span>install<span class="w"> </span>.
 </section>
 <section id="quick-start">
 <h2>Quick start<a class="headerlink" href="#quick-start" title="Link to this heading">¶</a></h2>
-<p>Here, a quick example for calculating the single-point and PBC local topological invariant in the supercell framework for the Haldane model in presence of Anderson disorder. We can define the periodic model with either <code class="docutils literal notranslate"><span class="pre">TBmodels</span></code> or <code class="docutils literal notranslate"><span class="pre">PythTB</span></code>, which is then passed to the <code class="docutils literal notranslate"><span class="pre">Supercell</span></code> class, which takes as parameters also the dimension of the supercell. Then, we can add some on-site random disorder and finally call the methods to compute the single-point and local invariants.</p>
+<p>Here, a quick example for calculating the single-point and PBC local topological invariant in the supercell framework for the Haldane model in presence of Anderson disorder. We can define the periodic model with either <code class="docutils literal notranslate"><span class="pre">TBmodels</span></code> or <code class="docutils literal notranslate"><span class="pre">PythTB</span></code>, which is then passed to the <code class="docutils literal notranslate"><span class="pre">Supercell</span></code> class (when defining the supercell, we also need to specify the dimension of the supercell). Then, we can add some on-site random disorder and finally call the methods to compute the single-point and local invariants.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">strawberrypy</span>
+<span class="kn">from</span> <span class="nn">strawberrypy</span> <span class="kn">import</span> <span class="o">*</span>
 
-<span class="n">pbc_model</span> <span class="o">=</span> <span class="n">strawberrypy</span><span class="o">.</span><span class="n">example_models</span><span class="o">.</span><span class="n">haldane_tbmodels</span><span class="p">(</span><span class="n">delta</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">strawberrypy</span><span class="o">.</span><span class="n">Supercell</span><span class="p">(</span><span class="n">tbmodel</span> <span class="o">=</span> <span class="n">pbcmodel</span><span class="p">,</span> <span class="n">Lx</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">Ly</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">spinful</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="c1"># Define the PBC model</span>
+<span class="n">pbc_model</span> <span class="o">=</span> <span class="n">example_models</span><span class="o">.</span><span class="n">haldane_tbmodels</span><span class="p">(</span><span class="n">delta</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Build the supercell of the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Supercell</span><span class="p">(</span><span class="n">tbmodel</span> <span class="o">=</span> <span class="n">pbcmodel</span><span class="p">,</span> <span class="n">Lx</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">Ly</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span> <span class="n">spinful</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Add on-site Anderson disorder</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add_onsite_disorder</span><span class="p">(</span><span class="n">w</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
 
+<span class="c1"># Evaluate the single-point Chern number</span>
 <span class="n">sp_inv</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">single_point_chern</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Single-point invariant: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sp_inv</span><span class="p">[</span><span class="s1">&#39;symmetric&#39;</span><span class="p">]))</span>
 
+<span class="c1"># Evaluate the PBC local Chern marker</span>
 <span class="n">pbclcm</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">pbc_local_chern_marker</span><span class="p">(</span><span class="n">macroscopic_average</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">cutoff</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>

@@ -23,20 +23,27 @@ Clone `this <https://github.com/strawberrypy-developers/strawberrypy.git>`_ Gith
 Quick start
 -----------
 
-Here, a quick example for calculating the single-point and PBC local topological invariant in the supercell framework for the Haldane model in presence of Anderson disorder. We can define the periodic model with either ``TBmodels`` or ``PythTB``, which is then passed to the ``Supercell`` class, which takes as parameters also the dimension of the supercell. Then, we can add some on-site random disorder and finally call the methods to compute the single-point and local invariants.
+Here, a quick example for calculating the single-point and PBC local topological invariant in the supercell framework for the Haldane model in presence of Anderson disorder. We can define the periodic model with either ``TBmodels`` or ``PythTB``, which is then passed to the ``Supercell`` class (when defining the supercell, we also need to specify the dimension of the supercell). Then, we can add some on-site random disorder and finally call the methods to compute the single-point and local invariants.
 
 .. code:: python
 
    import numpy as np
-   import strawberrypy
+   from strawberrypy import *
 
-   pbc_model = strawberrypy.example_models.haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
-   model = strawberrypy.Supercell(tbmodel = pbcmodel, Lx = 30, Ly = 30, spinful = False)
+   # Define the PBC model
+   pbc_model = example_models.haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
+
+   # Build the supercell of the model
+   model = Supercell(tbmodel = pbcmodel, Lx = 30, Ly = 30, spinful = False)
+
+   # Add on-site Anderson disorder
    model.add_onsite_disorder(w = 5)
 
+   # Evaluate the single-point Chern number
    sp_inv = model.single_point_chern()
    print("Single-point invariant: {}".format(sp_inv['symmetric']))
 
+   # Evaluate the PBC local Chern marker
    pbclcm = model.pbc_local_chern_marker(macroscopic_average = True, cutoff = 2)
 
 .. image:: _static/media/pbc_lcm_index.pdf
