@@ -6,3 +6,11 @@ tests/__pycache__
 .devcontainer/
 .pytest_cache
 .DS_Store
+build/
+strawberrypy.egg-info/
+tests/*.pdf
+tests/test_pbclscm.py
+tests/localchernmarker_test.py
+out.pdf
+pbclcmtest.py
+logo.py
