@@ -1,29 +1,29 @@
-strawberrypy.example\_models package
-====================================
+.. strawberrypy.example\_models package
+.. ====================================
 
-Submodules
-----------
+Predefined example models
+=========================
 
-strawberrypy.example\_models.haldane module
--------------------------------------------
+Haldane model
+~~~~~~~~~~~~~
 
 .. automodule:: strawberrypy.example_models.haldane
    :members:
    :undoc-members:
    :show-inheritance:
 
-strawberrypy.example\_models.kane\_mele module
-----------------------------------------------
+Kane Mele
+~~~~~~~~~
 
 .. automodule:: strawberrypy.example_models.kane_mele
    :members:
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
-
-.. automodule:: strawberrypy.example_models
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. Module contents
+.. ---------------
+..
+.. .. automodule:: strawberrypy.example_models
+..   :members:
+..   :undoc-members:
+..   :show-inheritance:

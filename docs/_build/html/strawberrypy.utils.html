@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Utility functions &#8212; StraWBerryPy 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial" href="tutorial.html" />
+    <link rel="prev" title="Predefined example models" href="strawberrypy.example_models.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="index.html">StraWBerryPy</a></h1>
+
+
+
+<p class="blurb">Single-poinT and local invaRiAnts for Wannier Berriologies in Python</p>
+
+
+
+
+
+
+<!-- From: https://framagit.org/coslo/template-docs -->
+
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">Reference</a><ul>
+  <li><a href="strawberrypy.html">StraWBerryPy package</a><ul>
+      <li>Previous: <a href="strawberrypy.example_models.html" title="previous chapter">Predefined example models</a></li>
+      <li>Next: <a href="tutorial.html" title="next chapter">Tutorial</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-strawberrypy.utils">
+<span id="utility-functions"></span><h1>Utility functions<a class="headerlink" href="#module-strawberrypy.utils" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="strawberrypy.utils.chemical_potential">
+<span class="sig-prename descclassname"><span class="pre">strawberrypy.utils.</span></span><span class="sig-name descname"><span class="pre">chemical_potential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">occupied_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strawberrypy/utils.html#chemical_potential"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#strawberrypy.utils.chemical_potential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the chemical potential of a given model knowing the eigenvallue distribution and the number of electrons (occupied states) in the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>evals</strong> – List of eigenvalues of the Hamiltonian.</p></li>
+<li><p><strong>temperature</strong> – Temperature (real or fictitious, as in the case of smearing) of the system, appearing in the Fermi-Dirac distribution.</p></li>
+<li><p><strong>occupied_states</strong> – Number of occupied states of the system.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The chemical potential of the system.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mu</p>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The chemical potential is calculated via bisection method, if convergence is not achieved in 200 iterations, an error is returned.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="strawberrypy.utils.fermidirac">
+<span class="sig-prename descclassname"><span class="pre">strawberrypy.utils.</span></span><span class="sig-name descname"><span class="pre">fermidirac</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strawberrypy/utils.html#fermidirac"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#strawberrypy.utils.fermidirac" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Fermi-Dirac distribution <span class="math notranslate nohighlight">\(f(\epsilon, T, \mu)=\big[ 1 + e^{\frac{\epsilon-\mu}{T}} \big]^{-1}\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>evals</strong> – List of eigenvalues of the Hamiltonian.</p></li>
+<li><p><strong>temperature</strong> – Temperature of the system.</p></li>
+<li><p><strong>mu</strong> – The chemical potential of the system.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The occupation(s) of the state corresponding to the given energy(ies)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>occupations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="strawberrypy.utils.smearing">
+<span class="sig-prename descclassname"><span class="pre">strawberrypy.utils.</span></span><span class="sig-name descname"><span class="pre">smearing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vecs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_hevecs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temperature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strawberrypy/utils.html#smearing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#strawberrypy.utils.smearing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Smearing introduced to improve the convergence of the formula: it measures how much the projector built from <code class="docutils literal notranslate"><span class="pre">vecs</span></code> is similar to the one built from <code class="docutils literal notranslate"><span class="pre">gamma_hevecs</span></code>, the eigenstates of the Hamiltonian at the <span class="math notranslate nohighlight">\(\Gamma\)</span>-point. Naming <span class="math notranslate nohighlight">\(|\phi_n\rangle\)</span> the vectors in <code class="docutils literal notranslate"><span class="pre">vecs</span></code> and <span class="math notranslate nohighlight">\(|u_n\rangle\)</span> the ones in <code class="docutils literal notranslate"><span class="pre">gamma_hevecs</span></code>, the smearing factor is computed as <span class="math notranslate nohighlight">\(c_n=\sum_m f(\epsilon_m, T_s, \mu)|\langle \phi_n|u_m\rangle|^2\)</span>, where <span class="math notranslate nohighlight">\(\epsilon_m\)</span> is the eigenvalue corresponding to the eigenstate <span class="math notranslate nohighlight">\(|u_m\rangle\)</span>, <span class="math notranslate nohighlight">\(T_s\)</span> is the smearing temperature, <span class="math notranslate nohighlight">\(\mu\)</span> is the chemical potential.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vecs</strong> – List of states that need to be weighted according to some smearing.</p></li>
+<li><p><strong>gamma_hevecs</strong> – Eigenstates of th Hamiltonian at the <span class="math notranslate nohighlight">\(\Gamma\)</span>-point.</p></li>
+<li><p><strong>evals</strong> – Eigenvales of the Hamiltonian at the <span class="math notranslate nohighlight">\(\Gamma\)</span>-point.</p></li>
+<li><p><strong>temperature</strong> – Temperature introduced to smoothen the occupation of the states (smearing temperature).</p></li>
+<li><p><strong>mu</strong> – Chemical potential of the system.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of smearing coefficients that weights the states <code class="docutils literal notranslate"><span class="pre">vecs</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>smearing_coeffs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="strawberrypy.utils.unique_vacancies">
+<span class="sig-prename descclassname"><span class="pre">strawberrypy.utils.</span></span><span class="sig-name descname"><span class="pre">unique_vacancies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Ly</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strawberrypy/utils.html#unique_vacancies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#strawberrypy.utils.unique_vacancies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of unique random lattice sites to be removed in the model using the method <code class="docutils literal notranslate"><span class="pre">add_vacancies</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num</strong> – Number of lattice positions to generate.</p></li>
+<li><p><strong>Lx</strong> – Number of unit cells of the model along the <span class="math notranslate nohighlight">\(\mathbf{a}_1\)</span> direction.</p></li>
+<li><p><strong>Ly</strong> – Number of unit cells of the model along the <span class="math notranslate nohighlight">\(\mathbf{a}_2\)</span> direction.</p></li>
+<li><p><strong>basis</strong> – Number of atoms per unit cell.</p></li>
+<li><p><strong>seed</strong> – Seed for the random number generation. Default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of unique random lattice site.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>unique_list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2023, Roberta Favata, Nicolas Baù and Antimo Marrazzo.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/strawberrypy.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -34,7 +34,7 @@ Here, a quick example for calculating the single-point and PBC local topological
    pbc_model = example_models.haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
 
    # Build the supercell of the model
-   model = Supercell(tbmodel = pbcmodel, Lx = 30, Ly = 30, spinful = False)
+   model = Supercell(tbmodel = pbc_model, Lx = 30, Ly = 30, spinful = False)
 
    # Add on-site Anderson disorder
    model.add_onsite_disorder(w = 5)
@@ -46,20 +46,22 @@ Here, a quick example for calculating the single-point and PBC local topological
    # Evaluate the PBC local Chern marker
    pbclcm = model.pbc_local_chern_marker(macroscopic_average = True, cutoff = 2)
 
-.. image:: _static/media/pbc_lcm_index.pdf
-   :width: 100%
-   :alt: PBC local Chern marker produced with the code above.
+.. image:: _static/media/pbc_lcm_index.png
+   :width: 150%
+   :alt: PBC local Chern marker produced with the code above
 
 Contents
---------
+^^^^^^^^
 .. toctree::
    :maxdepth: 1
-   :caption: Reference:
 
    modules
+   tutorial
+   changelog
 
 Indices and tables
-------------------
+^^^^^^^^^^^^^^^^^^
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+* `Github <https://github.com/strawberrypy-developers/strawberrypy>`_
