@@ -4,11 +4,11 @@
    contain the root `toctree` directive.
 
 Welcome to StraWBerryPy!
-========================================
+========================
 
 **StraWBerryPy** (Single-poinT and local invaRiAnts for Wannier Berriologies in Python) is a Python package calculating topological invariants for non-crystalline 2D topological insulators. In the supercell framework the single-point formulas for the Chern number `[Ceresoli-Resta] <https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.012405>`_ and the single-point spin Chern number `[Favata-Marrazzo] <https://iopscience.iop.org/article/10.1088/2516-1075/acba6f/meta>`_ are implemented. It is also possible to calculate the local Chern marker within periodic boundary conditions `[Baù-Marrazzo] <https://arxiv.org/abs/2310.15783>`_.
 In addition, StraWBerryPy can handle finite systems (such as bounded samples and heterostructures) and compute the local Chern marker `[Bianco-Resta] <https://journals.aps.org/prb/abstract/10.1103/PhysRevB.84.241106>`_.
-The code provides dedicated interfaces to tight-binding packages `PythTB <http://www.physics.rutgers.edu/pythtb/>`_ and `TBmodels <https://tbmodels.greschd.ch/en/latest/>`_.
+The code provides dedicated interfaces to tight-binding packages `PythTB <http://www.physics.rutgers.edu/pythtb/>`_ and `TBmodels <https://tbmodels.greschd.ch/en/latest/>`_. The lastest version allows to calculate also the single-point invariant in the framework of Wannier Hamiltonians, which are read in the format produced by `Wannier90 <https://wannier.org/>`_ through `WannierBerri <https://wannier-berri.org/index.html>`_.
 
 Quick installation
 ------------------

@@ -1,19 +1,16 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>strawberrypy.example_models.haldane &#8212; StraWBerryPy 0.2.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=343c9f17" />
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
@@ -45,7 +42,7 @@
 
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">Tutorial and examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
@@ -85,60 +82,72 @@
           <div class="body" role="main">
             
   <h1>Source code for strawberrypy.example_models.haldane</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">pythtb</span> <span class="kn">import</span> <span class="n">tb_model</span>
-<span class="kn">from</span> <span class="nn">tbmodels</span> <span class="kn">import</span> <span class="n">Model</span>
+<span></span><code><span id="line-1"><span class="kn">from</span> <span class="nn">pythtb</span> <span class="kn">import</span> <span class="n">tb_model</span>
+</span><span id="line-2"><span class="kn">from</span> <span class="nn">tbmodels</span> <span class="kn">import</span> <span class="n">Model</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</span><span id="line-5">
+<div class="viewcode-block" id="haldane_pythtb">
+<a class="viewcode-back" href="../../../strawberrypy.example_models.html#strawberrypy.example_models.haldane.haldane_pythtb">[docs]</a>
+</span><span id="line-6"><span class="k">def</span> <span class="nf">haldane_pythtb</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+</span><span id="line-7">    <span class="c1"># From http://www.physics.rutgers.edu/pythtb/examples.html#haldane-model</span>
+</span><span id="line-8">    <span class="n">lat</span><span class="o">=</span><span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">]]</span>
+</span><span id="line-9">    <span class="n">orb</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">]]</span>
+</span><span id="line-10">    <span class="n">model</span><span class="o">=</span><span class="n">tb_model</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">lat</span><span class="p">,</span><span class="n">orb</span><span class="p">)</span>
+</span><span id="line-11">    <span class="n">model</span><span class="o">.</span><span class="n">set_onsite</span><span class="p">([</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span><span class="n">delta</span><span class="p">])</span>
+</span><span id="line-12">    <span class="k">for</span> <span class="n">lvec</span> <span class="ow">in</span> <span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+</span><span id="line-13">        <span class="n">model</span><span class="o">.</span><span class="n">set_hop</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lvec</span><span class="p">)</span>
+</span><span id="line-14">    <span class="k">for</span> <span class="n">lvec</span> <span class="ow">in</span> <span class="p">([</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+</span><span id="line-15">        <span class="n">model</span><span class="o">.</span><span class="n">set_hop</span><span class="p">(</span><span class="n">t2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lvec</span><span class="p">)</span>
+</span><span id="line-16">    <span class="k">for</span> <span class="n">lvec</span> <span class="ow">in</span> <span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]):</span>
+</span><span id="line-17">        <span class="n">model</span><span class="o">.</span><span class="n">set_hop</span><span class="p">(</span><span class="n">t2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lvec</span><span class="p">)</span>
+</span><span id="line-18">
+</span><span id="line-19">    <span class="n">sc_model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">make_supercell</span><span class="p">([[</span><span class="n">L</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="n">L</span><span class="p">]])</span>
+</span><span id="line-20">    <span class="k">return</span> <span class="n">sc_model</span></div>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</span><span id="line-21">
+<div class="viewcode-block" id="haldane_tbmodels">
+<a class="viewcode-back" href="../../../strawberrypy.example_models.html#strawberrypy.example_models.haldane.haldane_tbmodels">[docs]</a>
+</span><span id="line-22"><span class="k">def</span> <span class="nf">haldane_tbmodels</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+</span><span id="line-23">    <span class="n">primitive_cell</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">]]</span>
+</span><span id="line-24">    <span class="n">orb</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">]]</span>
+</span><span id="line-25">    <span class="n">h_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">on_site</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span><span class="n">delta</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">occ</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">orb</span><span class="p">,</span> <span class="n">uc</span><span class="o">=</span><span class="n">primitive_cell</span><span class="p">)</span>
+</span><span id="line-26">    <span class="k">for</span> <span class="n">lvec</span> <span class="ow">in</span> <span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+</span><span id="line-27">        <span class="n">h_model</span><span class="o">.</span><span class="n">add_hop</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">lvec</span><span class="p">)</span>
+</span><span id="line-28">    <span class="k">for</span> <span class="n">lvec</span> <span class="ow">in</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+</span><span id="line-29">        <span class="n">h_model</span><span class="o">.</span><span class="n">add_hop</span><span class="p">(</span><span class="n">t2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">lvec</span><span class="p">)</span>
+</span><span id="line-30">    <span class="k">for</span> <span class="n">lvec</span> <span class="ow">in</span> <span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]):</span>
+</span><span id="line-31">        <span class="n">h_model</span><span class="o">.</span><span class="n">add_hop</span><span class="p">(</span><span class="n">t2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">lvec</span><span class="p">)</span> 
+</span><span id="line-32">
+</span><span id="line-33">    <span class="n">sc_model</span> <span class="o">=</span> <span class="n">h_model</span><span class="o">.</span><span class="n">supercell</span><span class="p">([</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">])</span>
+</span><span id="line-34">       
+</span><span id="line-35">    <span class="k">return</span> <span class="n">sc_model</span></div>
 
-<div class="viewcode-block" id="haldane_pythtb"><a class="viewcode-back" href="../../../strawberrypy.example_models.html#strawberrypy.example_models.haldane.haldane_pythtb">[docs]</a><span class="k">def</span> <span class="nf">haldane_pythtb</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
-    <span class="c1"># From http://www.physics.rutgers.edu/pythtb/examples.html#haldane-model</span>
-    <span class="n">lat</span><span class="o">=</span><span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">]]</span>
-    <span class="n">orb</span><span class="o">=</span><span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">]]</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">tb_model</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">lat</span><span class="p">,</span><span class="n">orb</span><span class="p">)</span>
-    <span class="n">model</span><span class="o">.</span><span class="n">set_onsite</span><span class="p">([</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span><span class="n">delta</span><span class="p">])</span>
-    <span class="k">for</span> <span class="n">lvec</span> <span class="ow">in</span> <span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
-        <span class="n">model</span><span class="o">.</span><span class="n">set_hop</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lvec</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">lvec</span> <span class="ow">in</span> <span class="p">([</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
-        <span class="n">model</span><span class="o">.</span><span class="n">set_hop</span><span class="p">(</span><span class="n">t2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lvec</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">lvec</span> <span class="ow">in</span> <span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]):</span>
-        <span class="n">model</span><span class="o">.</span><span class="n">set_hop</span><span class="p">(</span><span class="n">t2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">lvec</span><span class="p">)</span>
+</span><span id="line-36">
+<div class="viewcode-block" id="h_anderson_disorder_pythtb">
+<a class="viewcode-back" href="../../../strawberrypy.example_models.html#strawberrypy.example_models.haldane.h_anderson_disorder_pythtb">[docs]</a>
+</span><span id="line-37"><span class="k">def</span> <span class="nf">h_anderson_disorder_pythtb</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+</span><span id="line-38">    <span class="n">n_orb</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_num_orbitals</span><span class="p">()</span> 
+</span><span id="line-39">    <span class="k">if</span> <span class="n">w</span> <span class="o">!=</span> <span class="mf">0.</span><span class="p">:</span>
+</span><span id="line-40">        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">n_orb</span><span class="p">):</span>
+</span><span id="line-41">            <span class="n">dis</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+</span><span id="line-42">            <span class="n">model</span><span class="o">.</span><span class="n">set_onsite</span><span class="p">(</span><span class="n">dis</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;add&#39;</span><span class="p">)</span>
+</span><span id="line-43">
+</span><span id="line-44">    <span class="k">return</span> <span class="n">model</span></div>
 
-    <span class="n">sc_model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">make_supercell</span><span class="p">([[</span><span class="n">L</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="n">L</span><span class="p">]])</span>
-    <span class="k">return</span> <span class="n">sc_model</span></div>
+</span><span id="line-45">
+<div class="viewcode-block" id="h_anderson_disorder_tbmodels">
+<a class="viewcode-back" href="../../../strawberrypy.example_models.html#strawberrypy.example_models.haldane.h_anderson_disorder_tbmodels">[docs]</a>
+</span><span id="line-46"><span class="k">def</span> <span class="nf">h_anderson_disorder_tbmodels</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+</span><span id="line-47">    <span class="n">n_orb</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
+</span><span id="line-48">    <span class="k">if</span> <span class="n">w</span> <span class="o">!=</span> <span class="mf">0.</span><span class="p">:</span>
+</span><span id="line-49">        <span class="n">dis</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_orb</span><span class="p">)</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>                   
+</span><span id="line-50">
+</span><span id="line-51">        <span class="n">model</span><span class="o">.</span><span class="n">add_on_site</span><span class="p">(</span><span class="n">dis</span><span class="p">)</span>
+</span><span id="line-52">
+</span><span id="line-53">    <span class="k">return</span> <span class="n">model</span></div>
 
-<div class="viewcode-block" id="haldane_tbmodels"><a class="viewcode-back" href="../../../strawberrypy.example_models.html#strawberrypy.example_models.haldane.haldane_tbmodels">[docs]</a><span class="k">def</span> <span class="nf">haldane_tbmodels</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t2</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
-    <span class="n">primitive_cell</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">0.5</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">]]</span>
-    <span class="n">orb</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],[</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">,</span><span class="mf">1.</span><span class="o">/</span><span class="mf">3.</span><span class="p">]]</span>
-    <span class="n">h_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">on_site</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span><span class="n">delta</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">occ</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">orb</span><span class="p">,</span> <span class="n">uc</span><span class="o">=</span><span class="n">primitive_cell</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">lvec</span> <span class="ow">in</span> <span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
-        <span class="n">h_model</span><span class="o">.</span><span class="n">add_hop</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">lvec</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">lvec</span> <span class="ow">in</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
-        <span class="n">h_model</span><span class="o">.</span><span class="n">add_hop</span><span class="p">(</span><span class="n">t2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">lvec</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">lvec</span> <span class="ow">in</span> <span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]):</span>
-        <span class="n">h_model</span><span class="o">.</span><span class="n">add_hop</span><span class="p">(</span><span class="n">t2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">phi</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">lvec</span><span class="p">)</span> 
-
-    <span class="n">sc_model</span> <span class="o">=</span> <span class="n">h_model</span><span class="o">.</span><span class="n">supercell</span><span class="p">([</span><span class="n">L</span><span class="p">,</span><span class="n">L</span><span class="p">])</span>
-       
-    <span class="k">return</span> <span class="n">sc_model</span></div>
-
-<div class="viewcode-block" id="h_anderson_disorder_pythtb"><a class="viewcode-back" href="../../../strawberrypy.example_models.html#strawberrypy.example_models.haldane.h_anderson_disorder_pythtb">[docs]</a><span class="k">def</span> <span class="nf">h_anderson_disorder_pythtb</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
-    <span class="n">n_orb</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_num_orbitals</span><span class="p">()</span> 
-    <span class="k">if</span> <span class="n">w</span> <span class="o">!=</span> <span class="mf">0.</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">n_orb</span><span class="p">):</span>
-            <span class="n">dis</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
-            <span class="n">model</span><span class="o">.</span><span class="n">set_onsite</span><span class="p">(</span><span class="n">dis</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;add&#39;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">model</span></div>
-
-<div class="viewcode-block" id="h_anderson_disorder_tbmodels"><a class="viewcode-back" href="../../../strawberrypy.example_models.html#strawberrypy.example_models.haldane.h_anderson_disorder_tbmodels">[docs]</a><span class="k">def</span> <span class="nf">h_anderson_disorder_tbmodels</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
-    <span class="n">n_orb</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">w</span> <span class="o">!=</span> <span class="mf">0.</span><span class="p">:</span>
-        <span class="n">dis</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_orb</span><span class="p">)</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>                   
-
-        <span class="n">model</span><span class="o">.</span><span class="n">add_on_site</span><span class="p">(</span><span class="n">dis</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">model</span></div>
-</pre></div>
+</span></code></pre></div>
 
           </div>
           
@@ -150,7 +159,7 @@
       &copy;2023, Roberta Favata, Nicolas Baù and Antimo Marrazzo.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>

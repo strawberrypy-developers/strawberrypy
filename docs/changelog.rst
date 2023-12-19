@@ -15,6 +15,7 @@ New features
 * Introduced the localization marker for finite systems.
 * Introduced the PBC local Chern marker for periodic system in a supercell.
 * Introduced the possibility of add disorder in the system both by an on-site uniformly distributed random term (Anderson disorder) and by vacancies in the lattice.
+* Introduced the interface with `Wannier90 <https://wannier.org/>`_ through `WannierBerri <https://wannier-berri.org/index.html>`_, which allows to read Wannier Hamiltonians.
 
 StraWBerryPy 0.2.0 (SPInv)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

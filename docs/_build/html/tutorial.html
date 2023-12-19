@@ -1,20 +1,18 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Tutorial &#8212; StraWBerryPy 0.2.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <title>Tutorial and examples &#8212; StraWBerryPy 0.2.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=649a27d8" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=343c9f17" />
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Changelog" href="changelog.html" />
@@ -48,7 +46,7 @@
 
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Reference</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tutorial and examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 
@@ -87,8 +85,78 @@
 
           <div class="body" role="main">
             
-  <section id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading">¶</a></h1>
+  <section id="tutorial-and-examples">
+<h1>Tutorial and examples<a class="headerlink" href="#tutorial-and-examples" title="Link to this heading">¶</a></h1>
+<p>This page provides a short tutorial on how to use the code. At the end of the page a couple of examples illustrates come results obtained using the package.</p>
+<section id="short-tutorial">
+<h2>Short tutorial<a class="headerlink" href="#short-tutorial" title="Link to this heading">¶</a></h2>
+<section id="defining-a-model">
+<h3>Defining a model<a class="headerlink" href="#defining-a-model" title="Link to this heading">¶</a></h3>
+<p><strong>StraWBerryPy</strong> is able to read model instances from either <strong>PythTB</strong> or <strong>TBmodels</strong>. The creation of the model istelf should be performed using those packages, see for instance the relative tutorials for <a class="reference external" href="https://www.physics.rutgers.edu/pythtb/examples.html">PythTB</a> and <a class="reference external" href="https://tbmodels.greschd.ch/en/latest/tutorial.html">TBmodels</a>. Some useful examples are already implemented in <a class="reference internal" href="strawberrypy.example_models.html"><span class="doc">example_models</span></a>, such as the Haldane and Kane-Mele model.</p>
+<p>Once the model has been created it can be read from StraWBerryPy, which can create both finite models and supercells. Upon creation of supercells and finite models, the number of unit cells repeated along each direction must be given along with a bool specifying if the model has to be interpreted as spinful or not (needed to properly account for the spin degrees of freedom):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</span><span id="line-2"><span class="kn">import</span> <span class="nn">strawberrypy</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1"># Import a model from the examples</span>
+</span><span id="line-5"><span class="n">uc_model</span> <span class="o">=</span> <span class="n">strawberrypy</span><span class="o">.</span><span class="n">example_models</span><span class="o">.</span><span class="n">haldane_tbmodels</span><span class="p">(</span><span class="n">delta</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">t2</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+</span><span id="line-6">
+</span><span id="line-7"><span class="c1"># Create a supercell and a finite model of size L</span>
+</span><span id="line-8"><span class="n">supercell_model</span> <span class="o">=</span> <span class="n">strawberrypy</span><span class="o">.</span><span class="n">Supercell</span><span class="p">(</span><span class="n">tbmodel</span> <span class="o">=</span> <span class="n">uc_model</span><span class="p">,</span> <span class="n">Lx</span> <span class="o">=</span> <span class="n">L</span><span class="p">,</span> <span class="n">Ly</span> <span class="o">=</span> <span class="n">L</span><span class="p">,</span> <span class="n">spinful</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</span><span id="line-9"><span class="n">finite_model</span> <span class="o">=</span> <span class="n">strawberrypy</span><span class="o">.</span><span class="n">FiniteModel</span><span class="p">(</span><span class="n">tbmodel</span> <span class="o">=</span> <span class="n">uc_model</span><span class="p">,</span> <span class="n">Lx</span> <span class="o">=</span> <span class="n">L</span><span class="p">,</span> <span class="n">Ly</span> <span class="o">=</span> <span class="n">L</span><span class="p">,</span> <span class="n">spinful</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+</section>
+<section id="adding-disorder-and-vacancies">
+<h3>Adding disorder and vacancies<a class="headerlink" href="#adding-disorder-and-vacancies" title="Link to this heading">¶</a></h3>
+<p>In order to add disorder and vacancies to a given model we can use the methods of the class (available for both supercells and finite models):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="c1"># Add a random on-site term uniformly distributed in the interval [-W/2, W/2]</span>
+</span><span id="line-2"><span class="n">model</span><span class="o">.</span><span class="n">add_onsite_disorder</span><span class="p">(</span><span class="n">w</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">rng_seed</span><span class="p">)</span>
+</span><span id="line-3">
+</span><span id="line-4"><span class="c1"># Add 15 random vacancies to the lattice</span>
+</span><span id="line-5"><span class="n">vacncies</span> <span class="o">=</span> <span class="n">strawberrypy</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">unique_vacancies</span><span class="p">(</span><span class="n">num</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">Lx</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">Ly</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Ly</span><span class="p">,</span> <span class="n">basis</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">states_uc</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="n">rng_seed</span><span class="p">)</span>
+</span><span id="line-6"><span class="n">model</span><span class="o">.</span><span class="n">add_vacancies</span><span class="p">(</span><span class="n">vacancies_list</span> <span class="o">=</span> <span class="n">vacancies</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The function that adds vacancies in the lattice relies on an internal indexing of the lattice sites inherited from TBmodels and PythTB. Because of this, it may not be accurate with systems not defined using these packages when targeting a specific site.</p>
+</div>
+</section>
+<section id="calculate-the-single-point-invariant">
+<h3>Calculate the single-point invariant<a class="headerlink" href="#calculate-the-single-point-invariant" title="Link to this heading">¶</a></h3>
+<p>If a supercell is created it is possible to evaluate the single-point invariant by calling the appropriate method. If <code class="code highlight python docutils literal highlight-python"><span class="n">spinful</span> <span class="o">==</span> <span class="kc">False</span></code> the single-point Chern number can be computed using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span><span class="o">.</span><span class="n">single_point_chern</span><span class="p">(</span><span class="n">formula</span> <span class="o">=</span> <span class="s1">&#39;symmetric&#39;</span><span class="p">,</span> <span class="n">return_ham_gap</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">formula</span></code> can be <code class="docutils literal notranslate"><span class="pre">'symmetric'</span></code> or <code class="docutils literal notranslate"><span class="pre">'asymetric'</span></code> and specify whether the invariant should be computed with the derivative approximated by forward or central finite differences, and <code class="docutils literal notranslate"><span class="pre">return_ham_gap</span></code> returns the gap of the Hamiltonian matrix. Similarly, if <code class="code highlight python docutils literal highlight-python"><span class="n">spinful</span> <span class="o">==</span> <span class="kc">True</span></code>, the single-point spin-Chern number can be computed using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">model</span><span class="o">.</span><span class="n">single_point_spin_chern</span><span class="p">(</span><span class="n">spin</span> <span class="o">=</span> <span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="n">formula</span> <span class="o">=</span> <span class="s1">&#39;symmetric&#39;</span><span class="p">,</span> <span class="n">return_pszp_gap</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">return_ham_gap</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">spin</span></code> can be either <code class="docutils literal notranslate"><span class="pre">'up'</span></code> or <code class="docutils literal notranslate"><span class="pre">'down'</span></code> and specify the sign of the eigenvalues of the projected spin operator on which the topological invariant should be calculated on, and <code class="docutils literal notranslate"><span class="pre">return_pszp_gap</span></code> returns the gap of <span class="math notranslate nohighlight">\(PS_zP\)</span>. The output of the functions is a dictionary with labels <code class="docutils literal notranslate"><span class="pre">'asymmetric'</span></code>, <code class="docutils literal notranslate"><span class="pre">'symmetric'</span></code>, <code class="docutils literal notranslate"><span class="pre">'hamiltonian_gap'</span></code> and <code class="docutils literal notranslate"><span class="pre">'pszp_gap'</span></code> in the single-point spin-Chern number function.</p>
+</section>
+<section id="calculate-the-local-topological-marker">
+<h3>Calculate the local topological marker<a class="headerlink" href="#calculate-the-local-topological-marker" title="Link to this heading">¶</a></h3>
+<p>If a finite model or supercell is created it is possible to evaluate the local topological markers by calling the appropriate method. If <code class="code highlight python docutils literal highlight-python"><span class="n">spinful</span> <span class="o">==</span> <span class="kc">False</span></code> the local Chern marker can be computed using:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span id="line-1"><span class="n">finite_model</span><span class="o">.</span><span class="n">local_chern_marker</span><span class="p">(</span><span class="n">direction</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">return_projector</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">input_projector</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">macroscopic_average</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">smearing_temperature</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">fermidirac_cutoff</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+</span><span id="line-2"><span class="n">supercell</span><span class="o">.</span><span class="n">pbc_local_chern_marker</span><span class="p">(</span><span class="n">direction</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">return_projector</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">input_projector</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">formula</span> <span class="o">=</span> <span class="s1">&#39;symmetric&#39;</span><span class="p">,</span> <span class="n">macroscopic_average</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">cutoff</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">smearing_temperature</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">fermidirac_cutoff</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+</span></code></pre></div>
+</div>
+<p>Where <code class="code highlight python docutils literal highlight-python"><span class="n">direction</span> <span class="o">==</span> <span class="kc">None</span></code> means that the function returns the topological marker evaluated over the whole lattice. If <code class="docutils literal notranslate"><span class="pre">direction</span></code> is <code class="docutils literal notranslate"><span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">1</span></code> the functions return the value of the marker along the <em>x</em> or <em>y</em> direction respectively starting from <code class="docutils literal notranslate"><span class="pre">start</span></code>. The parameter <code class="docutils literal notranslate"><span class="pre">return_projector</span></code> is used to return the projectors used in the calculations, namely <span class="math notranslate nohighlight">\(\mathcal P\)</span> (the ground state projector) in the open boundary conditions case and the list <span class="math notranslate nohighlight">\([\mathcal P_{\Gamma}, \mathcal P_{\mathbf b_1}, \mathcal P_{\mathbf b_2}, \mathcal P_{-\mathbf b_1}, \mathcal P_{-\mathbf b_2}]\)</span> in the periodic boundary conditions case. The parameter <code class="docutils literal notranslate"><span class="pre">input_projector</span></code> allows to input the projector mentioned above to reduce the computational cost.</p>
+<p>When the system is disordered, it may be useful to return the value of the topological marker averaged over a real-space area bigger than the unit cell of the model. To do so, one can set the parameters <code class="code highlight python docutils literal highlight-python"><span class="n">macroscopic_average</span> <span class="o">==</span> <span class="kc">True</span></code> (useful also when dealing with system that do not respect the internal indexing of PythTB and TBmodels mentioned above) and <code class="docutils literal notranslate"><span class="pre">cutoff</span></code> to specify the range of the average in real space (lattice constant units).</p>
+</section>
+<section id="using-strawberrypy-with-wannier90-files">
+<h3>Using StraWBerryPy with Wannier90 files<a class="headerlink" href="#using-strawberrypy-with-wannier90-files" title="Link to this heading">¶</a></h3>
+</section>
+</section>
+<section id="a-couple-of-examples">
+<h2>A couple of examples<a class="headerlink" href="#a-couple-of-examples" title="Link to this heading">¶</a></h2>
+<section id="strong-enough-disorder-breaks-the-non-trivial-topology">
+<h3>Strong enough disorder breaks the non-trivial topology<a class="headerlink" href="#strong-enough-disorder-breaks-the-non-trivial-topology" title="Link to this heading">¶</a></h3>
+</section>
+<section id="topological-periodic-heterostructure">
+<h3>Topological periodic heterostructure<a class="headerlink" href="#topological-periodic-heterostructure" title="Link to this heading">¶</a></h3>
+</section>
+</section>
 </section>
 
 
@@ -102,7 +170,7 @@
       &copy;2023, Roberta Favata, Nicolas Baù and Antimo Marrazzo.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
