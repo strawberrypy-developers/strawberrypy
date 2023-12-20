@@ -52,13 +52,13 @@ If a supercell is created it is possible to evaluate the single-point invariant 
 
     model.single_point_chern(formula = 'symmetric', return_ham_gap = False)
 
-Where ``formula`` can be ``'symmetric'`` or ``'asymetric'`` and specify whether the invariant should be computed with the derivative approximated by forward or central finite differences, and ``return_ham_gap`` returns the gap of the Hamiltonian matrix. Similarly, if :python:`spinful == True`, the single-point spin-Chern number can be computed using:
+Where ``formula`` can be ``'symmetric'`` or ``'asymetric'`` and specify whether the invariant should be computed with the derivative approximated by forward or central finite differences. The parameter ``return_ham_gap`` is a bool specifying whether the gap of the Hamiltonian should be returned. Similarly, if :python:`spinful == True`, the single-point spin-Chern number can be computed using:
 
 .. code:: python
 
     model.single_point_spin_chern(spin = 'up', formula = 'symmetric', return_pszp_gap = False, return_ham_gap = False)
 
-Where ``spin`` can be either ``'up'`` or ``'down'`` and specify the sign of the eigenvalues of the projected spin operator on which the topological invariant should be calculated on, and ``return_pszp_gap`` returns the gap of :math:`PS_zP`. The output of the functions is a dictionary with labels ``'asymmetric'``, ``'symmetric'``, ``'hamiltonian_gap'`` and ``'pszp_gap'`` in the single-point spin-Chern number function. 
+Where ``spin`` can be either ``'up'`` or ``'down'`` and specify the sign of the eigenvalues of the projected spin operator on which the topological invariant should be calculated on. The parameter ``return_pszp_gap`` is a bool specifying whether the gap of :math:`PS_zP` should be returned. The functions return a dictionary with labels ``'asymmetric'``, ``'symmetric'``, ``'hamiltonian_gap'`` (and ``'pszp_gap'`` in the single-point spin-Chern number function) depending on the values of the input parameters. 
 
 Calculate the local topological marker
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -69,18 +69,51 @@ If a finite model or supercell is created it is possible to evaluate the local t
     finite_model.local_chern_marker(direction = None, start = 0, return_projector = False, input_projector = None, macroscopic_average = False, cutoff = 0.8, smearing_temperature = 0.0, fermidirac_cutoff = 0.1)
     supercell.pbc_local_chern_marker(direction = None, start = 0, return_projector = False, input_projector = None, formula = 'symmetric', macroscopic_average = False, cutoff = 0.8, smearing_temperature = 0.0, fermidirac_cutoff = 0.1)
 
-Where :python:`direction == None` means that the function returns the topological marker evaluated over the whole lattice. If ``direction`` is ``0`` or ``1`` the functions return the value of the marker along the *x* or *y* direction respectively starting from ``start``. The parameter ``return_projector`` is used to return the projectors used in the calculations, namely :math:`\mathcal P` (the ground state projector) in the open boundary conditions case and the list :math:`[\mathcal P_{\Gamma}, \mathcal P_{\mathbf b_1}, \mathcal P_{\mathbf b_2}, \mathcal P_{-\mathbf b_1}, \mathcal P_{-\mathbf b_2}]` in the periodic boundary conditions case. The parameter ``input_projector`` allows to input the projector mentioned above to reduce the computational cost.
+Where :python:`direction == None` means that the function returns the topological marker evaluated over the whole lattice. If ``direction`` is ``0`` or ``1`` the functions returns the value of the marker along the *x* or *y* direction respectively starting from ``start`` (index of the unit cell along the orthogonal direction to ``direction``). The parameter ``return_projector`` is used to return the projectors used in the calculations, namely :math:`\mathcal P` (the ground state projector) in the open boundary conditions case and the list :math:`[\mathcal P_{\Gamma}, \mathcal P_{\mathbf b_1}, \mathcal P_{\mathbf b_2}, \mathcal P_{-\mathbf b_1}, \mathcal P_{-\mathbf b_2}]` in the periodic boundary conditions case. The parameter ``input_projector`` allows to input the projectors mentioned above (beware of the order) when these are known. The parameters ``smearing_temperature`` and ``fermidirac_cutoff`` can be set when dealing with heterostructures to improve the convergence of the topological markers by introducing a Fermi-Dirac occupation function in the calculation of the projectors.
 
-When the system is disordered, it may be useful to return the value of the topological marker averaged over a real-space area bigger than the unit cell of the model. To do so, one can set the parameters :python:`macroscopic_average == True` (useful also when dealing with system that do not respect the internal indexing of PythTB and TBmodels mentioned above) and ``cutoff`` to specify the range of the average in real space (lattice constant units).
+When the system is disordered, it may be useful to return the value of the topological marker averaged over a real-space area bigger than the unit cell of the model. To do so, one can set the parameters :python:`macroscopic_average == True` (useful also when dealing with system that do not respect the internal indexing of PythTB and TBmodels, as mentioned above) and ``cutoff`` to specify the range of the averages in real space (lattice constant units).
 
-Using StraWBerryPy with Wannier90 files
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using StraWBerryPy with Wannier90 output files
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+?
 
 A couple of examples
 --------------------
 
 Strong enough disorder breaks the non-trivial topology
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+?
 
 Topological periodic heterostructure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+As an example, we report here the code used to generate Fig. 3 of the `paper <https://arxiv.org/abs/2310.15783>`_ introducing the local Chern marker in periodic boundary conditions.
+
+.. code:: python
+
+    import numpy as np
+    from strawberrypy import *
+
+    # Parameters of the supercell
+    Lx = 100
+    Ly = 30
+
+    # Define the models in the unit cell
+    model = example_models.haldane_tbmodels(0.3, 1, 0.15, -np.pi / 2)
+    model_trivial = example_models.haldane_tbmodels(1.25, 1, 0.15, -np.pi / 2)
+
+    # Create a supercell for both models
+    model = Supercell(model, Lx, Ly, spinful = False)
+    model_trivial = Supercell(model_trivial, Lx, Ly, spinful = False)
+    
+    # Substitute model_trivial into model from cell 24 to 74 along the x direction
+    model.make_heterostructure(model_trivial, direction = 0, start = 24, stop = 74)
+
+    # Compute the PBC local Chern marker in the whole lattice
+    pbclcm_lattice, projectors = model.pbc_local_chern_marker(return_projector = True, smearing_temperature = 0.05, fermidirac_cutoff = 0.1)
+
+    # Compute the PBC local Chern marker along the x direction al half height
+    pbclcm_line = model.pbc_local_chern_marker(direction = 0, start = Ly // 2, input_projector = projectors)
+
+.. image:: _static/media/heterostructure_pbclcm.png
+   :width: 150%
+   :alt: PBC local Chern marker produced with the code above

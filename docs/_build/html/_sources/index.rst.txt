@@ -31,7 +31,7 @@ Here, a quick example for calculating the single-point and PBC local topological
    from strawberrypy import *
 
    # Define the PBC model
-   pbc_model = example_models.haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
+   pbc_model = example_models.haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2)
 
    # Build the supercell of the model
    model = Supercell(tbmodel = pbc_model, Lx = 30, Ly = 30, spinful = False)
