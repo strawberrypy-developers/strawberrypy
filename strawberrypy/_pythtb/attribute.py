@@ -31,20 +31,6 @@ def _orb_cart (model):
     orb_c = np.array(orb_c)
     return orb_c
 
-""" N: is this needed?
-def _orb_cart_spin (model):
-    #returns position of orbitals in cartesian coordinates
-    n_occ = model.get_num_orbitals()
-    lat_super = model.get_lat()          
-    orb_red = model.get_orb()            
-
-    orb_c = []
-    for i in range (n_occ):
-        orb_c.append( (np.matmul(lat_super.transpose(),orb_red[i].reshape(-1,1))).squeeze() )  
-        orb_c.append( (np.matmul(lat_super.transpose(),orb_red[i].reshape(-1,1))).squeeze() )  
-    orb_c = np.array(orb_c)
-    return orb_c"""
-
 def _reciprocal_vec(model):
     """
     Returns reciprocal lattice vectors in cartesian coordinates. ``pythtb.tb_model`` version.
