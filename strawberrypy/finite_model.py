@@ -32,13 +32,9 @@ class FiniteModel(Model):
         self.model = self._make_finite(tbmodel)
         self.uc_vol = self._calc_uc_vol()
 
-        # make_finite in PythTB delete informations about the dimensionaloty of the system
-        self.dim = super()._get_dim(tbmodel)
-
         super().__init__(tbmodel = self.model,
                          spinful = spinful,
                          states_uc = super()._calc_states_uc(tbmodel, spinful),
-                         dim = self.dim,
                          Lx = self.Lx,
                          Ly = self.Ly
                         )
@@ -46,7 +42,7 @@ class FiniteModel(Model):
         # The positions for TBModels must be rescaled by the supercell dimension
         self.cart_positions = self._get_positions()
         self.r = []
-        for d in range(self.dim):
+        for d in range(self.dim_r):
             self.r.append( np.diag(self.cart_positions[:, d]) )
 
     #################################################

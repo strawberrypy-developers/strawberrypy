@@ -240,6 +240,7 @@ class Supercell(Model):
 
             # Evaluate the effective number of occupied states whose occupation is greater than the Fermi-Dirac cutoff
             rank = np.sum(fermidirac(eigenvals, smearing_temperature, mu) > fermidirac_cutoff)
+            print(self.n_occ, rank)
 
             eigenvecs_use = eigenvecs.T
 
@@ -296,7 +297,7 @@ class Supercell(Model):
 
         if direction is not None:
             # Evaluate index of the selected direction
-            indices = self._xy_to_index('x' if direction == 1 else 'y', start)
+            indices = self._xy_to_line('x' if direction == 1 else 'y', start)
 
             # If macroscopic_average consider the averaged lattice, else the Chern operators
             if macroscopic_average or self.disordered:

@@ -26,7 +26,7 @@ class Model():
             Number of unit cell repeated along the :math:`\mathbf{a}_2` direction. Default is ``1``.
     """
 
-    def __init__(self, tbmodel = None, spinful : bool = False, states_uc : int = None, dim : int = None, Lx : int = 1, Ly : int = 1):
+    def __init__(self, tbmodel = None, spinful : bool = False, states_uc : int = None, Lx : int = 1, Ly : int = 1):
         
         # Store local variables
         self.model = tbmodel
@@ -38,23 +38,23 @@ class Model():
         self.cart_positions = self._get_positions() 
         self.n_orb = self.cart_positions[:,0].size
 
-        self.dim = self._get_dim(tbmodel) if dim == None else dim
+        self.dim_r = self._get_dim()
         self.hamiltonian, self.n_occ = self._get_hamiltonian()
 
         # Generate the spin matrices if the model is spinful
-        if spinful:
+        if self.spinful:
             self.sz = self._get_spin()
         else:
             self.sz = None
 
         # Generate the position matrices 
         self.r = []
-        for d in range (self.dim):
+        for d in range (self.dim_r):
             self.r.append( np.diag(self.cart_positions[:,d]) )
 
         # Number of states per unit cell
         if states_uc == None:
-            self.states_uc = self._calc_states_uc()
+            self.states_uc = self._calc_states_uc(self.model, self.spinful)
         else:
             self.states_uc = states_uc
         
@@ -82,13 +82,12 @@ class Model():
         r"""
         Returns the hamiltonian matrix at the :math:`\Gamma`-point.
         """
-        model_use = self.model
-        if isinstance(model_use, tbm.Model):
-            gamma_point = np.zeros(self.dim)
-            return _tbmodels.get_hamiltonian(model_use, gamma_point)
-        elif isinstance(model_use, ptb.tb_model):
-            gamma_point = np.zeros(self.dim)
-            return _pythtb.get_hamiltonian(model_use, self.spinful, gamma_point, self.dim)
+        if isinstance(self.model, tbm.Model):
+            gamma_point = np.zeros(self.dim_r)
+            return _tbmodels.get_hamiltonian(self.model, gamma_point)
+        elif isinstance(self.model, ptb.tb_model):
+            gamma_point = np.zeros(self.dim_r)
+            return _pythtb.get_hamiltonian(self.model, self.spinful, gamma_point, self.dim_r)
         else:
             raise NotImplementedError("Invalid model instance.")
         
@@ -103,19 +102,19 @@ class Model():
             raise NotImplementedError("Invalid model instance.")
         
 
-    def _get_dim(self, model):
+    def _get_dim(self):
         r"""
-        Returns the dimensionality of the model.
+        Returns the real-space dimensionality of the model.
 
         Parameters
         ----------
             model :
                 Model instance.
         """
-        if isinstance(model, tbm.Model):
-            return model.dim
-        elif isinstance(model, ptb.tb_model):
-            return model._dim_k
+        if isinstance(self.model, tbm.Model):
+            return self.model.dim
+        elif isinstance(self.model, ptb.tb_model):
+            return self.model._dim_r
         else:
             raise NotImplementedError("Invalid model instance.")
         

@@ -1,5 +1,5 @@
-strawberrypy
-============
+Reference
+=========
 
 .. toctree::
    :maxdepth: 4

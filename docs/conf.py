@@ -22,14 +22,15 @@ extensions = [
 	'sphinx.ext.viewcode',
 	'sphinx.ext.napoleon',
     'sphinx.ext.intersphinx',
-    #'sphinx_favicon'
+    'sphinx.ext.autosectionlabel',
+    'sphinxawesome_theme.highlighting',
+    'sphinx_copybutton'
 ]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 highlight_language = 'python3'
 master_doc = 'index'
-#html_additional_pages = {'index': 'index.html'}
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -50,12 +51,11 @@ if html_theme == 'alabaster':
         'gray_2': '#F4F4F4ED',
         'sidebar_width': '250px',
         'body_max_width': 'auto',
-        'page_width': '1000px',
+        'page_width': '1100px'
     }
     html_logo = "_static/media/logo.png"
     
     html_favicon = "favicon.ico"
-    #favicon = [{"href": "_static/media/favicon.ico"}]
 
     html_sidebars = {
         '**': [

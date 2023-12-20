@@ -1,45 +1,45 @@
-strawberrypy package
+StraWBerryPy package
 ====================
 
-Subpackages
------------
-
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
 
-   strawberrypy.example_models
-
-Submodules
-----------
-
-strawberrypy.classes module
----------------------------
+Model class module
+------------------
 
 .. automodule:: strawberrypy.classes
    :members:
    :undoc-members:
    :show-inheritance:
 
-strawberrypy.finite\_model module
----------------------------------
+Finite model class module
+-------------------------
 
 .. automodule:: strawberrypy.finite_model
    :members:
    :undoc-members:
    :show-inheritance:
 
-strawberrypy.supercell module
------------------------------
+Supercell model class module
+----------------------------
 
 .. automodule:: strawberrypy.supercell
    :members:
    :undoc-members:
    :show-inheritance:
 
-Module contents
----------------
+Subpackages
+-----------
 
-.. automodule:: strawberrypy
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. toctree::
+   :maxdepth: 2
+
+   strawberrypy.example_models
+   strawberrypy.utils
+
+.. Utility functions
+.. -----------------
+.. .. automodule:: strawberrypy
+..    :members:
+..    :undoc-members:
+..   :show-inheritance:
