@@ -2,9 +2,13 @@ import numpy as np
 
 import tbmodels as tbm
 import pythtb as ptb
+import wannierberri as wberri
 
 from . import _tbmodels
 from . import _pythtb
+from . import _wberri
+
+import scipy.linalg as la
 
 class Model():
     r"""
@@ -26,26 +30,40 @@ class Model():
             Number of unit cell repeated along the :math:`\mathbf{a}_2` direction. Default is ``1``.
     """
 
-    def __init__(self, tbmodel = None, spinful : bool = False, states_uc : int = None, Lx : int = 1, Ly : int = 1):
+    def __init__(self, tbmodel = None, spinful : bool = False, states_uc : int = None, Lx : int = 1, Ly : int = 1,
+                 wannier : bool = False, file_spn : bool = False, n_occ : int = None):
         
         # Store local variables
         self.model = tbmodel
         self.Lx = Lx
         self.Ly = Ly
         self.spinful = spinful
+        self.wannier = wannier
+        self.file_spn = file_spn
 
         # Generate the positions of the atoms in the lattice
         self.cart_positions = self._get_positions() 
         self.n_orb = self.cart_positions[:,0].size
 
         self.dim_r = self._get_dim()
-        self.hamiltonian, self.n_occ = self._get_hamiltonian()
+
+        if self.wannier:
+            self.hamiltonian, self.data = self._get_hamiltonian()
+            self.n_occ = n_occ
+        else:
+            self.hamiltonian, self.n_occ = self._get_hamiltonian()
+
 
         # Generate the spin matrices if the model is spinful
         if self.spinful:
-            self.sz = self._get_spin()
+            if self.wannier and self.file_spn:
+                self.eig, self.un_0 = self._diagonalize()
+                self.sz = self._read_spn()
+            else:
+                self.sz = self._get_spin()
         else:
             self.sz = None
+
 
         # Generate the position matrices 
         self.r = []
@@ -74,6 +92,8 @@ class Model():
             return _tbmodels.get_positions(self.model)
         elif isinstance(self.model, ptb.tb_model):
             return _pythtb.get_positions(self.model, self.spinful)
+        elif isinstance(self.model, wberri.System_w90):
+            return _wberri.get_positions(self.model)
         else:
             raise NotImplementedError("Invalid model instance.")
 
@@ -88,16 +108,38 @@ class Model():
         elif isinstance(self.model, ptb.tb_model):
             gamma_point = np.zeros(self.dim_r)
             return _pythtb.get_hamiltonian(self.model, self.spinful, gamma_point, self.dim_r)
+        elif isinstance(self.model, wberri.System_w90):
+            return _wberri.get_hamiltonian(self.model)
         else:
             raise NotImplementedError("Invalid model instance.")
+        
+
+    def _diagonalize(self):
+        """
+        Returns the eigenvalues and the eigenstates of the hamiltonian matrix at Gamma point along rows
+        """
+        eig, u_n0 = la.eigh(self.hamiltonian)
+        u_n0 = u_n0.T
+
+        return eig, u_n0
         
 
     def _get_spin(self):
         r"""
         Returns the spin matrix elements in the basis of tight-binding orbitals which are diagonal in the spin operator :math:`S_z`.
         """
-        if isinstance(self.model, tbm.Model) or isinstance(self.model, ptb.tb_model):
+        if isinstance(self.model, tbm.Model) or isinstance(self.model, ptb.tb_model) or isinstance(self.model, wberri.System_w90):
             return np.diag([1, -1] * (self.n_orb//2))
+        else:
+            raise NotImplementedError("Invalid model instance.")
+        
+
+    def _read_spn(self):
+        """
+        Returns the spin matrix elements in the basis of Wannier functions
+        """
+        if isinstance(self.model, wberri.System_w90):
+            return _wberri.read_spn(self.model,self.data,self.un_0)
         else:
             raise NotImplementedError("Invalid model instance.")
         
@@ -115,6 +157,8 @@ class Model():
             return self.model.dim
         elif isinstance(self.model, ptb.tb_model):
             return self.model._dim_r
+        elif isinstance(self.model, wberri.System_w90):
+            return(self.cart_positions[0,:].size)
         else:
             raise NotImplementedError("Invalid model instance.")
         
@@ -134,6 +178,8 @@ class Model():
             return _tbmodels.calc_states_uc(model)
         elif isinstance(model, ptb.tb_model):
             return _pythtb.calc_states_uc(model, spinful)
+        elif isinstance(model, wberri.System_w90):
+            return _wberri.calc_states_uc(model)
         else:
             raise NotImplementedError("Invalid model instance.")
         
@@ -146,6 +192,8 @@ class Model():
             return _tbmodels.initialize_mask(self.model)
         elif isinstance(self.model, ptb.tb_model):
             return _pythtb.initialize_mask(self.model, self.spinful)
+        elif isinstance(self.model, wberri.System_w90):
+            return _wberri.calc_states_uc(self.model)
         else:
             raise NotImplementedError("Invalid model instance.")
 

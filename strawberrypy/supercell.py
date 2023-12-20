@@ -2,20 +2,24 @@ import numpy as np
 
 import tbmodels as tbm
 import pythtb as ptb
+import wannierberri as wberri
 
 from .classes import Model
 
 from . import _tbmodels
 from . import _pythtb
+from . import _wberri
 
 import scipy.linalg as la
 from opt_einsum import contract
 from .utils import *
 
 class Supercell(Model):
-    def __init__(self, tbmodel, Lx : int, Ly : int, spinful : bool = False):
+    def __init__(self, tbmodel, Lx : int, Ly : int, spinful : bool = False,
+                 wannier : bool = False, file_spn : bool = False, n_occ : int = None):
         self.Lx = Lx
         self.Ly = Ly
+        self.Lz = 1
 
         self.model = self._make_supercell(tbmodel)
 
@@ -23,16 +27,21 @@ class Supercell(Model):
                          spinful = spinful,
                          states_uc = super()._calc_states_uc(tbmodel, spinful),
                          Lx = self.Lx,
-                         Ly = self.Ly
+                         Ly = self.Ly,
+                         wannier = wannier,
+                         file_spn = file_spn,
+                         n_occ = n_occ
                         )
 
 
     def _make_supercell(self, tbmodel):
         if (self.Lx != 1 and self.Ly != 1):
             if isinstance(tbmodel, tbm.Model):
-                return tbmodel.supercell([self.Lx,self.Ly])
+                return tbmodel.supercell([self.Lx,self.Ly]) if tbmodel.dim == 2 else tbmodel.supercell([self.Lx,self.Ly,self.Lz])
             elif isinstance(tbmodel, ptb.tb_model):
-                return tbmodel.make_supercell([[self.Lx,0],[0,self.Ly]])
+                return tbmodel.make_supercell([[self.Lx,0],[0,self.Ly]]) if tbmodel._dim_r == 2 else tbmodel.make_supercell([[self.Lx,0,0],[0,self.Ly,0],[0,0,self.Lz]])
+            elif isinstance(tbmodel, wberri.System_w90):
+                return tbmodel
             else:
                 raise NotImplementedError("Invalid model instance.")
         else:
@@ -44,15 +53,19 @@ class Supercell(Model):
                 return _tbmodels._reciprocal_vec(self.model)
         elif isinstance(self.model, ptb.tb_model):
             return _pythtb._reciprocal_vec(self.model)
+        elif isinstance(self.model, wberri.System_w90):
+            return _wberri._reciprocal_vec(self.model)
         else:
             raise NotImplementedError("Invalid model instance.")
 
 
-    def pszp_matrix(self, u_n0):
-        sz = self.sz
-        #sz_un0 = (sz@u_n0).T
+    def pszp_matrix (self, un0 = None):
         pszp = np.ndarray([self.n_occ,self.n_occ],dtype=complex)
-        pszp = u_n0[:self.n_occ,:].conjugate() @ (sz @ u_n0[:self.n_occ,:].T)
+        if self.wannier and self.file_spn:
+            pszp = self.sz[:self.n_occ,:self.n_occ]
+        else:
+            sz = self.sz
+            pszp = un0[:self.n_occ,:].conjugate() @ (sz @ un0[:self.n_occ,:].T)
         return pszp
 
 
@@ -137,8 +150,12 @@ class Supercell(Model):
     def single_point_spin_chern(self, spin : str = 'down', formula : str = 'both', return_pszp_gap : bool = False, return_ham_gap : bool = False):
         n_sub = self.n_occ//2
 
-        eig, u_n0 = la.eigh(self.hamiltonian)
-        u_n0 = u_n0.T
+        if self.wannier and self.file_spn:  
+            eig = self.eig
+            u_n0 = self.un_0
+        else:
+            eig, u_n0 = la.eigh(self.hamiltonian)
+            u_n0 = u_n0.T
 
         pszp = self.pszp_matrix(u_n0)
         eval_pszp, eig_pszp = la.eigh(pszp)
