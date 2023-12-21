@@ -51,8 +51,14 @@ if html_theme == 'alabaster':
         'gray_2': '#F4F4F4ED',
         'sidebar_width': '250px',
         'body_max_width': 'auto',
-        'page_width': '1100px'
+        'page_width': '1100px',
+        'github_user': 'strawberrypy-developers',
+        'github_repo': 'strawberrypy',
+        'github_button': True,
+        'github_type': 'watch',
+        'github_count': False,
     }
+
     html_logo = "_static/media/logo.png"
     
     html_favicon = "favicon.ico"

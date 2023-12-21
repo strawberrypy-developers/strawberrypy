@@ -39,6 +39,13 @@
 
 
 
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=strawberrypy-developers&repo=strawberrypy&type=watch&count=False&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
 
 
 <!-- From: https://framagit.org/coslo/template-docs -->
@@ -115,7 +122,7 @@
 </span><span id="line-26"><span class="sd">            Number of unit cell repeated along the :math:`\mathbf{a}_2` direction. Default is ``1``.</span>
 </span><span id="line-27"><span class="sd">    &quot;&quot;&quot;</span>
 </span><span id="line-28">
-</span><span id="line-29">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbmodel</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">spinful</span> <span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">states_uc</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">dim</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">Lx</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Ly</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+</span><span id="line-29">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tbmodel</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">spinful</span> <span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">states_uc</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">Lx</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Ly</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
 </span><span id="line-30">        
 </span><span id="line-31">        <span class="c1"># Store local variables</span>
 </span><span id="line-32">        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">tbmodel</span>
@@ -127,23 +134,23 @@
 </span><span id="line-38">        <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_positions</span><span class="p">()</span> 
 </span><span id="line-39">        <span class="bp">self</span><span class="o">.</span><span class="n">n_orb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
 </span><span id="line-40">
-</span><span id="line-41">        <span class="bp">self</span><span class="o">.</span><span class="n">dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dim</span><span class="p">(</span><span class="n">tbmodel</span><span class="p">)</span> <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dim</span>
+</span><span id="line-41">        <span class="bp">self</span><span class="o">.</span><span class="n">dim_r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_dim</span><span class="p">()</span>
 </span><span id="line-42">        <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_occ</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_hamiltonian</span><span class="p">()</span>
 </span><span id="line-43">
 </span><span id="line-44">        <span class="c1"># Generate the spin matrices if the model is spinful</span>
-</span><span id="line-45">        <span class="k">if</span> <span class="n">spinful</span><span class="p">:</span>
+</span><span id="line-45">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">:</span>
 </span><span id="line-46">            <span class="bp">self</span><span class="o">.</span><span class="n">sz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_spin</span><span class="p">()</span>
 </span><span id="line-47">        <span class="k">else</span><span class="p">:</span>
 </span><span id="line-48">            <span class="bp">self</span><span class="o">.</span><span class="n">sz</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="line-49">
 </span><span id="line-50">        <span class="c1"># Generate the position matrices </span>
 </span><span id="line-51">        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="line-52">        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">):</span>
+</span><span id="line-52">        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_r</span><span class="p">):</span>
 </span><span id="line-53">            <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">[:,</span><span class="n">d</span><span class="p">])</span> <span class="p">)</span>
 </span><span id="line-54">
 </span><span id="line-55">        <span class="c1"># Number of states per unit cell</span>
 </span><span id="line-56">        <span class="k">if</span> <span class="n">states_uc</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="line-57">            <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_states_uc</span><span class="p">()</span>
+</span><span id="line-57">            <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_states_uc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">)</span>
 </span><span id="line-58">        <span class="k">else</span><span class="p">:</span>
 </span><span id="line-59">            <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">=</span> <span class="n">states_uc</span>
 </span><span id="line-60">        
@@ -171,471 +178,470 @@
 </span><span id="line-82"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="line-83"><span class="sd">        Returns the hamiltonian matrix at the :math:`\Gamma`-point.</span>
 </span><span id="line-84"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-85">        <span class="n">model_use</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
-</span><span id="line-86">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_use</span><span class="p">,</span> <span class="n">tbm</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span id="line-87">            <span class="n">gamma_point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
-</span><span id="line-88">            <span class="k">return</span> <span class="n">_tbmodels</span><span class="o">.</span><span class="n">get_hamiltonian</span><span class="p">(</span><span class="n">model_use</span><span class="p">,</span> <span class="n">gamma_point</span><span class="p">)</span>
-</span><span id="line-89">        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_use</span><span class="p">,</span> <span class="n">ptb</span><span class="o">.</span><span class="n">tb_model</span><span class="p">):</span>
-</span><span id="line-90">            <span class="n">gamma_point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
-</span><span id="line-91">            <span class="k">return</span> <span class="n">_pythtb</span><span class="o">.</span><span class="n">get_hamiltonian</span><span class="p">(</span><span class="n">model_use</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">,</span> <span class="n">gamma_point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim</span><span class="p">)</span>
-</span><span id="line-92">        <span class="k">else</span><span class="p">:</span>
-</span><span id="line-93">            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Invalid model instance.&quot;</span><span class="p">)</span>
-</span><span id="line-94">        
-</span><span id="line-95">
-</span><span id="line-96">    <span class="k">def</span> <span class="nf">_get_spin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="line-97"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="line-98"><span class="sd">        Returns the spin matrix elements in the basis of tight-binding orbitals which are diagonal in the spin operator :math:`S_z`.</span>
-</span><span id="line-99"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-100">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">tbm</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">ptb</span><span class="o">.</span><span class="n">tb_model</span><span class="p">):</span>
-</span><span id="line-101">            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orb</span><span class="o">//</span><span class="mi">2</span><span class="p">))</span>
-</span><span id="line-102">        <span class="k">else</span><span class="p">:</span>
-</span><span id="line-103">            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Invalid model instance.&quot;</span><span class="p">)</span>
-</span><span id="line-104">        
-</span><span id="line-105">
-</span><span id="line-106">    <span class="k">def</span> <span class="nf">_get_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
-</span><span id="line-107"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="line-108"><span class="sd">        Returns the dimensionality of the model.</span>
-</span><span id="line-109">
-</span><span id="line-110"><span class="sd">        Parameters</span>
-</span><span id="line-111"><span class="sd">        ----------</span>
-</span><span id="line-112"><span class="sd">            model :</span>
-</span><span id="line-113"><span class="sd">                Model instance.</span>
-</span><span id="line-114"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-115">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tbm</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span id="line-116">            <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">dim</span>
-</span><span id="line-117">        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ptb</span><span class="o">.</span><span class="n">tb_model</span><span class="p">):</span>
-</span><span id="line-118">            <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">_dim_k</span>
-</span><span id="line-119">        <span class="k">else</span><span class="p">:</span>
-</span><span id="line-120">            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Invalid model instance.&quot;</span><span class="p">)</span>
-</span><span id="line-121">        
-</span><span id="line-122">
-</span><span id="line-123">    <span class="k">def</span> <span class="nf">_calc_states_uc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">spinful</span><span class="p">):</span>
-</span><span id="line-124"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="line-125"><span class="sd">        Returns number of states per unit cell.</span>
-</span><span id="line-126">
-</span><span id="line-127"><span class="sd">        Parameters</span>
-</span><span id="line-128"><span class="sd">        ----------</span>
-</span><span id="line-129"><span class="sd">            model :</span>
-</span><span id="line-130"><span class="sd">                Model instance.</span>
-</span><span id="line-131"><span class="sd">            spinful :</span>
-</span><span id="line-132"><span class="sd">                Whether the model is spinful or not.</span>
-</span><span id="line-133"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-134">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tbm</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span id="line-135">            <span class="k">return</span> <span class="n">_tbmodels</span><span class="o">.</span><span class="n">calc_states_uc</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
-</span><span id="line-136">        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ptb</span><span class="o">.</span><span class="n">tb_model</span><span class="p">):</span>
-</span><span id="line-137">            <span class="k">return</span> <span class="n">_pythtb</span><span class="o">.</span><span class="n">calc_states_uc</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">spinful</span><span class="p">)</span>
-</span><span id="line-138">        <span class="k">else</span><span class="p">:</span>
-</span><span id="line-139">            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Invalid model instance.&quot;</span><span class="p">)</span>
+</span><span id="line-85">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">tbm</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span id="line-86">            <span class="n">gamma_point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_r</span><span class="p">)</span>
+</span><span id="line-87">            <span class="k">return</span> <span class="n">_tbmodels</span><span class="o">.</span><span class="n">get_hamiltonian</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">gamma_point</span><span class="p">)</span>
+</span><span id="line-88">        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">ptb</span><span class="o">.</span><span class="n">tb_model</span><span class="p">):</span>
+</span><span id="line-89">            <span class="n">gamma_point</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_r</span><span class="p">)</span>
+</span><span id="line-90">            <span class="k">return</span> <span class="n">_pythtb</span><span class="o">.</span><span class="n">get_hamiltonian</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">,</span> <span class="n">gamma_point</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim_r</span><span class="p">)</span>
+</span><span id="line-91">        <span class="k">else</span><span class="p">:</span>
+</span><span id="line-92">            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Invalid model instance.&quot;</span><span class="p">)</span>
+</span><span id="line-93">        
+</span><span id="line-94">
+</span><span id="line-95">    <span class="k">def</span> <span class="nf">_get_spin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="line-96"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="line-97"><span class="sd">        Returns the spin matrix elements in the basis of tight-binding orbitals which are diagonal in the spin operator :math:`S_z`.</span>
+</span><span id="line-98"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="line-99">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">tbm</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">ptb</span><span class="o">.</span><span class="n">tb_model</span><span class="p">):</span>
+</span><span id="line-100">            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orb</span><span class="o">//</span><span class="mi">2</span><span class="p">))</span>
+</span><span id="line-101">        <span class="k">else</span><span class="p">:</span>
+</span><span id="line-102">            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Invalid model instance.&quot;</span><span class="p">)</span>
+</span><span id="line-103">        
+</span><span id="line-104">
+</span><span id="line-105">    <span class="k">def</span> <span class="nf">_get_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="line-106"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="line-107"><span class="sd">        Returns the real-space dimensionality of the model.</span>
+</span><span id="line-108">
+</span><span id="line-109"><span class="sd">        Parameters</span>
+</span><span id="line-110"><span class="sd">        ----------</span>
+</span><span id="line-111"><span class="sd">            model :</span>
+</span><span id="line-112"><span class="sd">                Model instance.</span>
+</span><span id="line-113"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="line-114">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">tbm</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span id="line-115">            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">dim</span>
+</span><span id="line-116">        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">ptb</span><span class="o">.</span><span class="n">tb_model</span><span class="p">):</span>
+</span><span id="line-117">            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_dim_r</span>
+</span><span id="line-118">        <span class="k">else</span><span class="p">:</span>
+</span><span id="line-119">            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Invalid model instance.&quot;</span><span class="p">)</span>
+</span><span id="line-120">        
+</span><span id="line-121">
+</span><span id="line-122">    <span class="k">def</span> <span class="nf">_calc_states_uc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">spinful</span><span class="p">):</span>
+</span><span id="line-123"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="line-124"><span class="sd">        Returns number of states per unit cell.</span>
+</span><span id="line-125">
+</span><span id="line-126"><span class="sd">        Parameters</span>
+</span><span id="line-127"><span class="sd">        ----------</span>
+</span><span id="line-128"><span class="sd">            model :</span>
+</span><span id="line-129"><span class="sd">                Model instance.</span>
+</span><span id="line-130"><span class="sd">            spinful :</span>
+</span><span id="line-131"><span class="sd">                Whether the model is spinful or not.</span>
+</span><span id="line-132"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="line-133">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">tbm</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span id="line-134">            <span class="k">return</span> <span class="n">_tbmodels</span><span class="o">.</span><span class="n">calc_states_uc</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</span><span id="line-135">        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">ptb</span><span class="o">.</span><span class="n">tb_model</span><span class="p">):</span>
+</span><span id="line-136">            <span class="k">return</span> <span class="n">_pythtb</span><span class="o">.</span><span class="n">calc_states_uc</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">spinful</span><span class="p">)</span>
+</span><span id="line-137">        <span class="k">else</span><span class="p">:</span>
+</span><span id="line-138">            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Invalid model instance.&quot;</span><span class="p">)</span>
+</span><span id="line-139">        
 </span><span id="line-140">        
-</span><span id="line-141">        
-</span><span id="line-142">    <span class="k">def</span> <span class="nf">_initialize_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="line-143"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="line-144"><span class="sd">        Returns a list of ``True`` values with length the dimension of the lattice.</span>
-</span><span id="line-145"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-146">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">tbm</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span id="line-147">            <span class="k">return</span> <span class="n">_tbmodels</span><span class="o">.</span><span class="n">initialize_mask</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
-</span><span id="line-148">        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">ptb</span><span class="o">.</span><span class="n">tb_model</span><span class="p">):</span>
-</span><span id="line-149">            <span class="k">return</span> <span class="n">_pythtb</span><span class="o">.</span><span class="n">initialize_mask</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">)</span>
-</span><span id="line-150">        <span class="k">else</span><span class="p">:</span>
-</span><span id="line-151">            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Invalid model instance.&quot;</span><span class="p">)</span>
-</span><span id="line-152">
-</span><span id="line-153">    <span class="c1">#################################################</span>
-</span><span id="line-154">    <span class="c1"># Lattice functions</span>
-</span><span id="line-155">    <span class="c1">#################################################</span>
-</span><span id="line-156">
+</span><span id="line-141">    <span class="k">def</span> <span class="nf">_initialize_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="line-142"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="line-143"><span class="sd">        Returns a list of ``True`` values with length the dimension of the lattice.</span>
+</span><span id="line-144"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="line-145">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">tbm</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span id="line-146">            <span class="k">return</span> <span class="n">_tbmodels</span><span class="o">.</span><span class="n">initialize_mask</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">)</span>
+</span><span id="line-147">        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">ptb</span><span class="o">.</span><span class="n">tb_model</span><span class="p">):</span>
+</span><span id="line-148">            <span class="k">return</span> <span class="n">_pythtb</span><span class="o">.</span><span class="n">initialize_mask</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">)</span>
+</span><span id="line-149">        <span class="k">else</span><span class="p">:</span>
+</span><span id="line-150">            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Invalid model instance.&quot;</span><span class="p">)</span>
+</span><span id="line-151">
+</span><span id="line-152">    <span class="c1">#################################################</span>
+</span><span id="line-153">    <span class="c1"># Lattice functions</span>
+</span><span id="line-154">    <span class="c1">#################################################</span>
+</span><span id="line-155">
 <div class="viewcode-block" id="Model.add_onsite_disorder">
 <a class="viewcode-back" href="../../strawberrypy.html#strawberrypy.classes.Model.add_onsite_disorder">[docs]</a>
-</span><span id="line-157">    <span class="k">def</span> <span class="nf">add_onsite_disorder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">seed</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-</span><span id="line-158"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="line-159"><span class="sd">        Add on-site Anderson disorder to the model. The addition of Anderson disorder consists in a diagonal term in the Hamiltonian :math:`\mathcal H_{Anderson}=\sum_i w_ic_i^{\dagger}c_i` where :math:`w_i` are random variables uniformly distributed in the interval :math:`[-\frac{W}{2},\frac{W}{2}]`.</span>
-</span><span id="line-160">
-</span><span id="line-161"><span class="sd">        Parameters</span>
-</span><span id="line-162"><span class="sd">        ----------</span>
-</span><span id="line-163"><span class="sd">            w :</span>
-</span><span id="line-164"><span class="sd">                Disorder amplitude, defining the extrema of the interval :math:`[-\frac{W}{2},\frac{W}{2}]`. Default is ``0``.</span>
-</span><span id="line-165"><span class="sd">            seed :</span>
-</span><span id="line-166"><span class="sd">                Seed to be used in the random number generation. Default is ``None``, which result in the default Numpy seed.</span>
-</span><span id="line-167"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-168">        <span class="k">if</span> <span class="n">w</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">disordered</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="line-169">
-</span><span id="line-170">        <span class="c1"># Set the seed for the random number generator</span>
-</span><span id="line-171">        <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="line-172">            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
-</span><span id="line-173">
-</span><span id="line-174">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">:</span> 
-</span><span id="line-175">            <span class="n">spinstates</span> <span class="o">=</span> <span class="mi">2</span>
-</span><span id="line-176">        <span class="k">else</span><span class="p">:</span>
-</span><span id="line-177">            <span class="n">spinstates</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span id="line-178">
-</span><span id="line-179">        <span class="c1"># Create an array of random numbers uniformly distributed in (-w/2, w/2)</span>
-</span><span id="line-180">        <span class="n">d</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orb</span> <span class="o">//</span> <span class="n">spinstates</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
-</span><span id="line-181">        <span class="n">dis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">spinstates</span><span class="p">)</span>
-</span><span id="line-182">
-</span><span id="line-183">        <span class="c1"># This function returns None, modify self.hamiltonian</span>
-</span><span id="line-184">        <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">diagonal</span><span class="p">()</span> <span class="o">+</span> <span class="n">dis</span><span class="p">)</span></div>
+</span><span id="line-156">    <span class="k">def</span> <span class="nf">add_onsite_disorder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">w</span> <span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">seed</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+</span><span id="line-157"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="line-158"><span class="sd">        Add on-site Anderson disorder to the model. The addition of Anderson disorder consists in a diagonal term in the Hamiltonian :math:`\mathcal H_{Anderson}=\sum_i w_ic_i^{\dagger}c_i` where :math:`w_i` are random variables uniformly distributed in the interval :math:`[-\frac{W}{2},\frac{W}{2}]`.</span>
+</span><span id="line-159">
+</span><span id="line-160"><span class="sd">        Parameters</span>
+</span><span id="line-161"><span class="sd">        ----------</span>
+</span><span id="line-162"><span class="sd">            w :</span>
+</span><span id="line-163"><span class="sd">                Disorder amplitude, defining the extrema of the interval :math:`[-\frac{W}{2},\frac{W}{2}]`. Default is ``0``.</span>
+</span><span id="line-164"><span class="sd">            seed :</span>
+</span><span id="line-165"><span class="sd">                Seed to be used in the random number generation. Default is ``None``, which result in the default Numpy seed.</span>
+</span><span id="line-166"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="line-167">        <span class="k">if</span> <span class="n">w</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">disordered</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="line-168">
+</span><span id="line-169">        <span class="c1"># Set the seed for the random number generator</span>
+</span><span id="line-170">        <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="line-171">            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+</span><span id="line-172">
+</span><span id="line-173">        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">:</span> 
+</span><span id="line-174">            <span class="n">spinstates</span> <span class="o">=</span> <span class="mi">2</span>
+</span><span id="line-175">        <span class="k">else</span><span class="p">:</span>
+</span><span id="line-176">            <span class="n">spinstates</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="line-177">
+</span><span id="line-178">        <span class="c1"># Create an array of random numbers uniformly distributed in (-w/2, w/2)</span>
+</span><span id="line-179">        <span class="n">d</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">w</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_orb</span> <span class="o">//</span> <span class="n">spinstates</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+</span><span id="line-180">        <span class="n">dis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">spinstates</span><span class="p">)</span>
+</span><span id="line-181">
+</span><span id="line-182">        <span class="c1"># This function returns None, modify self.hamiltonian</span>
+</span><span id="line-183">        <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">diagonal</span><span class="p">()</span> <span class="o">+</span> <span class="n">dis</span><span class="p">)</span></div>
 
+</span><span id="line-184">
 </span><span id="line-185">
-</span><span id="line-186">
 <div class="viewcode-block" id="Model.add_vacancies">
 <a class="viewcode-back" href="../../strawberrypy.html#strawberrypy.classes.Model.add_vacancies">[docs]</a>
-</span><span id="line-187">    <span class="k">def</span> <span class="nf">add_vacancies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vacancies_list</span><span class="p">):</span>
-</span><span id="line-188"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="line-189"><span class="sd">        Add vacancies in the system by removing a site in the lattice.</span>
-</span><span id="line-190">
-</span><span id="line-191"><span class="sd">        Parameters</span>
-</span><span id="line-192"><span class="sd">        ----------</span>
-</span><span id="line-193"><span class="sd">            vacancies_list:</span>
-</span><span id="line-194"><span class="sd">                A list of [cell_x, cell_y, basis] pointing to the cell and atom to be removed. Multiple values at once are allowed. For instance, consider a :math:`L_x\times L_y` lattice with a basis of :math:`N_b` atoms, and :math:`M` sites needs to be removed. Then, the list ``[[np.random.randint(L_x), np.random.randint(L_y), np.random.randint(N_b)] for _ in range(M)]`` can be passed as argument.</span>
-</span><span id="line-195">
-</span><span id="line-196"><span class="sd">        .. note::</span>
-</span><span id="line-197"><span class="sd">            In order to enforce half-filling, if the model is not spinful, an even number of vacancies is required.</span>
-</span><span id="line-198"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-199">        <span class="n">ham</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span>
-</span><span id="line-200">        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span>
-</span><span id="line-201">        <span class="n">cart_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="o">.</span><span class="n">T</span>
-</span><span id="line-202">        <span class="n">sz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sz</span>
-</span><span id="line-203">        <span class="n">nocc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_occ</span>
-</span><span id="line-204">        <span class="n">norbs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_orb</span>
-</span><span id="line-205">
-</span><span id="line-206">        <span class="c1"># Convert vacancies_list to internal indexing</span>
-</span><span id="line-207">        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vacancies_list</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
-</span><span id="line-208">            <span class="n">vacancies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xy_to_index</span><span class="p">(</span><span class="n">vacancies_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vacancies_list</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vacancies_list</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-</span><span id="line-209">        <span class="k">else</span><span class="p">:</span>
-</span><span id="line-210">            <span class="n">vacancies</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="line-211">            <span class="k">for</span> <span class="n">hl</span> <span class="ow">in</span> <span class="n">vacancies_list</span><span class="p">:</span>
-</span><span id="line-212">                <span class="n">vacancies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xy_to_index</span><span class="p">(</span><span class="n">hl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hl</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hl</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
-</span><span id="line-213">
-</span><span id="line-214">        <span class="c1"># Remove the selected sites</span>
-</span><span id="line-215">        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vacancies</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">():</span>
-</span><span id="line-216">            <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="n">vacancies</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="line-217">            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">:</span>
-</span><span id="line-218">                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Adding an odd number of vacancies causes the model to no longer be half-filled.&quot;</span><span class="p">)</span>
-</span><span id="line-219">            <span class="k">else</span><span class="p">:</span>
-</span><span id="line-220">                <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="n">vacancies</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="line-221">                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
-</span><span id="line-222">                    <span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ham</span><span class="p">,</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="line-223">                    <span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ham</span><span class="p">,</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span id="line-224">                    <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)):</span>
-</span><span id="line-225">                        <span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="line-226">                        <span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span id="line-227">                    <span class="n">cart_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">cart_pos</span><span class="p">,</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span id="line-228">                    <span class="n">sz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sz</span><span class="p">,</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="line-229">                    <span class="n">sz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sz</span><span class="p">,</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span id="line-230">                <span class="n">nocc</span> <span class="o">-=</span> <span class="mi">1</span>
-</span><span id="line-231">                <span class="n">norbs</span> <span class="o">-=</span> <span class="mi">2</span>
-</span><span id="line-232">        <span class="k">else</span><span class="p">:</span>
-</span><span id="line-233">            <span class="c1"># Avoid relabelling</span>
-</span><span id="line-234">            <span class="n">vacancies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">vacancies</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-</span><span id="line-235">
-</span><span id="line-236">            <span class="c1"># Check if the number of vacancies is odd if the model is not spinful</span>
-</span><span id="line-237">            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vacancies</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
-</span><span id="line-238">                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Adding an odd number of vacancies causes the model to no longer be half-filled.&quot;</span><span class="p">)</span>
-</span><span id="line-239">
-</span><span id="line-240">            <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">vacancies</span><span class="p">:</span>
-</span><span id="line-241">                <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="n">h</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="line-242">                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">:</span>
-</span><span id="line-243">                    <span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ham</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="line-244">                    <span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ham</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span id="line-245">                    <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)):</span>
-</span><span id="line-246">                        <span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">h</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="line-247">                        <span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span id="line-248">                    <span class="n">cart_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">cart_pos</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span id="line-249">                    <span class="n">nocc</span> <span class="o">-=</span> <span class="mf">0.5</span>
-</span><span id="line-250">                    <span class="n">norbs</span> <span class="o">-=</span> <span class="mi">1</span>
-</span><span id="line-251">                <span class="k">else</span><span class="p">:</span>
-</span><span id="line-252">                    <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="n">h</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="line-253">                    <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="line-254">                    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
-</span><span id="line-255">                        <span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ham</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="line-256">                        <span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ham</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span id="line-257">                        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)):</span>
-</span><span id="line-258">                            <span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">h</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="line-259">                            <span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span id="line-260">                        <span class="n">cart_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">cart_pos</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span id="line-261">                        <span class="n">sz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sz</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-</span><span id="line-262">                        <span class="n">sz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sz</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span id="line-263">                    <span class="n">nocc</span> <span class="o">-=</span> <span class="mi">1</span>
-</span><span id="line-264">                    <span class="n">norbs</span> <span class="o">-=</span> <span class="mi">2</span>
-</span><span id="line-265">        
-</span><span id="line-266">        <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span> <span class="o">=</span> <span class="n">ham</span>
-</span><span id="line-267">        <span class="bp">self</span><span class="o">.</span><span class="n">sz</span> <span class="o">=</span> <span class="n">sz</span>
-</span><span id="line-268">        <span class="bp">self</span><span class="o">.</span><span class="n">n_occ</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nocc</span><span class="p">)</span>
-</span><span id="line-269">        <span class="bp">self</span><span class="o">.</span><span class="n">disordered</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="line-270">        <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span> <span class="o">=</span> <span class="n">cart_pos</span><span class="o">.</span><span class="n">T</span></div>
+</span><span id="line-186">    <span class="k">def</span> <span class="nf">add_vacancies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vacancies_list</span><span class="p">):</span>
+</span><span id="line-187"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="line-188"><span class="sd">        Add vacancies in the system by removing a site in the lattice.</span>
+</span><span id="line-189">
+</span><span id="line-190"><span class="sd">        Parameters</span>
+</span><span id="line-191"><span class="sd">        ----------</span>
+</span><span id="line-192"><span class="sd">            vacancies_list:</span>
+</span><span id="line-193"><span class="sd">                A list of [cell_x, cell_y, basis] pointing to the cell and atom to be removed. Multiple values at once are allowed. For instance, consider a :math:`L_x\times L_y` lattice with a basis of :math:`N_b` atoms, and :math:`M` sites needs to be removed. Then, the list ``[[np.random.randint(L_x), np.random.randint(L_y), np.random.randint(N_b)] for _ in range(M)]`` can be passed as argument.</span>
+</span><span id="line-194">
+</span><span id="line-195"><span class="sd">        .. note::</span>
+</span><span id="line-196"><span class="sd">            In order to enforce half-filling, if the model is not spinful, an even number of vacancies is required.</span>
+</span><span id="line-197"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="line-198">        <span class="n">ham</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span>
+</span><span id="line-199">        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span>
+</span><span id="line-200">        <span class="n">cart_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="o">.</span><span class="n">T</span>
+</span><span id="line-201">        <span class="n">sz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sz</span>
+</span><span id="line-202">        <span class="n">nocc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_occ</span>
+</span><span id="line-203">        <span class="n">norbs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_orb</span>
+</span><span id="line-204">
+</span><span id="line-205">        <span class="c1"># Convert vacancies_list to internal indexing</span>
+</span><span id="line-206">        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vacancies_list</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,):</span>
+</span><span id="line-207">            <span class="n">vacancies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xy_to_index</span><span class="p">(</span><span class="n">vacancies_list</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vacancies_list</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vacancies_list</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</span><span id="line-208">        <span class="k">else</span><span class="p">:</span>
+</span><span id="line-209">            <span class="n">vacancies</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="line-210">            <span class="k">for</span> <span class="n">hl</span> <span class="ow">in</span> <span class="n">vacancies_list</span><span class="p">:</span>
+</span><span id="line-211">                <span class="n">vacancies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_xy_to_index</span><span class="p">(</span><span class="n">hl</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hl</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">hl</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+</span><span id="line-212">
+</span><span id="line-213">        <span class="c1"># Remove the selected sites</span>
+</span><span id="line-214">        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vacancies</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">():</span>
+</span><span id="line-215">            <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="n">vacancies</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="line-216">            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">:</span>
+</span><span id="line-217">                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Adding an odd number of vacancies causes the model to no longer be half-filled.&quot;</span><span class="p">)</span>
+</span><span id="line-218">            <span class="k">else</span><span class="p">:</span>
+</span><span id="line-219">                <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="n">vacancies</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="line-220">                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+</span><span id="line-221">                    <span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ham</span><span class="p">,</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-222">                    <span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ham</span><span class="p">,</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-223">                    <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)):</span>
+</span><span id="line-224">                        <span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-225">                        <span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-226">                    <span class="n">cart_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">cart_pos</span><span class="p">,</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-227">                    <span class="n">sz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sz</span><span class="p">,</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-228">                    <span class="n">sz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sz</span><span class="p">,</span> <span class="n">vacancies</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-229">                <span class="n">nocc</span> <span class="o">-=</span> <span class="mi">1</span>
+</span><span id="line-230">                <span class="n">norbs</span> <span class="o">-=</span> <span class="mi">2</span>
+</span><span id="line-231">        <span class="k">else</span><span class="p">:</span>
+</span><span id="line-232">            <span class="c1"># Avoid relabelling</span>
+</span><span id="line-233">            <span class="n">vacancies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">vacancies</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</span><span id="line-234">
+</span><span id="line-235">            <span class="c1"># Check if the number of vacancies is odd if the model is not spinful</span>
+</span><span id="line-236">            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vacancies</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+</span><span id="line-237">                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Adding an odd number of vacancies causes the model to no longer be half-filled.&quot;</span><span class="p">)</span>
+</span><span id="line-238">
+</span><span id="line-239">            <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">vacancies</span><span class="p">:</span>
+</span><span id="line-240">                <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="n">h</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="line-241">                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span><span class="p">:</span>
+</span><span id="line-242">                    <span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ham</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-243">                    <span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ham</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-244">                    <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)):</span>
+</span><span id="line-245">                        <span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">h</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-246">                        <span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-247">                    <span class="n">cart_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">cart_pos</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-248">                    <span class="n">nocc</span> <span class="o">-=</span> <span class="mf">0.5</span>
+</span><span id="line-249">                    <span class="n">norbs</span> <span class="o">-=</span> <span class="mi">1</span>
+</span><span id="line-250">                <span class="k">else</span><span class="p">:</span>
+</span><span id="line-251">                    <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="n">h</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="line-252">                    <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="line-253">                    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+</span><span id="line-254">                        <span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ham</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-255">                        <span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">ham</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-256">                        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">)):</span>
+</span><span id="line-257">                            <span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">h</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-258">                            <span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-259">                        <span class="n">cart_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">cart_pos</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-260">                        <span class="n">sz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sz</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</span><span id="line-261">                        <span class="n">sz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">sz</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-262">                    <span class="n">nocc</span> <span class="o">-=</span> <span class="mi">1</span>
+</span><span id="line-263">                    <span class="n">norbs</span> <span class="o">-=</span> <span class="mi">2</span>
+</span><span id="line-264">        
+</span><span id="line-265">        <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span> <span class="o">=</span> <span class="n">ham</span>
+</span><span id="line-266">        <span class="bp">self</span><span class="o">.</span><span class="n">sz</span> <span class="o">=</span> <span class="n">sz</span>
+</span><span id="line-267">        <span class="bp">self</span><span class="o">.</span><span class="n">n_occ</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nocc</span><span class="p">)</span>
+</span><span id="line-268">        <span class="bp">self</span><span class="o">.</span><span class="n">disordered</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="line-269">        <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span> <span class="o">=</span> <span class="n">cart_pos</span><span class="o">.</span><span class="n">T</span></div>
 
+</span><span id="line-270">
 </span><span id="line-271">
-</span><span id="line-272">
 <div class="viewcode-block" id="Model.make_heterostructure">
 <a class="viewcode-back" href="../../strawberrypy.html#strawberrypy.classes.Model.make_heterostructure">[docs]</a>
-</span><span id="line-273">    <span class="k">def</span> <span class="nf">make_heterostructure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model2</span><span class="p">,</span> <span class="n">direction</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">start</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stop</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
-</span><span id="line-274"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="line-275"><span class="sd">        Create an heterostructure by substtuting the parameters of ``model2`` into the model. The system will be split in the direction ``direction`` starting from the unit cell whose index is ``start`` and stopping at the cell indexed as ``end``.</span>
-</span><span id="line-276">
-</span><span id="line-277"><span class="sd">        Parameters</span>
-</span><span id="line-278"><span class="sd">        ----------</span>
-</span><span id="line-279"><span class="sd">            model2 :</span>
-</span><span id="line-280"><span class="sd">                The model whose Hamiltonian has to be used when constructing the heterostructure.</span>
-</span><span id="line-281"><span class="sd">            direction  :</span>
-</span><span id="line-282"><span class="sd">                Direction in which the splitting happens, allowed values are ``0`` for the :math:`\mathbf{a}_1` direction or ``1`` for the :math:`\mathbf{a}_2` direction. Default is ``0``.</span>
-</span><span id="line-283"><span class="sd">            start :</span>
-</span><span id="line-284"><span class="sd">                Starting point for the splitting in the ``direction`` direction. Default is ``0``.</span>
-</span><span id="line-285"><span class="sd">            end :</span>
-</span><span id="line-286"><span class="sd">                End point of the splitting in the ``direction`` direction. Default is ``0``.</span>
-</span><span id="line-287">
-</span><span id="line-288"><span class="sd">        .. warning::</span>
-</span><span id="line-289"><span class="sd">            The current instance of the model will be modified.</span>
-</span><span id="line-290"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-291">
-</span><span id="line-292">        <span class="c1"># Ensure start &lt;= stop</span>
-</span><span id="line-293">        <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="n">stop</span><span class="p">:</span>
-</span><span id="line-294">            <span class="n">tmp</span> <span class="o">=</span> <span class="n">start</span>
-</span><span id="line-295">            <span class="n">start</span> <span class="o">=</span> <span class="n">stop</span>
-</span><span id="line-296">            <span class="n">stop</span> <span class="o">=</span> <span class="n">tmp</span>
-</span><span id="line-297">
-</span><span id="line-298">        <span class="c1"># Check input data are ok</span>
-</span><span id="line-299">        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">start</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lx</span> <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">)):</span>
-</span><span id="line-300">            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Start point value not allowed.&quot;</span><span class="p">)</span>
-</span><span id="line-301">        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">stop</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">stop</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lx</span> <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">)):</span>
-</span><span id="line-302">            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;End point value not allowed.&quot;</span><span class="p">)</span>
-</span><span id="line-303">        <span class="k">if</span> <span class="n">direction</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
-</span><span id="line-304">            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Direction not allowed: insert 0 for &#39;x&#39; and 1 for &#39;y&#39;.&quot;</span><span class="p">)</span>
-</span><span id="line-305">        
-</span><span id="line-306">        <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">model2</span><span class="p">),</span> <span class="n">Model</span><span class="p">):</span>
-</span><span id="line-307">            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;The two models must be instances of Model, Supercell or FiniteModel.&quot;</span><span class="p">)</span>
-</span><span id="line-308">        
-</span><span id="line-309">        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lx</span> <span class="o">==</span> <span class="n">model2</span><span class="o">.</span><span class="n">Lx</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">==</span> <span class="n">model2</span><span class="o">.</span><span class="n">Ly</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="n">model2</span><span class="o">.</span><span class="n">r</span><span class="p">)):</span>
-</span><span id="line-310">            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;You can only build heterostructures of the same model.&quot;</span><span class="p">)</span>
-</span><span id="line-311">        
-</span><span id="line-312">        <span class="c1"># Generate the Hamiltonian of the second model</span>
-</span><span id="line-313">        <span class="n">hamilt_model2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">model2</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">)</span>
-</span><span id="line-314">
-</span><span id="line-315">        <span class="c1"># Check if only the on-site terms are changed (if so, avoid checking all the matrix elements)</span>
-</span><span id="line-316">        <span class="n">onsite_only</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="line-317">        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">)),</span> <span class="n">hamilt_model2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">hamilt_model2</span><span class="p">))</span> <span class="p">):</span>
-</span><span id="line-318">            <span class="n">onsite_only</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="line-319">
-</span><span id="line-320">        <span class="c1"># Remove on-site terms from the model</span>
-</span><span id="line-321">        <span class="n">onsite1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-</span><span id="line-322">        <span class="n">onsite2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">hamilt_model2</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-</span><span id="line-323">        <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">onsite1</span><span class="p">)</span>
-</span><span id="line-324">        
-</span><span id="line-325">        <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="line-326">            <span class="c1"># Splitting along the x direction</span>
-</span><span id="line-327">            <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[(</span><span class="n">start</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">+</span> <span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-</span><span id="line-328">        <span class="k">else</span><span class="p">:</span>
-</span><span id="line-329">            <span class="c1"># Splitting along the y direction</span>
-</span><span id="line-330">            <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">i</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">+</span> <span class="n">start</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">+</span> <span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">)])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-</span><span id="line-331">
-</span><span id="line-332">        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ind</span><span class="p">:</span>
-</span><span id="line-333">            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span><span class="p">):</span>
-</span><span id="line-334">                <span class="n">onsite1</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">onsite2</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span>
-</span><span id="line-335">
-</span><span id="line-336">        <span class="c1"># Add the new on-site terms</span>
-</span><span id="line-337">        <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">onsite1</span><span class="p">)</span>
-</span><span id="line-338">        
-</span><span id="line-339">        <span class="c1"># If other matrix element are changed</span>
-</span><span id="line-340">        <span class="k">if</span> <span class="ow">not</span> <span class="n">onsite_only</span><span class="p">:</span>
-</span><span id="line-341">            <span class="c1"># Indices of every atom in the selected cells, not only of the initial atom of the cell</span>
-</span><span id="line-342">            <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ind</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-</span><span id="line-343">
-</span><span id="line-344">            <span class="c1"># Cycle over the rows of the hopping matrix</span>
-</span><span id="line-345">            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-</span><span id="line-346">
-</span><span id="line-347">                <span class="c1"># Cycle over the columns of the hopping matrix</span>
-</span><span id="line-348">                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-</span><span id="line-349">                    <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">l</span><span class="p">:</span> <span class="k">continue</span>
-</span><span id="line-350">
-</span><span id="line-351">                    <span class="c1"># Hopping amplitudes</span>
-</span><span id="line-352">                    <span class="n">amplitude1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">l</span><span class="p">]</span>
-</span><span id="line-353">                    <span class="n">amplitude2</span> <span class="o">=</span> <span class="n">hamilt_model2</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">l</span><span class="p">]</span>
-</span><span id="line-354">                            
-</span><span id="line-355">                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
-</span><span id="line-356">                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">amplitude2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span> <span class="k">continue</span>
-</span><span id="line-357">                        <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">amplitude2</span>
-</span><span id="line-358">                    <span class="k">else</span><span class="p">:</span>
-</span><span id="line-359">                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">amplitude1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span> <span class="k">continue</span>
-</span><span id="line-360">                        <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">amplitude1</span></div>
+</span><span id="line-272">    <span class="k">def</span> <span class="nf">make_heterostructure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model2</span><span class="p">,</span> <span class="n">direction</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">start</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stop</span> <span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+</span><span id="line-273"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="line-274"><span class="sd">        Create an heterostructure by substtuting the parameters of ``model2`` into the model. The system will be split in the direction ``direction`` starting from the unit cell whose index is ``start`` and stopping at the cell indexed as ``end``.</span>
+</span><span id="line-275">
+</span><span id="line-276"><span class="sd">        Parameters</span>
+</span><span id="line-277"><span class="sd">        ----------</span>
+</span><span id="line-278"><span class="sd">            model2 :</span>
+</span><span id="line-279"><span class="sd">                The model whose Hamiltonian has to be used when constructing the heterostructure.</span>
+</span><span id="line-280"><span class="sd">            direction  :</span>
+</span><span id="line-281"><span class="sd">                Direction in which the splitting happens, allowed values are ``0`` for the :math:`\mathbf{a}_1` direction or ``1`` for the :math:`\mathbf{a}_2` direction. Default is ``0``.</span>
+</span><span id="line-282"><span class="sd">            start :</span>
+</span><span id="line-283"><span class="sd">                Starting point for the splitting in the ``direction`` direction. Default is ``0``.</span>
+</span><span id="line-284"><span class="sd">            end :</span>
+</span><span id="line-285"><span class="sd">                End point of the splitting in the ``direction`` direction. Default is ``0``.</span>
+</span><span id="line-286">
+</span><span id="line-287"><span class="sd">        .. warning::</span>
+</span><span id="line-288"><span class="sd">            The current instance of the model will be modified.</span>
+</span><span id="line-289"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="line-290">
+</span><span id="line-291">        <span class="c1"># Ensure start &lt;= stop</span>
+</span><span id="line-292">        <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="n">stop</span><span class="p">:</span>
+</span><span id="line-293">            <span class="n">tmp</span> <span class="o">=</span> <span class="n">start</span>
+</span><span id="line-294">            <span class="n">start</span> <span class="o">=</span> <span class="n">stop</span>
+</span><span id="line-295">            <span class="n">stop</span> <span class="o">=</span> <span class="n">tmp</span>
+</span><span id="line-296">
+</span><span id="line-297">        <span class="c1"># Check input data are ok</span>
+</span><span id="line-298">        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">start</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">start</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lx</span> <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">)):</span>
+</span><span id="line-299">            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Start point value not allowed.&quot;</span><span class="p">)</span>
+</span><span id="line-300">        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">stop</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">stop</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lx</span> <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">)):</span>
+</span><span id="line-301">            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;End point value not allowed.&quot;</span><span class="p">)</span>
+</span><span id="line-302">        <span class="k">if</span> <span class="n">direction</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+</span><span id="line-303">            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Direction not allowed: insert 0 for &#39;x&#39; and 1 for &#39;y&#39;.&quot;</span><span class="p">)</span>
+</span><span id="line-304">        
+</span><span id="line-305">        <span class="k">if</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">model2</span><span class="p">),</span> <span class="n">Model</span><span class="p">):</span>
+</span><span id="line-306">            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;The two models must be instances of Model, Supercell or FiniteModel.&quot;</span><span class="p">)</span>
+</span><span id="line-307">        
+</span><span id="line-308">        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lx</span> <span class="o">==</span> <span class="n">model2</span><span class="o">.</span><span class="n">Lx</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">==</span> <span class="n">model2</span><span class="o">.</span><span class="n">Ly</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">,</span> <span class="n">model2</span><span class="o">.</span><span class="n">r</span><span class="p">)):</span>
+</span><span id="line-309">            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;You can only build heterostructures of the same model.&quot;</span><span class="p">)</span>
+</span><span id="line-310">        
+</span><span id="line-311">        <span class="c1"># Generate the Hamiltonian of the second model</span>
+</span><span id="line-312">        <span class="n">hamilt_model2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">model2</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">)</span>
+</span><span id="line-313">
+</span><span id="line-314">        <span class="c1"># Check if only the on-site terms are changed (if so, avoid checking all the matrix elements)</span>
+</span><span id="line-315">        <span class="n">onsite_only</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="line-316">        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">)),</span> <span class="n">hamilt_model2</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">hamilt_model2</span><span class="p">))</span> <span class="p">):</span>
+</span><span id="line-317">            <span class="n">onsite_only</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="line-318">
+</span><span id="line-319">        <span class="c1"># Remove on-site terms from the model</span>
+</span><span id="line-320">        <span class="n">onsite1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="line-321">        <span class="n">onsite2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">hamilt_model2</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="line-322">        <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">onsite1</span><span class="p">)</span>
+</span><span id="line-323">        
+</span><span id="line-324">        <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="line-325">            <span class="c1"># Splitting along the x direction</span>
+</span><span id="line-326">            <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[(</span><span class="n">start</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">+</span> <span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+</span><span id="line-327">        <span class="k">else</span><span class="p">:</span>
+</span><span id="line-328">            <span class="c1"># Splitting along the y direction</span>
+</span><span id="line-329">            <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">i</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">+</span> <span class="n">start</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">+</span> <span class="n">j</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">)])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+</span><span id="line-330">
+</span><span id="line-331">        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ind</span><span class="p">:</span>
+</span><span id="line-332">            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span><span class="p">):</span>
+</span><span id="line-333">                <span class="n">onsite1</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">onsite2</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span>
+</span><span id="line-334">
+</span><span id="line-335">        <span class="c1"># Add the new on-site terms</span>
+</span><span id="line-336">        <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">onsite1</span><span class="p">)</span>
+</span><span id="line-337">        
+</span><span id="line-338">        <span class="c1"># If other matrix element are changed</span>
+</span><span id="line-339">        <span class="k">if</span> <span class="ow">not</span> <span class="n">onsite_only</span><span class="p">:</span>
+</span><span id="line-340">            <span class="c1"># Indices of every atom in the selected cells, not only of the initial atom of the cell</span>
+</span><span id="line-341">            <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span><span class="p">)]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ind</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+</span><span id="line-342">
+</span><span id="line-343">            <span class="c1"># Cycle over the rows of the hopping matrix</span>
+</span><span id="line-344">            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+</span><span id="line-345">
+</span><span id="line-346">                <span class="c1"># Cycle over the columns of the hopping matrix</span>
+</span><span id="line-347">                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+</span><span id="line-348">                    <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="n">l</span><span class="p">:</span> <span class="k">continue</span>
+</span><span id="line-349">
+</span><span id="line-350">                    <span class="c1"># Hopping amplitudes</span>
+</span><span id="line-351">                    <span class="n">amplitude1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">l</span><span class="p">]</span>
+</span><span id="line-352">                    <span class="n">amplitude2</span> <span class="o">=</span> <span class="n">hamilt_model2</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">l</span><span class="p">]</span>
+</span><span id="line-353">                            
+</span><span id="line-354">                    <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+</span><span id="line-355">                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">amplitude2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span> <span class="k">continue</span>
+</span><span id="line-356">                        <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">amplitude2</span>
+</span><span id="line-357">                    <span class="k">else</span><span class="p">:</span>
+</span><span id="line-358">                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">amplitude1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-10</span><span class="p">:</span> <span class="k">continue</span>
+</span><span id="line-359">                        <span class="bp">self</span><span class="o">.</span><span class="n">hamiltonian</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">amplitude1</span></div>
 
-</span><span id="line-361">
-</span><span id="line-362">    <span class="c1">#################################################</span>
-</span><span id="line-363">    <span class="c1"># Utility functions</span>
-</span><span id="line-364">    <span class="c1">#################################################</span>
-</span><span id="line-365">
-</span><span id="line-366">    <span class="k">def</span> <span class="nf">_xy_to_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellx</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">celly</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">basis</span> <span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-</span><span id="line-367"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="line-368"><span class="sd">        Convert ``[cell_x, cell_y, basis]`` to the internal indexing of the lattice sites.</span>
-</span><span id="line-369">
-</span><span id="line-370"><span class="sd">        Parameters</span>
-</span><span id="line-371"><span class="sd">        ----------</span>
-</span><span id="line-372"><span class="sd">            cellx :</span>
-</span><span id="line-373"><span class="sd">                Index of the unit cell along the :math:`\mathbf{a}_1` direction.</span>
-</span><span id="line-374"><span class="sd">            celly :</span>
-</span><span id="line-375"><span class="sd">                Index of the unit cell along the :math:`\mathbf{a}_2` direction.</span>
-</span><span id="line-376"><span class="sd">            basis :</span>
-</span><span id="line-377"><span class="sd">                Index of the atom in the basis of the lattice. This index is defined when creating the model.</span>
-</span><span id="line-378">
-</span><span id="line-379"><span class="sd">        Returns</span>
-</span><span id="line-380"><span class="sd">        -------</span>
-</span><span id="line-381"><span class="sd">            index :</span>
-</span><span id="line-382"><span class="sd">                The index of an atom in the lattice according to the internal indexing.</span>
-</span><span id="line-383">
-</span><span id="line-384"><span class="sd">        .. note::</span>
-</span><span id="line-385"><span class="sd">            The conventional internal indexing is the one also used in PythTB and TBmodels when dealing with supercells: the first index is the bottom-left corner of the lattice and the last one is the top-right. The indices increase first along the :math:`\mathbf{a}_2` direction, then along :math:`\mathbf{a}_1`.</span>
-</span><span id="line-386"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-387">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="n">cellx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="n">celly</span> <span class="o">+</span> <span class="n">basis</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-360">
+</span><span id="line-361">    <span class="c1">#################################################</span>
+</span><span id="line-362">    <span class="c1"># Utility functions</span>
+</span><span id="line-363">    <span class="c1">#################################################</span>
+</span><span id="line-364">
+</span><span id="line-365">    <span class="k">def</span> <span class="nf">_xy_to_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cellx</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">celly</span> <span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">basis</span> <span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span id="line-366"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="line-367"><span class="sd">        Convert ``[cell_x, cell_y, basis]`` to the internal indexing of the lattice sites.</span>
+</span><span id="line-368">
+</span><span id="line-369"><span class="sd">        Parameters</span>
+</span><span id="line-370"><span class="sd">        ----------</span>
+</span><span id="line-371"><span class="sd">            cellx :</span>
+</span><span id="line-372"><span class="sd">                Index of the unit cell along the :math:`\mathbf{a}_1` direction.</span>
+</span><span id="line-373"><span class="sd">            celly :</span>
+</span><span id="line-374"><span class="sd">                Index of the unit cell along the :math:`\mathbf{a}_2` direction.</span>
+</span><span id="line-375"><span class="sd">            basis :</span>
+</span><span id="line-376"><span class="sd">                Index of the atom in the basis of the lattice. This index is defined when creating the model.</span>
+</span><span id="line-377">
+</span><span id="line-378"><span class="sd">        Returns</span>
+</span><span id="line-379"><span class="sd">        -------</span>
+</span><span id="line-380"><span class="sd">            index :</span>
+</span><span id="line-381"><span class="sd">                The index of an atom in the lattice according to the internal indexing.</span>
+</span><span id="line-382">
+</span><span id="line-383"><span class="sd">        .. note::</span>
+</span><span id="line-384"><span class="sd">            The conventional internal indexing is the one also used in PythTB and TBmodels when dealing with supercells: the first index is the bottom-left corner of the lattice and the last one is the top-right. The indices increase first along the :math:`\mathbf{a}_2` direction, then along :math:`\mathbf{a}_1`.</span>
+</span><span id="line-385"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="line-386">        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="n">cellx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="n">celly</span> <span class="o">+</span> <span class="n">basis</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinful</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="line-387">
 </span><span id="line-388">
-</span><span id="line-389">
-</span><span id="line-390">    <span class="k">def</span> <span class="nf">_xy_to_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fixed_coordinate</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">xy</span> <span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-</span><span id="line-391"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="line-392"><span class="sd">        Returns the indices of the sites of the lattice along the fixed direction ``fixed_coordinate`` starting from ``xy``.</span>
-</span><span id="line-393">
-</span><span id="line-394"><span class="sd">        Parameters</span>
-</span><span id="line-395"><span class="sd">        ----------</span>
-</span><span id="line-396"><span class="sd">            fixed_coordinate :</span>
-</span><span id="line-397"><span class="sd">                Coordinate that has to be kept fixed. If one is interested in the indices along the :math:`\mathbf{a}_1` direction, this has to be set ``&#39;y&#39;`` else ``&#39;x&#39;``.</span>
-</span><span id="line-398"><span class="sd">            xy :</span>
-</span><span id="line-399"><span class="sd">                Index of the unit cell along the direction ``fixed_coordiante`` from which the indices are returned.</span>
-</span><span id="line-400">
-</span><span id="line-401"><span class="sd">        Returns</span>
-</span><span id="line-402"><span class="sd">        -------</span>
-</span><span id="line-403"><span class="sd">            index_list :</span>
-</span><span id="line-404"><span class="sd">                The list of indices of the atoms in the lattice keeping fixed ``fixed_direction`` from the cell ``xy``.             </span>
-</span><span id="line-405"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-406">        <span class="k">if</span> <span class="n">fixed_coordinate</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span>
-</span><span id="line-407">            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="n">xy</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="n">xy</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">+</span> <span class="n">i</span><span class="p">]])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-</span><span id="line-408">        <span class="k">elif</span> <span class="n">fixed_coordinate</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
-</span><span id="line-409">            <span class="n">indices</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="line-410">            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">):</span>
-</span><span id="line-411">                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span><span class="p">):</span>
-</span><span id="line-412">                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="n">xy</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]:</span>
-</span><span id="line-413">                        <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="n">xy</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">)</span>
-</span><span id="line-414">            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
-</span><span id="line-415">        <span class="k">else</span><span class="p">:</span>
-</span><span id="line-416">            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Direction not allowed, only &#39;x&#39; or &#39;y&#39;.&quot;</span><span class="p">)</span>
-</span><span id="line-417">
-</span><span id="line-418">    <span class="c1">#################################################</span>
-</span><span id="line-419">    <span class="c1"># Macroscopic average functions</span>
-</span><span id="line-420">    <span class="c1">#################################################</span>
-</span><span id="line-421">
-</span><span id="line-422">    <span class="k">def</span> <span class="nf">_lattice_contraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cutoff</span> <span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-</span><span id="line-423"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="line-424"><span class="sd">        Defines which atomic sites must be contracted on one site, for each site of the lattice.</span>
-</span><span id="line-425">
-</span><span id="line-426"><span class="sd">        Parameters</span>
-</span><span id="line-427"><span class="sd">        ----------</span>
-</span><span id="line-428"><span class="sd">            cutoff :</span>
-</span><span id="line-429"><span class="sd">                Real-space cutoff for the contraction window.</span>
-</span><span id="line-430">
-</span><span id="line-431"><span class="sd">        Returns</span>
-</span><span id="line-432"><span class="sd">        -------</span>
-</span><span id="line-433"><span class="sd">            contraction :</span>
-</span><span id="line-434"><span class="sd">                List of the indices of the atoms that are within cutoff from each other, per atom.</span>
-</span><span id="line-435"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-436">        <span class="n">contraction</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="line-437">
-</span><span id="line-438">        <span class="c1"># Diagonal position matrix elements</span>
-</span><span id="line-439">        <span class="n">rx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">];</span> <span class="n">ry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-</span><span id="line-440">        
-</span><span id="line-441">        <span class="c1"># Return True if current is close to trial within cutoff</span>
-</span><span id="line-442">        <span class="k">def</span> <span class="nf">within_range</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">trial</span><span class="p">):</span>
-</span><span id="line-443">            <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">-</span> <span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">ry</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">-</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">cutoff</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mf">1e-6</span> <span class="k">else</span> <span class="kc">False</span>
-</span><span id="line-444">
-</span><span id="line-445">        <span class="c1"># Store the lattice sites closer than cutoff for each lattice site</span>
-</span><span id="line-446">        <span class="k">for</span> <span class="n">current</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">)):</span>
-</span><span id="line-447">            <span class="n">contraction</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">trial</span> <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">))</span> <span class="k">if</span> <span class="n">within_range</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">trial</span><span class="p">)])</span>
-</span><span id="line-448">
-</span><span id="line-449">        <span class="k">return</span> <span class="n">contraction</span>
-</span><span id="line-450">    
-</span><span id="line-451">
-</span><span id="line-452">    <span class="k">def</span> <span class="nf">_PBC_lattice_contraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">):</span>
-</span><span id="line-453"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="line-454"><span class="sd">        Defines which atomic sites must be contracted on one site, for each site of the lattice within PBCs (minimum convention image).</span>
-</span><span id="line-455">
-</span><span id="line-456"><span class="sd">        Parameters</span>
-</span><span id="line-457"><span class="sd">        ----------</span>
-</span><span id="line-458"><span class="sd">            cutoff :</span>
-</span><span id="line-459"><span class="sd">                Real-space cutoff for the contraction window.</span>
-</span><span id="line-460">
-</span><span id="line-461"><span class="sd">        Returns</span>
-</span><span id="line-462"><span class="sd">        -------</span>
-</span><span id="line-463"><span class="sd">            contraction :</span>
-</span><span id="line-464"><span class="sd">                List of the indices of the atoms that are within cutoff from each other, per atom.</span>
-</span><span id="line-465"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-466">        <span class="n">contraction</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="line-467">
-</span><span id="line-468">        <span class="c1"># Compute the primitive lattice vectors</span>
-</span><span id="line-469">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">tbm</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-</span><span id="line-470">            <span class="n">lvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">uc</span><span class="p">)</span>
-</span><span id="line-471">        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">ptb</span><span class="o">.</span><span class="n">tb_model</span><span class="p">):</span>
-</span><span id="line-472">            <span class="n">lvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_lat</span><span class="p">)</span>
-</span><span id="line-473">        <span class="k">else</span><span class="p">:</span>
-</span><span id="line-474">            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Invalid model instance.&quot;</span><span class="p">)</span>
-</span><span id="line-475">
-</span><span id="line-476">        <span class="n">lvecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span>
-</span><span id="line-477">        <span class="n">lvecs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span>
-</span><span id="line-478">        
-</span><span id="line-479">        <span class="c1"># Compute reduced coordinates</span>
-</span><span id="line-480">        <span class="n">reds</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="line-481">        <span class="n">linv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">lvecs</span><span class="p">)</span>
-</span><span id="line-482">        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">)):</span>
-</span><span id="line-483">            <span class="n">reds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span> <span class="n">linv</span><span class="p">))</span>
-</span><span id="line-484">        <span class="n">reds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">reds</span><span class="p">)</span>
-</span><span id="line-485">        <span class="n">rx</span> <span class="o">=</span> <span class="n">reds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">];</span> <span class="n">ry</span> <span class="o">=</span> <span class="n">reds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-</span><span id="line-486">
-</span><span id="line-487">        <span class="c1"># Return True if current is close to trial within cutoff (trial comprise minimum image convention)</span>
-</span><span id="line-488">        <span class="k">def</span> <span class="nf">within_range</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">trial</span><span class="p">):</span>
-</span><span id="line-489">            <span class="n">trialorbitals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
-</span><span id="line-490">                <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">],</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]],</span> <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">],</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">],</span> <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">],</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">],</span> <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]],</span>
-</span><span id="line-491">                <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">],</span> <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">],</span> <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]],</span>
-</span><span id="line-492">                <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">],</span> <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">]</span>
-</span><span id="line-493">            <span class="p">])</span>
-</span><span id="line-494">            <span class="k">for</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">trialorbitals</span><span class="p">:</span>
-</span><span id="line-495">                <span class="c1"># Go back to real space coordinates to compute the distance</span>
-</span><span id="line-496">                <span class="n">dr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">rx</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">-</span> <span class="n">to</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ry</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">-</span> <span class="n">to</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span> <span class="n">lvecs</span><span class="p">)</span>
-</span><span id="line-497">                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">dr</span><span class="p">,</span> <span class="n">dr</span><span class="p">)</span> <span class="o">-</span> <span class="n">cutoff</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mf">1e-6</span><span class="p">:</span>
-</span><span id="line-498">                    <span class="k">return</span> <span class="kc">True</span>
-</span><span id="line-499">            <span class="k">return</span> <span class="kc">False</span>
-</span><span id="line-500">
-</span><span id="line-501">        <span class="c1"># Store the lattice sites closer than cutoff for each lattice site</span>
-</span><span id="line-502">        <span class="k">for</span> <span class="n">current</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">)):</span>
-</span><span id="line-503">            <span class="n">contraction</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">trial</span> <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">))</span> <span class="k">if</span> <span class="n">within_range</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">trial</span><span class="p">)])</span>
-</span><span id="line-504">
-</span><span id="line-505">        <span class="k">return</span> <span class="n">contraction</span>
+</span><span id="line-389">    <span class="k">def</span> <span class="nf">_xy_to_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fixed_coordinate</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">xy</span> <span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span id="line-390"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="line-391"><span class="sd">        Returns the indices of the sites of the lattice along the fixed direction ``fixed_coordinate`` starting from ``xy``.</span>
+</span><span id="line-392">
+</span><span id="line-393"><span class="sd">        Parameters</span>
+</span><span id="line-394"><span class="sd">        ----------</span>
+</span><span id="line-395"><span class="sd">            fixed_coordinate :</span>
+</span><span id="line-396"><span class="sd">                Coordinate that has to be kept fixed. If one is interested in the indices along the :math:`\mathbf{a}_1` direction, this has to be set ``&#39;y&#39;`` else ``&#39;x&#39;``.</span>
+</span><span id="line-397"><span class="sd">            xy :</span>
+</span><span id="line-398"><span class="sd">                Index of the unit cell along the direction ``fixed_coordiante`` from which the indices are returned.</span>
+</span><span id="line-399">
+</span><span id="line-400"><span class="sd">        Returns</span>
+</span><span id="line-401"><span class="sd">        -------</span>
+</span><span id="line-402"><span class="sd">            index_list :</span>
+</span><span id="line-403"><span class="sd">                The list of indices of the atoms in the lattice keeping fixed ``fixed_direction`` from the cell ``xy``.             </span>
+</span><span id="line-404"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="line-405">        <span class="k">if</span> <span class="n">fixed_coordinate</span> <span class="o">==</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span>
+</span><span id="line-406">            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="n">xy</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="n">xy</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">+</span> <span class="n">i</span><span class="p">]])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</span><span id="line-407">        <span class="k">elif</span> <span class="n">fixed_coordinate</span> <span class="o">==</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
+</span><span id="line-408">            <span class="n">indices</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="line-409">            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">):</span>
+</span><span id="line-410">                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span><span class="p">):</span>
+</span><span id="line-411">                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mask</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="n">xy</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]:</span>
+</span><span id="line-412">                        <span class="n">indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="n">xy</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">)</span>
+</span><span id="line-413">            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+</span><span id="line-414">        <span class="k">else</span><span class="p">:</span>
+</span><span id="line-415">            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Direction not allowed, only &#39;x&#39; or &#39;y&#39;.&quot;</span><span class="p">)</span>
+</span><span id="line-416">
+</span><span id="line-417">    <span class="c1">#################################################</span>
+</span><span id="line-418">    <span class="c1"># Macroscopic average functions</span>
+</span><span id="line-419">    <span class="c1">#################################################</span>
+</span><span id="line-420">
+</span><span id="line-421">    <span class="k">def</span> <span class="nf">_lattice_contraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cutoff</span> <span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+</span><span id="line-422"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="line-423"><span class="sd">        Defines which atomic sites must be contracted on one site, for each site of the lattice.</span>
+</span><span id="line-424">
+</span><span id="line-425"><span class="sd">        Parameters</span>
+</span><span id="line-426"><span class="sd">        ----------</span>
+</span><span id="line-427"><span class="sd">            cutoff :</span>
+</span><span id="line-428"><span class="sd">                Real-space cutoff for the contraction window.</span>
+</span><span id="line-429">
+</span><span id="line-430"><span class="sd">        Returns</span>
+</span><span id="line-431"><span class="sd">        -------</span>
+</span><span id="line-432"><span class="sd">            contraction :</span>
+</span><span id="line-433"><span class="sd">                List of the indices of the atoms that are within cutoff from each other, per atom.</span>
+</span><span id="line-434"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="line-435">        <span class="n">contraction</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="line-436">
+</span><span id="line-437">        <span class="c1"># Diagonal position matrix elements</span>
+</span><span id="line-438">        <span class="n">rx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">];</span> <span class="n">ry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="line-439">        
+</span><span id="line-440">        <span class="c1"># Return True if current is close to trial within cutoff</span>
+</span><span id="line-441">        <span class="k">def</span> <span class="nf">within_range</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">trial</span><span class="p">):</span>
+</span><span id="line-442">            <span class="k">return</span> <span class="kc">True</span> <span class="k">if</span> <span class="p">(</span><span class="n">rx</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">-</span> <span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">ry</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">-</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">cutoff</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mf">1e-6</span> <span class="k">else</span> <span class="kc">False</span>
+</span><span id="line-443">
+</span><span id="line-444">        <span class="c1"># Store the lattice sites closer than cutoff for each lattice site</span>
+</span><span id="line-445">        <span class="k">for</span> <span class="n">current</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">)):</span>
+</span><span id="line-446">            <span class="n">contraction</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">trial</span> <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">))</span> <span class="k">if</span> <span class="n">within_range</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">trial</span><span class="p">)])</span>
+</span><span id="line-447">
+</span><span id="line-448">        <span class="k">return</span> <span class="n">contraction</span>
+</span><span id="line-449">    
+</span><span id="line-450">
+</span><span id="line-451">    <span class="k">def</span> <span class="nf">_PBC_lattice_contraction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cutoff</span><span class="p">):</span>
+</span><span id="line-452"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="line-453"><span class="sd">        Defines which atomic sites must be contracted on one site, for each site of the lattice within PBCs (minimum convention image).</span>
+</span><span id="line-454">
+</span><span id="line-455"><span class="sd">        Parameters</span>
+</span><span id="line-456"><span class="sd">        ----------</span>
+</span><span id="line-457"><span class="sd">            cutoff :</span>
+</span><span id="line-458"><span class="sd">                Real-space cutoff for the contraction window.</span>
+</span><span id="line-459">
+</span><span id="line-460"><span class="sd">        Returns</span>
+</span><span id="line-461"><span class="sd">        -------</span>
+</span><span id="line-462"><span class="sd">            contraction :</span>
+</span><span id="line-463"><span class="sd">                List of the indices of the atoms that are within cutoff from each other, per atom.</span>
+</span><span id="line-464"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="line-465">        <span class="n">contraction</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="line-466">
+</span><span id="line-467">        <span class="c1"># Compute the primitive lattice vectors</span>
+</span><span id="line-468">        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">tbm</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+</span><span id="line-469">            <span class="n">lvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">uc</span><span class="p">)</span>
+</span><span id="line-470">        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">ptb</span><span class="o">.</span><span class="n">tb_model</span><span class="p">):</span>
+</span><span id="line-471">            <span class="n">lvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_lat</span><span class="p">)</span>
+</span><span id="line-472">        <span class="k">else</span><span class="p">:</span>
+</span><span id="line-473">            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Invalid model instance.&quot;</span><span class="p">)</span>
+</span><span id="line-474">
+</span><span id="line-475">        <span class="n">lvecs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span>
+</span><span id="line-476">        <span class="n">lvecs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span>
+</span><span id="line-477">        
+</span><span id="line-478">        <span class="c1"># Compute reduced coordinates</span>
+</span><span id="line-479">        <span class="n">reds</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="line-480">        <span class="n">linv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">lvecs</span><span class="p">)</span>
+</span><span id="line-481">        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">)):</span>
+</span><span id="line-482">            <span class="n">reds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]),</span> <span class="n">linv</span><span class="p">))</span>
+</span><span id="line-483">        <span class="n">reds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">reds</span><span class="p">)</span>
+</span><span id="line-484">        <span class="n">rx</span> <span class="o">=</span> <span class="n">reds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">];</span> <span class="n">ry</span> <span class="o">=</span> <span class="n">reds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+</span><span id="line-485">
+</span><span id="line-486">        <span class="c1"># Return True if current is close to trial within cutoff (trial comprise minimum image convention)</span>
+</span><span id="line-487">        <span class="k">def</span> <span class="nf">within_range</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">trial</span><span class="p">):</span>
+</span><span id="line-488">            <span class="n">trialorbitals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+</span><span id="line-489">                <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">],</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]],</span> <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">],</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">],</span> <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">],</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">],</span> <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]],</span>
+</span><span id="line-490">                <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">],</span> <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">],</span> <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]],</span>
+</span><span id="line-491">                <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">],</span> <span class="p">[</span><span class="n">rx</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Lx</span><span class="p">,</span> <span class="n">ry</span><span class="p">[</span><span class="n">trial</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ly</span><span class="p">]</span>
+</span><span id="line-492">            <span class="p">])</span>
+</span><span id="line-493">            <span class="k">for</span> <span class="n">to</span> <span class="ow">in</span> <span class="n">trialorbitals</span><span class="p">:</span>
+</span><span id="line-494">                <span class="c1"># Go back to real space coordinates to compute the distance</span>
+</span><span id="line-495">                <span class="n">dr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">rx</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">-</span> <span class="n">to</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ry</span><span class="p">[</span><span class="n">current</span><span class="p">]</span> <span class="o">-</span> <span class="n">to</span><span class="p">[</span><span class="mi">1</span><span class="p">]]),</span> <span class="n">lvecs</span><span class="p">)</span>
+</span><span id="line-496">                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">dr</span><span class="p">,</span> <span class="n">dr</span><span class="p">)</span> <span class="o">-</span> <span class="n">cutoff</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mf">1e-6</span><span class="p">:</span>
+</span><span id="line-497">                    <span class="k">return</span> <span class="kc">True</span>
+</span><span id="line-498">            <span class="k">return</span> <span class="kc">False</span>
+</span><span id="line-499">
+</span><span id="line-500">        <span class="c1"># Store the lattice sites closer than cutoff for each lattice site</span>
+</span><span id="line-501">        <span class="k">for</span> <span class="n">current</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">)):</span>
+</span><span id="line-502">            <span class="n">contraction</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">trial</span> <span class="k">for</span> <span class="n">trial</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rx</span><span class="p">))</span> <span class="k">if</span> <span class="n">within_range</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">trial</span><span class="p">)])</span>
+</span><span id="line-503">
+</span><span id="line-504">        <span class="k">return</span> <span class="n">contraction</span>
+</span><span id="line-505">
 </span><span id="line-506">
-</span><span id="line-507">
-</span><span id="line-508">    <span class="k">def</span> <span class="nf">_average_over_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">cutoff</span> <span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">contraction</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-</span><span id="line-509"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="line-510"><span class="sd">        Evaluate the average of ``vals`` according to a certain ``cutoff`` in real space.</span>
-</span><span id="line-511">
-</span><span id="line-512"><span class="sd">        Parameters</span>
-</span><span id="line-513"><span class="sd">        ----------</span>
-</span><span id="line-514"><span class="sd">            vals :</span>
-</span><span id="line-515"><span class="sd">                Values that have to be averaged.</span>
-</span><span id="line-516"><span class="sd">            cutoff :</span>
-</span><span id="line-517"><span class="sd">                Real space cutoff for the real space average.</span>
-</span><span id="line-518"><span class="sd">            contraction :</span>
-</span><span id="line-519"><span class="sd">                List of atoms that have to be considered in the macroscopic average, per atom. Default is ``None``, which means it is computed from the positions of the atoms in the lattice.</span>
-</span><span id="line-520">
-</span><span id="line-521"><span class="sd">        Returns</span>
-</span><span id="line-522"><span class="sd">        -------</span>
-</span><span id="line-523"><span class="sd">            return_vals :</span>
-</span><span id="line-524"><span class="sd">                List of averaged values per lattice site within a cutoff.</span>
-</span><span id="line-525"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="line-526">        <span class="n">return_vals</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span id="line-527">
-</span><span id="line-528">        <span class="c1"># If no contraction list is passed, it is computed from the lattice position (default OBC contraction)</span>
-</span><span id="line-529">        <span class="k">if</span> <span class="n">contraction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="line-530">            <span class="n">contraction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lattice_contraction</span><span class="p">(</span><span class="n">cutoff</span><span class="p">)</span>
-</span><span id="line-531">
-</span><span id="line-532">        <span class="c1"># Macroscopic average within a certain radius = cutoff</span>
-</span><span id="line-533">        <span class="k">for</span> <span class="n">current</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])):</span>
-</span><span id="line-534">            <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">vals</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">contraction</span><span class="p">[</span><span class="n">current</span><span class="p">]]</span>
-</span><span id="line-535">            <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="line-536">                <span class="n">return_vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span><span class="p">))</span>
-</span><span id="line-537">            <span class="k">else</span><span class="p">:</span>
-</span><span id="line-538">                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unexpected error occourred in counting the neighbors of a lattice site, there are none.&quot;</span><span class="p">)</span>
-</span><span id="line-539">
-</span><span id="line-540">        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">return_vals</span><span class="p">)</span></div>
+</span><span id="line-507">    <span class="k">def</span> <span class="nf">_average_over_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">cutoff</span> <span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">contraction</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+</span><span id="line-508"><span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="line-509"><span class="sd">        Evaluate the average of ``vals`` according to a certain ``cutoff`` in real space.</span>
+</span><span id="line-510">
+</span><span id="line-511"><span class="sd">        Parameters</span>
+</span><span id="line-512"><span class="sd">        ----------</span>
+</span><span id="line-513"><span class="sd">            vals :</span>
+</span><span id="line-514"><span class="sd">                Values that have to be averaged.</span>
+</span><span id="line-515"><span class="sd">            cutoff :</span>
+</span><span id="line-516"><span class="sd">                Real space cutoff for the real space average.</span>
+</span><span id="line-517"><span class="sd">            contraction :</span>
+</span><span id="line-518"><span class="sd">                List of atoms that have to be considered in the macroscopic average, per atom. Default is ``None``, which means it is computed from the positions of the atoms in the lattice.</span>
+</span><span id="line-519">
+</span><span id="line-520"><span class="sd">        Returns</span>
+</span><span id="line-521"><span class="sd">        -------</span>
+</span><span id="line-522"><span class="sd">            return_vals :</span>
+</span><span id="line-523"><span class="sd">                List of averaged values per lattice site within a cutoff.</span>
+</span><span id="line-524"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="line-525">        <span class="n">return_vals</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="line-526">
+</span><span id="line-527">        <span class="c1"># If no contraction list is passed, it is computed from the lattice position (default OBC contraction)</span>
+</span><span id="line-528">        <span class="k">if</span> <span class="n">contraction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="line-529">            <span class="n">contraction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lattice_contraction</span><span class="p">(</span><span class="n">cutoff</span><span class="p">)</span>
+</span><span id="line-530">
+</span><span id="line-531">        <span class="c1"># Macroscopic average within a certain radius = cutoff</span>
+</span><span id="line-532">        <span class="k">for</span> <span class="n">current</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cart_positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])):</span>
+</span><span id="line-533">            <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">vals</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">contraction</span><span class="p">[</span><span class="n">current</span><span class="p">]]</span>
+</span><span id="line-534">            <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="line-535">                <span class="n">return_vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">states_uc</span><span class="p">))</span>
+</span><span id="line-536">            <span class="k">else</span><span class="p">:</span>
+</span><span id="line-537">                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unexpected error occourred in counting the neighbors of a lattice site, there are none.&quot;</span><span class="p">)</span>
+</span><span id="line-538">
+</span><span id="line-539">        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">return_vals</span><span class="p">)</span></div>
 
 </span></code></pre></div>
 
