@@ -4,16 +4,16 @@
 
 Tutorial and examples
 =====================
-This page provides a short tutorial on how to use the code. At the end of the page a couple of examples illustrates come results obtained using the package.
+This page provides a short tutorial on how to use the code. At the end of the page, a couple of examples illustrates some results obtained using the package.
 
 Short tutorial
 --------------
 
 Defining a model
 ^^^^^^^^^^^^^^^^
-**StraWBerryPy** is able to read model instances from either **PythTB** or **TBmodels**. The creation of the model istelf should be performed using those packages, see for instance the relative tutorials for `PythTB <https://www.physics.rutgers.edu/pythtb/examples.html>`_ and `TBmodels <https://tbmodels.greschd.ch/en/latest/tutorial.html>`_. Some useful examples are already implemented in :doc:`example_models<strawberrypy.example_models>`, such as the Haldane and Kane-Mele model.
+**StraWBerryPy** is able to read tight-binding model instances from either **PythTB** or **TBmodels**. The creation of the model itself should be performed using those packages, see for instance the relative tutorials for `PythTB <https://www.physics.rutgers.edu/pythtb/examples.html>`_ and `TBmodels <https://tbmodels.greschd.ch/en/latest/tutorial.html>`_. Some useful examples are already implemented in :doc:`example_models<strawberrypy.example_models>`, such as the Haldane and Kane-Mele model.
 
-Once the model has been created it can be read from StraWBerryPy, which can create both finite models and supercells. Upon creation of supercells and finite models, the number of unit cells repeated along each direction must be given along with a bool specifying if the model has to be interpreted as spinful or not (needed to properly account for the spin degrees of freedom):
+Once the model has been created, it can be read from StraWBerryPy, which allows to create both finite models and supercells starting from a tight-binding model, using classes :python:`Supercell` and :python:`FiniteModel`, respectively. Upon the creation of supercells and finite models, the number of unit cells to be repeated along each direction must be given along with a bool specifying if the model has to be interpreted as spinful or not (needed to properly account for the spin degrees of freedom):
 
 .. code:: python
 
@@ -29,7 +29,7 @@ Once the model has been created it can be read from StraWBerryPy, which can crea
 
 Adding disorder and vacancies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-In order to add disorder and vacancies to a given model we can use the methods of the class (available for both supercells and finite models):
+In order to add disorder and vacancies to a given model we can use the following methods of the class (available for both supercells and finite models):
 
 .. code:: python
 
@@ -46,19 +46,26 @@ In order to add disorder and vacancies to a given model we can use the methods o
 
 Calculate the single-point invariant
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-If a supercell is created it is possible to evaluate the single-point invariant by calling the appropriate method. If :python:`spinful == False` the single-point Chern number can be computed using:
+If a supercell is created, it is possible to evaluate the single-point invariant by calling the appropriate method. If :python:`spinful == False` the single-point Chern number can be computed using:
 
 .. code:: python
 
     model.single_point_chern(formula = 'symmetric', return_ham_gap = False)
 
-Where ``formula`` can be ``'symmetric'`` or ``'asymetric'`` and specify whether the invariant should be computed with the derivative approximated by forward or central finite differences. The parameter ``return_ham_gap`` is a bool specifying whether the gap of the Hamiltonian should be returned. Similarly, if :python:`spinful == True`, the single-point spin-Chern number can be computed using:
+where ``formula`` can be ``'symmetric'`` or ``'asymmetric'`` (or ``'both'``) and specifies whether the single-point invariant should be computed using a formula within which the derivatives are approximated by forward or central finite differences, respectively. The ``symmetric`` formula usually converges faster with the supercell size to the exact result with respect to the ``asymmetric`` one.
+The parameter ``return_ham_gap`` is a bool specifying whether the gap of the Hamiltonian at the :math:`\Gamma`-point in the Brillouin zone should be returned. 
+
+Similarly, if :python:`spinful == True`, the single-point spin-Chern number can be computed using:
 
 .. code:: python
 
     model.single_point_spin_chern(spin = 'up', formula = 'symmetric', return_pszp_gap = False, return_ham_gap = False)
 
-Where ``spin`` can be either ``'up'`` or ``'down'`` and specify the sign of the eigenvalues of the projected spin operator on which the topological invariant should be calculated on. The parameter ``return_pszp_gap`` is a bool specifying whether the gap of :math:`PS_zP` should be returned. The functions return a dictionary with labels ``'asymmetric'``, ``'symmetric'``, ``'hamiltonian_gap'`` (and ``'pszp_gap'`` in the single-point spin-Chern number function) depending on the values of the input parameters. 
+where ``spin`` can be either ``'up'`` or ``'down'`` and indicates which sector of spin projected operator spectra is considered in the calculation of the single-point spin Chern number. 
+In fact, the single-point spin Chern number can be computed as :math:`C_s = \frac{C_{up} - C_{down}}{2}` mod :math:`2`, where :math:`C_{up/down}` are calculated on the eigenstates of spin projected operator with positive/negative eigenvalues; in general it is sufficient to compute either :math:`C_{up}` or :math:`C_{down}` only and consider its parity.
+The parameter ``return_pszp_gap`` is a bool specifying whether the gap of the spin projected operator :math:`P S_z P` should be returned. 
+
+The functions :python:`single_point_chern` and :python:`single_point_spin_chern` return a dictionary with labels ``'asymmetric'``, ``'symmetric'`` and, if required, the value of ``'hamiltonian_gap'`` (and ``'pszp_gap'`` in the single-point spin Chern number function).
 
 Calculate the local topological marker
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -69,7 +76,7 @@ If a finite model or supercell is created it is possible to evaluate the local t
     finite_model.local_chern_marker(direction = None, start = 0, return_projector = False, input_projector = None, macroscopic_average = False, cutoff = 0.8, smearing_temperature = 0.0, fermidirac_cutoff = 0.1)
     supercell.pbc_local_chern_marker(direction = None, start = 0, return_projector = False, input_projector = None, formula = 'symmetric', macroscopic_average = False, cutoff = 0.8, smearing_temperature = 0.0, fermidirac_cutoff = 0.1)
 
-Where :python:`direction == None` means that the function returns the topological marker evaluated over the whole lattice. If ``direction`` is ``0`` or ``1`` the functions returns the value of the marker along the *x* or *y* direction respectively starting from ``start`` (index of the unit cell along the orthogonal direction to ``direction``). The parameter ``return_projector`` is used to return the projectors used in the calculations, namely :math:`\mathcal P` (the ground state projector) in the open boundary conditions case and the list :math:`[\mathcal P_{\Gamma}, \mathcal P_{\mathbf b_1}, \mathcal P_{\mathbf b_2}, \mathcal P_{-\mathbf b_1}, \mathcal P_{-\mathbf b_2}]` in the periodic boundary conditions case. The parameter ``input_projector`` allows to input the projectors mentioned above (beware of the order) when these are known. The parameters ``smearing_temperature`` and ``fermidirac_cutoff`` can be set when dealing with heterostructures to improve the convergence of the topological markers by introducing a Fermi-Dirac occupation function in the calculation of the projectors.
+where :python:`direction == None` means that the function returns the topological marker evaluated over the whole lattice. If ``direction`` is ``0`` or ``1`` the function returns the value of the marker along the *x* or *y* direction respectively starting from ``start`` (index of the unit cell along the orthogonal direction to ``direction``). The parameter ``return_projector`` is used to return the projectors used in the calculations, namely :math:`\mathcal P` (the ground state projector) in the open boundary conditions case and the list :math:`[\mathcal P_{\Gamma}, \mathcal P_{\mathbf b_1}, \mathcal P_{\mathbf b_2}, \mathcal P_{-\mathbf b_1}, \mathcal P_{-\mathbf b_2}]` in the periodic boundary conditions case. The parameter ``input_projector`` allows to input the projectors mentioned above (beware of the order) when these are known. The parameters ``smearing_temperature`` and ``fermidirac_cutoff`` can be set when dealing with heterostructures to improve the convergence of the topological markers by introducing a Fermi-Dirac occupation function in the calculation of the projectors.
 
 When the system is disordered, it may be useful to return the value of the topological marker averaged over a real-space area bigger than the unit cell of the model. To do so, one can set the parameters :python:`macroscopic_average == True` (useful also when dealing with system that do not respect the internal indexing of PythTB and TBmodels, as mentioned above) and ``cutoff`` to specify the range of the averages in real space (lattice constant units).
 
