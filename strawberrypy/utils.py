@@ -15,7 +15,7 @@ def fermidirac(evals, temperature : float, mu : float):
 
     Returns
     -------
-        occupations :
+        occupations : `np.array | float`
             The occupation(s) of the state corresponding to the given energy(ies)
     """
     if temperature < 1e-6:
@@ -42,7 +42,7 @@ def chemical_potential(evals, temperature : float, occupied_states : int):
 
     Returns
     -------
-        mu :
+        mu : `float`
             The chemical potential of the system.
 
     .. warning::
@@ -91,7 +91,7 @@ def smearing(vecs, gamma_hevecs, evals, temperature : float, mu : float):
 
     Returns
     -------
-        smearing_coeffs :
+        smearing_coeffs : `np.array`
             A list of smearing coefficients that weights the states ``vecs``.
     """
     if temperature < 1e-6:
@@ -119,7 +119,7 @@ def unique_vacancies(num : int, Lx : int, Ly : int, basis : int, seed : int = No
 
     Returns
     -------
-        unique_list :
+        unique_list : `list`
             List of unique random lattice site.
     """
 
