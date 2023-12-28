@@ -12,8 +12,8 @@ Haldane model
    :undoc-members:
    :show-inheritance:
 
-Kane Mele
-~~~~~~~~~
+Kane-Mele model
+~~~~~~~~~~~~~~~
 
 .. automodule:: strawberrypy.example_models.kane_mele
    :members:
