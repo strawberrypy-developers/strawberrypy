@@ -8,7 +8,7 @@ from . import _pythtb
 
 class Model():
     r"""
-    Generic ``Model`` class from which are constructed ``Supercell`` and ``FiniteModel``. This should *not* be called explicitly since it is already called from both ``Supercell`` and ``FiniteModel`` upon creation. Contains the functions needed to load spin, positions, Hamiltonian matrices and other useful information.
+    Generic ``Model`` class from which are constructed ``Supercell`` and ``FiniteModel``. Contains the functions needed to load spin, positions, Hamiltonian matrices and other useful information.
 
     Parameters
     ----------
@@ -24,6 +24,9 @@ class Model():
             Number of unit cell repeated along the :math:`\mathbf{a}_1` direction. Default is ``1``.
         Ly :
             Number of unit cell repeated along the :math:`\mathbf{a}_2` direction. Default is ``1``.
+
+    .. warning::
+        This class should *not* be called explicitly by the user since it is already called from both ``Supercell`` and ``FiniteModel`` upon creation.
     """
 
     def __init__(self, tbmodel = None, spinful : bool = False, states_uc : int = None, Lx : int = 1, Ly : int = 1):
