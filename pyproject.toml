@@ -24,8 +24,7 @@ dependencies = [
     'opt-einsum==3.3.0'
 ]
 
+classifiers = ["Programming Language :: Python :: 3.8"]
+
 [project.urls]
 Repository = "https://github.com/strawberrypy-developers/strawberrypy.git"
-
-[tool.flit.metadata]
-classifiers = ["Programming Language :: Python :: 3.8"]
