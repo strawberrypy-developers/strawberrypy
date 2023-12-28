@@ -14,7 +14,7 @@ description = "Python package for calculation of topological invariants through 
 keywords = ["physics", "topology", "single-point invariants", "local topological markers", "wannier90", "tight-binding"]
 
 readme = "README.rst"
-license = "MIT License"
+license = {file = "LICENSE.txt"}
 
 requires-python = ">= 3.8"
 dependencies = [
