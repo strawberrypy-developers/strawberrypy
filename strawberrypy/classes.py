@@ -329,7 +329,7 @@ class Model():
 
     def make_heterostructure(self, model2, direction : int = 0, start : int = 0, stop : int = 0):
         r"""
-        Create an heterostructure by substtuting the parameters of ``model2`` into the model. The system will be split in the direction ``direction`` starting from the unit cell whose index is ``start`` and stopping at the cell indexed as ``end``.
+        Create an heterostructure by substituting the parameters of ``model2`` into the model. The system will be split in the direction ``direction`` starting from the unit cell whose index is ``start`` and stopping at the cell indexed as ``end``.
 
         Parameters
         ----------
