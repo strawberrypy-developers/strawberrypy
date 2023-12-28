@@ -7,10 +7,15 @@ name = "strawberrypy"
 authors = [{name = "Roberta Favata", email = "roberta.favata@phd.units.it"},
             {name = "Nicolas Baù", email = "nicolas.bau@phd.units.it"},
             {name = "Antimo Marrazzo"}]
-dynamic = ["version", "description"]
+
+version = "0.3.0"
+
+description = "Python package for calculation of topological invariants through single-point formulas and local markers"
 keywords = ["physics", "topology", "single-point invariants", "local topological markers", "wannier90", "tight-binding"]
+
 readme = "README.rst"
-license = {file = "LICENSE.txt"}
+license = "MIT License"
+
 requires-python = ">= 3.8"
 dependencies = [
     'wannierberri[all]==0.15.0',
@@ -21,3 +26,6 @@ dependencies = [
 
 [project.urls]
 Repository = "https://github.com/strawberrypy-developers/strawberrypy.git"
+
+[tool.flit.metadata]
+classifiers = ["Programming Language :: Python :: 3.8"]
