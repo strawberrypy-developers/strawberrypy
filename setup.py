@@ -8,7 +8,8 @@ setuptools.setup(
     description='Python package for calculation of topological invariants through single-point formulas and local markers',
     license='MIT License',
     packages=setuptools.find_packages(),
-    install_requires=['pythtb==1.8.0',
+    install_requires=['wannierberri[all]==0.15.0',
+                      'pythtb==1.8.0',
                       'tbmodels==1.4.3',
                       'opt-einsum==3.3.0',],
 )

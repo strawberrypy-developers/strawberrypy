@@ -47,18 +47,6 @@ def get_positions(model, nx_sites = 1, ny_sites = 1):
 
     return positions
 
-""" N: is this needed?
-def _orb_cart(model):
-    #returns position of orbitals in cartesian coordinates
-    orb_red = model.pos
-    n_orb = len(model.pos)
-    lat_super = model.uc
-
-    orb_c = []
-    for i in range (n_orb):
-        orb_c.append((np.matmul(lat_super.transpose(),orb_red[i].reshape(-1,1))).squeeze())
-    orb_c = np.array(orb_c)
-    return orb_c"""
 
 def get_hamiltonian(model, point):
     """
