@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Changelog &#8212; StraWBerryPy 0.2.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=649a27d8" />
     <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=296026ca" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <script src="_static/documentation_options.js?v=938c9ccc"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b1f64a84"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <link rel="icon" href="_static/favicon.ico"/>
@@ -86,10 +86,10 @@
           <div class="body" role="main">
             
   <section id="changelog">
-<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h1>
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading">¶</a></h1>
 <p>In the following there is a short summary of the main changes in StraWBerryPy from the first release as <a class="reference external" href="https://github.com/roberta-favata/spinv">SPInv</a>.</p>
 <section id="strawberry-0">
-<h2>StraWBerry 0.?.?<a class="headerlink" href="#strawberry-0" title="Link to this heading">¶</a></h2>
+<h2>StraWBerry 0.?.?<a class="headerlink" href="#strawberry-0" title="Permalink to this heading">¶</a></h2>
 <p>We modified the structure of the code to reduce the number of variables the user has to pass the functions. The basis class is <code class="docutils literal notranslate"><span class="pre">Model</span></code>, from which <code class="docutils literal notranslate"><span class="pre">Supercell</span></code> and <code class="docutils literal notranslate"><span class="pre">FiniteModel</span></code> are derived. Using these classes is easier to both implement the funcions and use the code since the variables of the model are stored as attributes of the instances and are defined once at the beginning of the code upon creating the model. The previous functions are updated to work with this structure.</p>
 <ul class="simple">
 <li><p>Introduced three main classes <code class="docutils literal notranslate"><span class="pre">Model</span></code>, <code class="docutils literal notranslate"><span class="pre">Supercell</span></code> and <code class="docutils literal notranslate"><span class="pre">FiniteModel</span></code> which are responsible for the creation of the specific model.</p></li>
@@ -100,7 +100,7 @@
 </ul>
 </section>
 <section id="strawberrypy-0-2-0-spinv">
-<h2>StraWBerryPy 0.2.0 (SPInv)<a class="headerlink" href="#strawberrypy-0-2-0-spinv" title="Link to this heading">¶</a></h2>
+<h2>StraWBerryPy 0.2.0 (SPInv)<a class="headerlink" href="#strawberrypy-0-2-0-spinv" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Introduced <code class="docutils literal notranslate"><span class="pre">make_finite</span></code> to remove periodic hoppings in the Hamiltonian;</p></li>
 <li><p>Introduced <code class="docutils literal notranslate"><span class="pre">make_heterostructure</span></code> to create heterostructures;</p></li>
@@ -108,7 +108,7 @@
 </ul>
 </section>
 <section id="strawberrypy-0-1-0-spinv">
-<h2>StraWBerryPy 0.1.0 (SPInv)<a class="headerlink" href="#strawberrypy-0-1-0-spinv" title="Link to this heading">¶</a></h2>
+<h2>StraWBerryPy 0.1.0 (SPInv)<a class="headerlink" href="#strawberrypy-0-1-0-spinv" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p>Introduced Haldane and Kane-Mele example models;</p></li>
 <li><p>Introduced the single-point Chern number and single-point spin-Chern number;</p></li>
@@ -127,7 +127,7 @@
       &copy;2023, Roberta Favata, Nicolas Baù and Antimo Marrazzo.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
