@@ -15,3 +15,5 @@ out.pdf
 pbclcmtest.py
 logo.py
 docs/old_readme.md
+main.py
+docs/_build/
