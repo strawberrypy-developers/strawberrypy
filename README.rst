@@ -6,7 +6,7 @@ StraWBerryPy
 
 The code reads tight-binding models from `PythTB <http://www.physics.rutgers.edu/pythtb/>`_, `TBmodels <https://tbmodels.greschd.ch/en/latest/>`_ and `Wannier90 <https://wannier.org/>`_ (through `WannierBerri <https://wannier-berri.org/index.html>`_). 
 
-StraWBerryPy can work both with periodic (PBCs) and open (OBCs) boundary conditions. The allows to create and manipulate supercells and finite models, for example adding disorder. Single-point and local topological invariants (single-point or local marker) can be computed, in addition to other quantum-geometrical quantities (e.g., the localization marker).
+StraWBerryPy can work both with periodic (PBCs) and open (OBCs) boundary conditions. The code allows to create and manipulate supercells and finite models, for example adding disorder. Single-point and local topological markers can be computed, in addition to other quantum-geometrical quantities (e.g., the localization marker).
 
 * `Github page <https://github.com/strawberrypy-developers/strawberrypy>`_
 * Documentation
