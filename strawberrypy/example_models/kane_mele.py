@@ -1,3 +1,13 @@
+r"""
+This module contains two equivalent functions that create an instance of the `Kane-Mele model <https://doi.org/10.1103/PhysRevLett.95.226801>`_ with PythTB or TBmodels. The Kane-Mele model is a tight-binding model describing spinful electrons hopping on a 2D honeycomb lattice with spin-orbit coupling and a Rashba term (breaking :math:`S_z`-symmetry). The parameters of the model are the intensity of the diagonal spin-orbit coupling :math:`\lambda_{SO}`, the Rashba term :math:`\lambda_{R}`. The Hamiltonian of the model reads:
+
+.. math::
+
+    \mathcal{H} = \Delta\sum_{i}(-1)^{\tau_i}c_{i}^{\dagger}c_{i} + t \sum_{\langle ij\rangle}c_i^{\dagger}c_j+i\lambda_{SO}\sum_{\langle\langle ij\rangle\rangle} \nu_{ij}c_i^{\dagger}\sigma_zc_j + i\lambda_R\sum_{\langle ij\rangle}c_i^{\dagger}(\hat{\mathbf e}_{\langle ij\rangle}\cdot\boldsymbol\sigma)c_j + \mathrm{h.c.}
+    
+where :math:`\tau_i\in\{0,1\}` is an index which distinguishes the two sublattices, :math:`\nu_{ij}=\pm 1` accounts for the direction of the hoppings and :math:`\hat{\mathbf e}_{\langle ij\rangle}=\hat{\mathbf d}_{\langle ij\rangle}\times\hat{\mathbf z}` where :math:`\hat{\mathbf d}_{\langle ij\rangle}` is the unit vector in the direction from site :math:`i` to site :math:`j`. In the Hamiltonian, the double sum on the spin indices is implied in each term, with the convention that if no spin matrices appear, they are contracted over the identity.
+"""
+
 from pythtb import tb_model
 from tbmodels import Model
 
