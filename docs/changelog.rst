@@ -6,7 +6,7 @@ What's new
 ==========
 In the following, a short summary of the main changes in StraWBerryPy from its first release as `SPInv <https://github.com/roberta-favata/spinv>`_.
 
-StraWBerry 0.3.0
+StraWBerryPy 0.3.0
 ^^^^^^^^^^^^^^^^
 
 We modified the structure of the code in order to make it much more user-friendly, reducing the number of variables the user has to pass to the functions and storing all the information from the input model at once at the beginning of the code upon creating the model. 

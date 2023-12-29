@@ -29,7 +29,7 @@ def fermidirac(evals, temperature : float, mu : float):
 
 def chemical_potential(evals, temperature : float, occupied_states : int):
     r"""
-    Calculate the chemical potential of a given model knowing the eigenvallue distribution and the number of electrons (occupied states) in the system.
+    Calculate the chemical potential of a given model knowing the eigenvalue distribution and the number of electrons (occupied states) in the system.
 
     Parameters
     ----------
