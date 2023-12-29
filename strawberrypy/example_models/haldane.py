@@ -1,9 +1,19 @@
+r"""
+This module contains two equivalent functions that create an instance of the `Haldane model <https://doi.org/10.1103/PhysRevLett.61.2015>`_ with PythTB or TBmodels. The Haldane model is a tight-binding model describing spinless electrons hopping on a 2D honeycomb lattice with a staggered magnetic flux. The parameters of the model are the nearest-neighbor hopping :math:`t`, the on-site energy term :math:`\pm\Delta` with opposite signs on the two sublattices and the second-nearest-neighbor hopping term :math:`t_2e^{i\phi}`. The Hamiltonian of the model reads:
+
+.. math::
+
+    \mathcal{H} = \Delta\sum_{i}\left( c_{i,A}^{\dagger}c_{i,A}-c_{i,B}^{\dagger}c_{i,B} \right) + t \sum_{\langle ij\rangle}c_i^{\dagger}c_j+t_2\sum_{\langle\langle ij\rangle\rangle} e^{i\nu_{ij}\phi}c_i^{\dagger}c_j + \mathrm{h.c.}
+
+where :math:`\nu_{ij}=\pm 1` is a factor accounting for the direction of the complex hopping.
+"""
+
 from pythtb import tb_model
 from tbmodels import Model
 
 import numpy as np
 
-def haldane_pythtb(delta, t, t2, phi, L):
+def haldane_pythtb(delta, t, t2, phi):
     # From http://www.physics.rutgers.edu/pythtb/examples.html#haldane-model
     lat=[[1.0,0.0],[0.5,np.sqrt(3.0)/2.0]]
     orb=[[0.0,0.0],[1./3.,1./3.]]
@@ -16,10 +26,9 @@ def haldane_pythtb(delta, t, t2, phi, L):
     for lvec in ([-1, 0], [ 1,-1], [ 0, 1]):
         model.set_hop(t2*np.exp(1.j*phi), 1, 1, lvec)
 
-    sc_model = model.make_supercell([[L,0],[0,L]])
-    return sc_model
+    return model
 
-def haldane_tbmodels(delta, t, t2, phi, L):
+def haldane_tbmodels(delta, t, t2, phi):
     primitive_cell = [[1.0,0.0],[0.5,np.sqrt(3.0)/2.0]]
     orb = [[0.0,0.0],[1./3.,1./3.]]
     h_model = Model(on_site=[-delta,delta], dim=2, occ=1, pos=orb, uc=primitive_cell)
@@ -30,24 +39,4 @@ def haldane_tbmodels(delta, t, t2, phi, L):
     for lvec in ([-1,0],[1,-1],[0,1]):
         h_model.add_hop(t2*np.exp(1.j*phi), 1,1,lvec) 
 
-    sc_model = h_model.supercell([L,L])
-       
-    return sc_model
-
-def h_anderson_disorder_pythtb(model, w):
-    n_orb = model.get_num_orbitals() 
-    if w != 0.:
-        for j in range (n_orb):
-            dis = 0.5*w*(2*np.random.random()-1.0)
-            model.set_onsite(dis, j, mode='add')
-
-    return model
-
-def h_anderson_disorder_tbmodels(model, w):
-    n_orb = len(model.pos)
-    if w != 0.:
-        dis = 0.5*w*(2*np.random.rand(n_orb)-1.0)                   
-
-        model.add_on_site(dis)
-
-    return model
+    return h_model

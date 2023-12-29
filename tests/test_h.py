@@ -6,11 +6,11 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
-from strawberrypy import single_point_chern
+from strawberrypy.supercell import Supercell
 
-from strawberrypy.example_models import haldane_pythtb, haldane_tbmodels, h_anderson_disorder_pythtb, h_anderson_disorder_tbmodels
+from strawberrypy.example_models import haldane_pythtb, haldane_tbmodels
 
-def test_spcn(L=6, t=-4., t2=1., delta=2., pi_phi=-2., w=1.5, which_formula = 'symmetric'):
+def test_spcn(L=6, t=-4., t2=1., delta=2., pi_phi=-2., w=1.5):
 #inputs are:    linear size of supercell LxL
 #               t = first neighbours real hopping
 #               t2 = second neighbours
@@ -22,28 +22,28 @@ def test_spcn(L=6, t=-4., t2=1., delta=2., pi_phi=-2., w=1.5, which_formula = 's
     #Haldane model parameters
     phi = np.pi/pi_phi
 
-    #create Haldane model in supercell LxL through PythTB package
-    h_pythtb_model = haldane_pythtb(delta, t, t2, phi, L)
+    #create Haldane model in the primitive cell through PythTB package
+    h_pythtb_model = haldane_pythtb(delta,t,t2,phi)
 
-    #create Haldane model in supercell LxL through TBmodels package
-    h_tbmodels_model = haldane_tbmodels(delta, t, t2, phi, L)
+    #create Haldane model in the primitive cell  through TBmodels package
+    h_tbmodels_model = haldane_tbmodels(delta,t,t2,phi)
 
-    #add Anderson disorder in PythTB model
-    np.random.seed(15)
-    h_pythtb_model = h_anderson_disorder_pythtb(h_pythtb_model, w)
+    #initialize supercell models 
+    system_tbm = Supercell(h_tbmodels_model, Lx=L, Ly=L, spinful=False)
+    system_pytb = Supercell(h_pythtb_model, Lx=L, Ly=L, spinful=False)
 
-    #add Anderson disorder in TBmodels model
-    np.random.seed(15)
-    h_tbmodels_model = h_anderson_disorder_tbmodels(h_tbmodels_model, w)
+    #add Anderson disorder 
+    system_pytb.add_onsite_disorder(w, seed=10)
+    system_tbm.add_onsite_disorder(w, seed=10)
 
     # Single Point Chern Number (SPCN) calculation for models created with both packages, for the same disorder configuration
 
-    chern_pythtb = single_point_chern(h_pythtb_model, formula=which_formula)
+    chern_pythtb, ham_gap_pythtb = system_pytb.single_point_chern(formula='both', return_ham_gap=True)
+    chern_tbmodels, ham_gap_tbmodels = system_tbm.single_point_chern(formula='both', return_ham_gap=True)
 
-    chern_tbmodels = single_point_chern(h_tbmodels_model, formula=which_formula)
+    print('PythTB package, supercell size L =', L, ' disorder strength = ', w,  ' SPCN :', chern_pythtb['symmetric'] )
+    print('TBmodels package, supercell size L =', L, ' disorder strength = ', w,  ' SPCN :', chern_tbmodels['symmetric'] )
 
-    # if which_formula = 'both', then Single Point Chern Numbers are printed as follows : 'asymmetric' 'symmetric'
-    print('PythTB package, supercell size L =', L, ' disorder strength = ', w,  ' SPCN :', *chern_pythtb )
-    print('TBmodels package, supercell size L =', L, ' disorder strength = ', w,  ' SPCN :', *chern_tbmodels )
-
-    assert math.isclose(chern_pythtb[0],chern_tbmodels[0],abs_tol=1e-10)
+    assert math.isclose(chern_pythtb['asymmetric'],chern_tbmodels['asymmetric'],abs_tol=1e-10)
+    assert math.isclose(chern_pythtb['symmetric'],chern_tbmodels['symmetric'],abs_tol=1e-10)
+    assert math.isclose(ham_gap_pythtb,ham_gap_tbmodels,abs_tol=1e-10)

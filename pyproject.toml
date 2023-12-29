@@ -1,0 +1,38 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "strawberrypy"
+authors = [{name = "Roberta Favata", email = "roberta.favata@phd.units.it"},
+            {name = "Nicolas Baù", email = "nicolas.bau@phd.units.it"},
+            {name = "Antimo Marrazzo", email="antimo.marrazzo@units.it"}]
+
+version = "0.3.0"
+
+description = "Python package for calculation of topological invariants through single-point formulas and local markers"
+keywords = ["physics", "tight-binding", "topology", "single-point invariants", "local topological markers", "wannier90"]
+
+readme = "README.rst"
+license = {file = "LICENSE.txt"}
+
+requires-python = ">= 3.8"
+dependencies = [
+    'wannierberri[all]==0.15.0',
+    'pythtb==1.8.0',
+    'tbmodels==1.4.3',
+    'opt-einsum==3.3.0'
+]
+
+classifiers = ["Programming Language :: Python :: 3.8"]
+
+[project.urls]
+repository = "https://github.com/strawberrypy-developers/strawberrypy.git"
+documentation = "http://strawberrypy.readthedocs.io/"
+
+[project.optional-dependencies]
+devs = ["sphinx==6.2.1",
+        "sphinx-copybutton==0.5.2",
+        "sphinxawesome-theme==5.0.1",
+        "sphinx_book_theme==1.0.1",
+        ]
