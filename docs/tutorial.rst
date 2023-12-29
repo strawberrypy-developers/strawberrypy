@@ -142,7 +142,7 @@ As an example, we show the detection, through single-point spin Chern number cal
     # Compute the single-point spin Chern number for the disordered model
     model.single_point_spin_chern(formula = 'symmetric')
 
-Output: ``W = 0: SPSCN = ?, W = 4: SPSCN = ?``.
+Output: ``In the pristine KM model (w = 0): SPSCN = -0.0024642975185114. In the disordered KM model (w = 4): SPSCN = 1.0092772036154``
 
 Topological periodic heterostructure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
