@@ -32,5 +32,5 @@ StraWBerryPy 0.2.0 (SPInv)
 StraWBerryPy 0.1.0 (SPInv)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Introduced Haldane and Kane-Mele example models.
-* Introduced the single-point Chern number and single-point spin Chern number.
+* Introduced `Haldane <https://doi.org/10.1103/PhysRevLett.61.2015>`_ and `Kane-Mele <https://doi.org/10.1103/PhysRevLett.95.226801>`_ models in :doc:`example_models<strawberrypy.example_models>`.
+* Introduced the single-point Chern number and single-point spin Chern number, as defined in Refs. `Ceresoli-Resta (2007) <https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.012405>`_ and `Favata-Marrazzo (2023) <https://iopscience.iop.org/article/10.1088/2516-1075/acba6f/meta>`_.
