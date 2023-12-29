@@ -21,20 +21,23 @@ In particular, if you use the implementation of the single-point (Chern or Z2) i
   
   R. Favata and A. Marrazzo
   Single-point spin Chern number in a supercell framework
-  'Electronic Structure 5, 014005 (2023)''
-.. Electronic Structure 5, 014005 (2023): https://doi.org/10.1088/2516-1075/acba6f
+  `Electronic Structure 5, 014005 (2023)`_
+
+.. _Electronic Structure 5, 014005 (2023): https://doi.org/10.1088/2516-1075/acba6f
 
 If you use the implementation of the local Chern marker in periodic boundary conditions:
 
   N. Baù and A. Marrazzo
   Local Chern marker for periodic systems
-  accepted in PRB (2023)
-.. arXiv: https://doi.org/10.48550/arXiv.2310.15783
+  `accepted in PRB, arxiv (2023)`_
+
+.. _accepted in PRB, arxiv (2023): https://doi.org/10.48550/arXiv.2310.15783
 
 If you use the implementation of the localization marker:
 
   A. Marrazzo and R. Resta
   A local theory of the insulating state
-  Phys. Rev. Lett. 122, 166602 (2019)
-.. Phys. Rev. Lett. 122, 166602 (2019): https://doi.org/10.1103/PhysRevLett.122.166602
+  `Phys. Rev. Lett. 122, 166602 (2019)`_
+  
+.. _Phys. Rev. Lett. 122, 166602 (2019): https://doi.org/10.1103/PhysRevLett.122.166602
 
