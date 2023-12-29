@@ -128,7 +128,7 @@ As an example, we show the detection, through single-point spin Chern number cal
     L = 24 
 
     # Define the models in the unit cell
-    km_model = example_models.kane_mele_tbmodels(rashba=1., esite=5.3, spin_orb=0.3, L=1)
+    km_model = example_models.kane_mele_tbmodels(rashba=1., esite=5.3, spin_orb=0.3)
 
     # Create a supercell L x L
     model = supercell.Supercell(tbmodel = km_model, Lx = L, Ly = L, spinful=True)
