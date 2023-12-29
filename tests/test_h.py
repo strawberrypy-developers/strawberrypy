@@ -23,10 +23,10 @@ def test_spcn(L=6, t=-4., t2=1., delta=2., pi_phi=-2., w=1.5):
     phi = np.pi/pi_phi
 
     #create Haldane model in the primitive cell through PythTB package
-    h_pythtb_model = haldane_pythtb(delta,t,t2,phi,L=1)
+    h_pythtb_model = haldane_pythtb(delta,t,t2,phi)
 
     #create Haldane model in the primitive cell  through TBmodels package
-    h_tbmodels_model = haldane_tbmodels(delta,t,t2,phi,L=1)
+    h_tbmodels_model = haldane_tbmodels(delta,t,t2,phi)
 
     #initialize supercell models 
     system_tbm = Supercell(h_tbmodels_model, Lx=L, Ly=L, spinful=False)
@@ -38,12 +38,12 @@ def test_spcn(L=6, t=-4., t2=1., delta=2., pi_phi=-2., w=1.5):
 
     # Single Point Chern Number (SPCN) calculation for models created with both packages, for the same disorder configuration
 
-    chern_pythtb = system_pytb.single_point_chern(formula='both', return_ham_gap=True)
-    chern_tbmodels = system_tbm.single_point_chern(formula='both', return_ham_gap=True)
+    chern_pythtb, ham_gap_pythtb = system_pytb.single_point_chern(formula='both', return_ham_gap=True)
+    chern_tbmodels, ham_gap_tbmodels = system_tbm.single_point_chern(formula='both', return_ham_gap=True)
 
     print('PythTB package, supercell size L =', L, ' disorder strength = ', w,  ' SPCN :', chern_pythtb['symmetric'] )
     print('TBmodels package, supercell size L =', L, ' disorder strength = ', w,  ' SPCN :', chern_tbmodels['symmetric'] )
 
     assert math.isclose(chern_pythtb['asymmetric'],chern_tbmodels['asymmetric'],abs_tol=1e-10)
     assert math.isclose(chern_pythtb['symmetric'],chern_tbmodels['symmetric'],abs_tol=1e-10)
-    assert math.isclose(chern_pythtb['hamiltonian_gap'],chern_tbmodels['hamiltonian_gap'],abs_tol=1e-10)
+    assert math.isclose(ham_gap_pythtb,ham_gap_tbmodels,abs_tol=1e-10)

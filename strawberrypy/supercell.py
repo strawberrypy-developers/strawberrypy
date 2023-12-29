@@ -330,7 +330,7 @@ class Supercell(Model):
 
     def pbc_local_chern_marker(self, direction : int = None, start : int = 0, return_projector : bool = False, input_projector = None, formula : str = "symmetric", macroscopic_average : bool = False, cutoff : float = 0.8, smearing_temperature : float = 0, fermidirac_cutoff : float = 0.1):
         r"""
-        Evaluate the local Chern marker on the whole supercell if ``direction`` is ``None``. If ``direction`` is not ``None`` evaluates the PBC local Chern marker along ``direction`` starting from ``start``. Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
+        Evaluate the local Chern marker provided in Ref. `Baù-Marrazzo(2023) <https://arxiv.org/abs/2310.15783>`_ on the whole supercell if ``direction`` is ``None``. If ``direction`` is not ``None`` evaluates the PBC local Chern marker along ``direction`` starting from ``start``. Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
         
         Parameters
         ----------

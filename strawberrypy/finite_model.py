@@ -95,7 +95,7 @@ class FiniteModel(Model):
 
     def local_chern_marker(self, direction : int = None, start : int = 0, return_projector : bool = False, input_projector : np.ndarray = None, macroscopic_average : bool = False, cutoff : float = 0.8, smearing_temperature : float = 0.0, fermidirac_cutoff : float = 0.1):
         r"""
-        Evaluate the local Chern marker on the whole lattice if ``direction`` is ``None``. If ``direction`` is not ``None`` evaluates the local Chern marker along ``direction`` starting from ``start``. Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
+        Evaluate the local Chern marker provided in Ref. `Bianco-Resta(2011) <https://doi.org/10.1103/PhysRevB.84.241106>`_ on the whole lattice if ``direction`` is ``None``. If ``direction`` is not ``None`` evaluates the local Chern marker along ``direction`` starting from ``start``. Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
         
         Parameters
         ----------
@@ -196,7 +196,7 @@ class FiniteModel(Model):
 
     def localization_marker(self, direction : int = None, start : int = 0, return_projector : bool = None, input_projector : np.ndarray = None, macroscopic_average : bool = False, cutoff : float = 0.8):
         r"""
-        Evaluate the localization marker on the whole lattice if ``direction`` is ``None``. If ``direction`` is not ``None`` evaluates the localization marker along ``direction`` starting from ``start``. Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
+        Evaluate the localization marker provided in Ref. `Marrazzo-Resta(2019) <https://doi.org/10.1103/PhysRevLett.122.166602>`_ on the whole lattice if ``direction`` is ``None``. If ``direction`` is not ``None`` evaluates the localization marker along ``direction`` starting from ``start``. Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
         
         Parameters
         ----------

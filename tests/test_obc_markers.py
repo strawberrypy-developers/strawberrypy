@@ -10,8 +10,8 @@ from strawberrypy.utils import unique_vacancies
 
 def test_local_chern_marker_haldane_tbmodels_pythtb():
     # Define the PBC models
-    hmodel_ptb = haldane_pythtb(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
-    hmodel_tbm = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
+    hmodel_ptb = haldane_pythtb(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2)
+    hmodel_tbm = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2)
 
     # Build the finite model instance
     hmodel_ptb_finite = FiniteModel(tbmodel = hmodel_ptb, Lx = 8, Ly = 8, spinful = False)
@@ -44,7 +44,7 @@ def test_local_chern_marker_haldane_static():
     # Arbitrary order to check equality
     check_x, check_y, check_lcm = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_lcm)))
 
-    hmodel = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
+    hmodel = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2)
     hmodel_finite = FiniteModel(tbmodel = hmodel, Lx = 8, Ly = 8, spinful = False)
 
     # Set seed for disorder
@@ -68,10 +68,10 @@ def test_local_chern_marker_haldane_heterostructure_static():
     # Arbitrary order to check equality
     check_x, check_y, check_lcm = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_lcm)))
 
-    hmodel = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
+    hmodel = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2)
     hmodel_finite = FiniteModel(tbmodel = hmodel, Lx = 16, Ly = 8, spinful = False)
 
-    hmodel_2 = haldane_tbmodels(delta = 5.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
+    hmodel_2 = haldane_tbmodels(delta = 5.3, t = 1, t2 = 0.15, phi = np.pi / 2)
     hmodel_2_finite = FiniteModel(tbmodel = hmodel_2, Lx = 16, Ly = 8, spinful = False)
     
     # Build the heterostructure
@@ -94,7 +94,7 @@ def test_local_chern_marker_haldane_vacancies_static():
     # Arbitrary order to check equality
     check_x, check_y, check_lcm = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_lcm)))
 
-    hmodel = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
+    hmodel = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2)
     hmodel_finite = FiniteModel(tbmodel = hmodel, Lx = 8, Ly = 8, spinful = False)
 
     # Set seed for disorder
@@ -114,8 +114,8 @@ def test_local_chern_marker_haldane_vacancies_static():
 
 def test_localization_marker_haldane_tbmodels_pythtb():
     # Define the PBC models
-    hmodel_ptb = haldane_pythtb(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
-    hmodel_tbm = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
+    hmodel_ptb = haldane_pythtb(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2)
+    hmodel_tbm = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2)
 
     # Set seed for disorder
     seed = 1982458
@@ -148,7 +148,7 @@ def test_localization_marker_haldane_static():
     # Arbitrary order to check equality
     check_x, check_y, check_loc = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_loc)))
 
-    hmodel = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
+    hmodel = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2)
     hmodel_finite = FiniteModel(tbmodel = hmodel, Lx = 8, Ly = 8, spinful = False)
 
     # Set seed for disorder
@@ -172,10 +172,10 @@ def test_localization_marker_haldane_heterostructure_static():
     # Arbitrary order to check equality
     check_x, check_y, check_loc = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_loc)))
 
-    hmodel = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
+    hmodel = haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2)
     hmodel_finite = FiniteModel(tbmodel = hmodel, Lx = 16, Ly = 8, spinful = False)
 
-    hmodel_2 = haldane_tbmodels(delta = 5.3, t = 1, t2 = 0.15, phi = np.pi / 2, L = 1)
+    hmodel_2 = haldane_tbmodels(delta = 5.3, t = 1, t2 = 0.15, phi = np.pi / 2)
     hmodel_2_finite = FiniteModel(tbmodel = hmodel_2, Lx = 16, Ly = 8, spinful = False)
     
     # Build the heterostructure
@@ -193,8 +193,8 @@ def test_localization_marker_haldane_heterostructure_static():
 
 def test_localization_marker_kane_mele_tbmodels_pythtb():
     # Define the PBC models
-    kmmodel_ptb = kane_mele_pythtb(rashba = 0.3, esite = 1, spin_orb = 0.1, L = 1)
-    kmmodel_tbm = kane_mele_tbmodels(rashba = 0.3, esite = 1, spin_orb = 0.1, L = 1)
+    kmmodel_ptb = kane_mele_pythtb(rashba = 0.3, esite = 1, spin_orb = 0.1)
+    kmmodel_tbm = kane_mele_tbmodels(rashba = 0.3, esite = 1, spin_orb = 0.1)
 
     # Set seed for disorder
     seed = 1982458
@@ -227,7 +227,7 @@ def test_localization_marker_kanemele_static():
     # Arbitrary order to check equality
     check_x, check_y, check_loc = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_loc)))
 
-    kmmodel = kane_mele_tbmodels(rashba = 0.3, esite = 1, spin_orb = 0.1, L = 1)
+    kmmodel = kane_mele_tbmodels(rashba = 0.3, esite = 1, spin_orb = 0.1)
     kmmodel_finite = FiniteModel(tbmodel = kmmodel, Lx = 8, Ly = 8, spinful = True)
 
     # Set seed for disorder
@@ -251,10 +251,10 @@ def test_localization_marker_kanemele_heterostructure_static():
     # Arbitrary order to check equality
     check_x, check_y, check_loc = zip(*sorted(zip(check_positions[:, 0], check_positions[:, 1], check_loc)))
 
-    kmmodel = kane_mele_tbmodels(rashba = 0.3, esite = 1, spin_orb = 0.1, L = 1)
+    kmmodel = kane_mele_tbmodels(rashba = 0.3, esite = 1, spin_orb = 0.1)
     kmmodel_finite = FiniteModel(tbmodel = kmmodel, Lx = 16, Ly = 8, spinful = True)
 
-    kmmodel_2 = kane_mele_tbmodels(rashba = 0.3, esite = 5, spin_orb = 0.1, L = 1)
+    kmmodel_2 = kane_mele_tbmodels(rashba = 0.3, esite = 5, spin_orb = 0.1)
     kmmodel_2_finite = FiniteModel(tbmodel = kmmodel_2, Lx = 16, Ly = 8, spinful = True)
     
     # Build the heterostructure

@@ -144,7 +144,7 @@ As an example, we show the detection, through single-point spin Chern number cal
 
 Topological periodic heterostructure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-As an example, we report here the code used to generate Fig. 3 of the `paper <https://arxiv.org/abs/2310.15783>`_ introducing the local Chern marker in periodic boundary conditions.
+As an example, we report here the code used to generate Fig. 3 of Ref. `Baù-Marrazzo(2023) <https://arxiv.org/abs/2310.15783>`_.
 
 .. code:: python
 

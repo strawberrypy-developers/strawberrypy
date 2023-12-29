@@ -10,8 +10,8 @@ Welcome to StraWBerryPy!
 In addition, StraWBerryPy can handle finite systems (such as bounded samples and heterostructures) and compute the local Chern marker `[Bianco-Resta] <https://journals.aps.org/prb/abstract/10.1103/PhysRevB.84.241106>`_.
 The code provides dedicated interfaces to tight-binding packages `PythTB <http://www.physics.rutgers.edu/pythtb/>`_ and `TBmodels <https://tbmodels.greschd.ch/en/latest/>`_. The lastest version allows to calculate also the single-point invariant in the framework of Wannier Hamiltonians, which are read in the format produced by `Wannier90 <https://wannier.org/>`_ through `WannierBerri <https://wannier-berri.org/index.html>`_.
 
-Quick installation
-------------------
+Installation
+------------
 Clone `this <https://github.com/strawberrypy-developers/strawberrypy.git>`_ Github repository and install using the following instructions:
 
 .. code:: bash
@@ -55,8 +55,8 @@ Contents
 .. toctree::
    :maxdepth: 1
 
-   modules
    tutorial
+   modules
    changelog
 
 Indices and tables
