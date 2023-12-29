@@ -6,7 +6,7 @@ build-backend = "flit_core.buildapi"
 name = "strawberrypy"
 authors = [{name = "Roberta Favata", email = "roberta.favata@phd.units.it"},
             {name = "Nicolas Baù", email = "nicolas.bau@phd.units.it"},
-            {name = "Antimo Marrazzo"}]
+            {name = "Antimo Marrazzo", email="antimo.marrazzo@units.it"}]
 
 version = "0.3.0"
 
