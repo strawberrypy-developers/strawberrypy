@@ -1,3 +1,7 @@
+.. role:: python(code)
+    :language: python
+    :class: highlight
+
 StraWBerryPy package
 ====================
 

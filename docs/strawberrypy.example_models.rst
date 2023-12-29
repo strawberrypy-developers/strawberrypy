@@ -1,6 +1,10 @@
 .. strawberrypy.example\_models package
 .. ====================================
 
+.. role:: python(code)
+    :language: python
+    :class: highlight
+
 Predefined example models
 =========================
 

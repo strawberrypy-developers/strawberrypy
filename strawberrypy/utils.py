@@ -15,7 +15,7 @@ def fermidirac(evals, temperature : float, mu : float):
 
     Returns
     -------
-        occupations : `np.array | float`
+        occupations : :python:`np.array | float`
             The occupation(s) of the state corresponding to the given energy(ies)
     """
     if temperature < 1e-6:
@@ -42,7 +42,7 @@ def chemical_potential(evals, temperature : float, occupied_states : int):
 
     Returns
     -------
-        mu : `float`
+        mu : :python:`float`
             The chemical potential of the system.
 
     .. warning::
@@ -74,7 +74,7 @@ def chemical_potential(evals, temperature : float, occupied_states : int):
 
 def smearing(vecs, gamma_hevecs, evals, temperature : float, mu : float):
     r"""
-    Smearing introduced to improve the convergence of the formula: it measures how much the projector built from ``vecs`` is similar to the one built from ``gamma_hevecs``, the eigenstates of the Hamiltonian at the :math:`\Gamma`-point. Naming :math:`|\phi_n\rangle` the vectors in ``vecs`` and :math:`|u_n\rangle` the ones in ``gamma_hevecs``, the smearing factor is computed as :math:`c_n=\sum_m f(\epsilon_m, T_s, \mu)|\langle \phi_n|u_m\rangle|^2`, where :math:`\epsilon_m` is the eigenvalue corresponding to the eigenstate :math:`|u_m\rangle`, :math:`T_s` is the smearing temperature, :math:`\mu` is the chemical potential.
+    Smearing introduced to improve the convergence of the formula: it measures how much the projector built from :python:`vecs` is similar to the one built from :python:`gamma_hevecs`, the eigenstates of the Hamiltonian at the :math:`\Gamma`-point. Naming :math:`|\phi_n\rangle` the vectors in :python:`vecs` and :math:`|u_n\rangle` the ones in :python:`gamma_hevecs`, the smearing factor is computed as :math:`c_n=\sum_m f(\epsilon_m, T_s, \mu)|\langle \phi_n|u_m\rangle|^2`, where :math:`\epsilon_m` is the eigenvalue corresponding to the eigenstate :math:`|u_m\rangle`, :math:`T_s` is the smearing temperature, :math:`\mu` is the chemical potential.
 
     Parameters
     ----------
@@ -91,8 +91,8 @@ def smearing(vecs, gamma_hevecs, evals, temperature : float, mu : float):
 
     Returns
     -------
-        smearing_coeffs : `np.array`
-            A list of smearing coefficients that weights the states ``vecs``.
+        smearing_coeffs : :python:`np.array`
+            A list of smearing coefficients that weights the states :python:`vecs`.
     """
     if temperature < 1e-6:
         return np.array([1 for _ in range(vecs.shape[1])])
@@ -101,8 +101,8 @@ def smearing(vecs, gamma_hevecs, evals, temperature : float, mu : float):
     
 
 def unique_vacancies(num : int, Lx : int, Ly : int, basis : int, seed : int = None):
-    """
-    Returns a list of unique random lattice sites to be removed in the model using the method ``add_vacancies``.
+    r"""
+    Returns a list of unique random lattice sites to be removed in the model using the method :python:`add_vacancies`.
 
     Parameters
     ----------
@@ -115,11 +115,11 @@ def unique_vacancies(num : int, Lx : int, Ly : int, basis : int, seed : int = No
         basis :
             Number of atoms per unit cell.
         seed :
-            Seed for the random number generation. Default is ``None``.
+            Seed for the random number generation. Default is :python:`None`.
 
     Returns
     -------
-        unique_list : `list`
+        unique_list : :python:`list`
             List of unique random lattice site.
     """
 

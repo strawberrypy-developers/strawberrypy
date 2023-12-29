@@ -3,16 +3,23 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. role:: python(code)
+    :language: python
+    :class: highlight
+
 Welcome to StraWBerryPy!
 ========================
 
-**StraWBerryPy** (Single-poinT and local invaRiAnts for Wannier Berriologies in Python) is a Python package calculating topological invariants for non-crystalline 2D topological insulators. In the supercell framework the single-point formulas for the Chern number `[Ceresoli-Resta] <https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.012405>`_ and the single-point spin Chern number `[Favata-Marrazzo] <https://iopscience.iop.org/article/10.1088/2516-1075/acba6f/meta>`_ are implemented. It is also possible to calculate the local Chern marker within periodic boundary conditions `[Baù-Marrazzo] <https://arxiv.org/abs/2310.15783>`_.
+**StraWBerryPy** (Single-poinT and local invaRiAnts for Wannier Berriologies in Python) is a Python package calculating topological invariants for non-crystalline 2D topological insulators.
+
+In the supercell framework the single-point formulas for the Chern number `[Ceresoli-Resta] <https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.012405>`_ and the single-point spin Chern number `[Favata-Marrazzo] <https://iopscience.iop.org/article/10.1088/2516-1075/acba6f/meta>`_ are implemented. It is also possible to calculate the local Chern marker within periodic boundary conditions `[Baù-Marrazzo] <https://arxiv.org/abs/2310.15783>`_.
 In addition, StraWBerryPy can handle finite systems (such as bounded samples and heterostructures) and compute the local Chern marker `[Bianco-Resta] <https://journals.aps.org/prb/abstract/10.1103/PhysRevB.84.241106>`_.
+
 The code provides dedicated interfaces to tight-binding packages `PythTB <http://www.physics.rutgers.edu/pythtb/>`_ and `TBmodels <https://tbmodels.greschd.ch/en/latest/>`_. The lastest version allows to calculate also the single-point invariant in the framework of Wannier Hamiltonians, which are read in the format produced by `Wannier90 <https://wannier.org/>`_ through `WannierBerri <https://wannier-berri.org/index.html>`_.
 
 Installation
 ------------
-Clone `this <https://github.com/strawberrypy-developers/strawberrypy.git>`_ Github repository and install using the following instructions:
+To install StraWBerry you can clone `this <https://github.com/strawberrypy-developers/strawberrypy.git>`_ Github repository and run the following instructions:
 
 .. code:: bash
    
@@ -23,7 +30,7 @@ Clone `this <https://github.com/strawberrypy-developers/strawberrypy.git>`_ Gith
 Quick start
 -----------
 
-Here, a quick example for calculating the single-point and PBC local topological invariant in the supercell framework for the Haldane model in presence of Anderson disorder. We can define the periodic model with either ``TBmodels`` or ``PythTB``, which is then passed to the ``Supercell`` class (when defining the supercell, we also need to specify the dimension of the supercell). Then, we can add some on-site random disorder and finally call the methods to compute the single-point and local invariants.
+Here, a quick example for calculating the single-point and the local topological invariant in the supercell framework for the Haldane model in presence of Anderson disorder. We can define the periodic model with either :python:`TBmodels` or :python:`PythTB`, which is then passed to the :python:`Supercell` class (when defining the supercell, we also need to specify its dimensions). Then, we can add on-site random disorder and finally call the methods to compute the quantities of interest.
 
 .. code:: python
 

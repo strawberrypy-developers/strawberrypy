@@ -22,7 +22,7 @@ class FiniteModel(Model):
         Ly :
             Number of unit cells repeated along the :math:`\mathbf{a}_2` direction in the finite sample.
         spinful :
-            Whether the model should be interpreted as spinful or not. Default is ``False``.
+            Whether the model should be interpreted as spinful or not. Default is :python:`False`.
     """
 
     def __init__(self, tbmodel, Lx : int = 1, Ly : int = 1, spinful : bool = False):
@@ -95,35 +95,35 @@ class FiniteModel(Model):
 
     def local_chern_marker(self, direction : int = None, start : int = 0, return_projector : bool = False, input_projector : np.ndarray = None, macroscopic_average : bool = False, cutoff : float = 0.8, smearing_temperature : float = 0.0, fermidirac_cutoff : float = 0.1):
         r"""
-        Evaluate the local Chern marker provided in Ref. `Bianco-Resta(2011) <https://doi.org/10.1103/PhysRevB.84.241106>`_ on the whole lattice if ``direction`` is ``None``. If ``direction`` is not ``None``, evaluate the local Chern marker along ``direction`` starting from ``start``. Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
+        Evaluate the local Chern marker provided in Ref. `Bianco-Resta (2011) <https://doi.org/10.1103/PhysRevB.84.241106>`_ on the whole lattice if :python:`direction == None`. If `:python:direction` is not :python:`None`, evaluate the local Chern marker along :python:`direction` starting from :python:`start`. Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
         
         Parameters
         ----------
             direction :
-                Direction along which the local Chern marker is computed. Default is ``None`` (returns the marker on the whole lattice). Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
+                Direction along which the local Chern marker is computed. Default is :python:`None` (returns the marker on the whole lattice). Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
             start :
-                If ``direction`` is not ``None``, indicates the coordinate of the unit cell from which the evaluation of the local Chern marker starts. For instance, if interested on the value of the local marker along the :math:`\mathbf{a}_1` direction at half height, it should be set ``direction = 0`` and ``start = Ly // 2``.
+                If :python:`direction` is not :python:`None`, indicates the coordinate of the unit cell from which the evaluation of the local Chern marker starts. For instance, if interested on the value of the local marker along the :math:`\mathbf{a}_1` direction at half height, it should be set :python:`direction = 0` and :python:`start = Ly // 2`.
             return_projector :
-                If ``True``, returns the ground state projector. Default is ``False``.
+                If :python:`True`, returns the ground state projector. Default is :python:`False`.
             input_projector :
-                Possibility to provide the ground state projector to be used in the calculation as input. Default is ``None``, which means that the ground state projector is computed from scratch from ``tbmodel``.
+                Possibility to provide the ground state projector to be used in the calculation as input. Default is :python:`None`, which means that the ground state projector is computed from the model stored in the class.
             macroscopic_average :
-                If ``True``, returns the local Chern marker averaged in real space over a radius equal to ``cutoff``. Default is ``False``.
+                If :python:`True`, returns the local Chern marker averaged in real space over a radius equal to :python:`cutoff`. Default is :python:`False`.
             cutoff :
                 Cutoff set for the calculation of the macroscopic average in real space of the local Chern marker.
             smearing_temperature :
                 Set a fictitious temperature :math:`T_s` to be used when weighting the eigenstates of the Hamiltonian comprising the ground state projector. In particular, the ground state projector is computed as :math:`\mathcal P=\sum_{n}f(\epsilon_n, T_s, \mu)|u_n\rangle\langle u_n|` where :math:`f(\epsilon_n, T_s, \mu)` is the Fermi-Dirac distribution, :math:`\mu` is the chemical potential and :math:`\mathcal{H}_{\mathbf{k}}|u_n\rangle=\epsilon_n|u_n\rangle`. Introducing some smearing is particularly useful when dealing with heterojunctions o inhomogeneous models whose insulating gap is small in order to improve the convergence of the local marker. Default is ``0``, so that no smearing is introduced and a half-filled model is assumed.
             fermidirac_cutoff :
-                Cutoff imposed on the Fermi-Dirac distribution to further improve the convergence, mostly when :math:`T_s\neq0`. Default is ``0.1``, which looks appropriate in most cases.
+                Cutoff imposed on the Fermi-Dirac distribution to further improve the convergence, mostly when :math:`T_s\neq0`. Default is ``0.1``, which is appropriate in most cases.
 
         Returns
         -------
             lattice_chern :
-                Local Chern marker evaluated on the whole lattice if ``direction`` is ``None``.
+                Local Chern marker evaluated on the whole lattice if :python:`direction == None`.
             lcm_direction :
-                Local Chern marker evaluated along ``direction`` starting from ``start``.
+                Local Chern marker evaluated along :python:`direction` starting from :python:`start`.
             gs_projector :
-                Ground state projector, returned if ``return_projector`` is ``True``.
+                Ground state projector, returned if :python:`return_projector == True`.
         """
 
         # Check input variables
@@ -196,31 +196,31 @@ class FiniteModel(Model):
 
     def localization_marker(self, direction : int = None, start : int = 0, return_projector : bool = None, input_projector : np.ndarray = None, macroscopic_average : bool = False, cutoff : float = 0.8):
         r"""
-        Evaluate the localization marker provided in Ref. `Marrazzo-Resta(2019) <https://doi.org/10.1103/PhysRevLett.122.166602>`_ on the whole lattice if ``direction`` is ``None``. If ``direction`` is not ``None``, evaluate the localization marker along ``direction`` starting from ``start``. Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
+        Evaluate the localization marker provided in Ref. `Marrazzo-Resta (2019) <https://doi.org/10.1103/PhysRevLett.122.166602>`_ on the whole lattice if :python:`direction == None`. If :python:`direction` is not :python:`None`, evaluate the localization marker along :python:`direction` starting from :python:`start`. Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
         
         Parameters
         ----------
             direction :
-                Direction along which the localization marker is computed. Default is ``None`` (returns the marker on the whole lattice). Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
+                Direction along which the localization marker is computed. Default is :python:`None` (returns the marker on the whole lattice). Allowed directions are ``0`` (meaning along :math:`\mathbf{a}_1`), and ``1`` (meaning along :math:`\mathbf{a}_2`).
             start :
-                If ``direction`` is not ``None``, indicates the coordinate of the unit cell from which the evaluation of the localization marker starts. For instance, if interested on the value of the local marker along the :math:`\mathbf{a}_1` direction at half height, it should be set ``direction = 0`` and ``start = Ly // 2``.
+                If :python:`direction` is not :python:`None`, indicates the coordinate of the unit cell from which the evaluation of the localization marker starts. For instance, if interested on the value of the local marker along the :math:`\mathbf{a}_1` direction at half height, it should be set :python:`direction = 0` and :python:`start = Ly // 2`.
             return_projector :
-                If ``True``, returns the ground state projector. Default is ``False``.
+                If :python:`True`, returns the ground state projector. Default is :python:`False`.
             input_projector :
-                Possibility to provide the ground state projector to be used in the calculation as input. Default is ``None``,  which means that the ground state projector is computed from scratch from ``tbmodel``.
+                Possibility to provide the ground state projector to be used in the calculation as input. Default is :python:`None`,  which means that the ground state projector is computed from the model stored in the class.
             macroscopic_average :
-                If ``True``, returns the localization marker averaged in real space over a radius equal to ``cutoff``. Default is ``False``.
+                If :python:`True`, returns the localization marker averaged in real space over a radius equal to :python:`cutoff`. Default is :python:`False`.
             cutoff :
                 Cutoff set for the calculation of the macroscopic average in real space of the localization marker.
 
         Returns
         --------
             lattice_loc :
-                Local Chern marker evaluated on the whole lattice if ``direction`` is ``None``.
+                Local Chern marker evaluated on the whole lattice if :python:`direction == None`.
             loc_direction :
-                Local Chern marker evaluated along ``direction`` starting from ``start``.
+                Local Chern marker evaluated along :python:`direction` starting from :python:`start`.
             gs_projector :
-                Ground state projector, returned if ``return_projector`` is ``True``.
+                Ground state projector, returned if :python:`return_projector == True`.
 
         .. note::
             This function is implemented only for TBmodels and PythTB up to now.
