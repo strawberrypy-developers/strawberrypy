@@ -45,11 +45,11 @@ Here, a quick example for calculating the single-point and the local topological
    model = Supercell(tbmodel = pbc_model, Lx = 30, Ly = 30, spinful = False)
 
    # Add on-site Anderson disorder
-   model.add_onsite_disorder(w = 5)
+   model.add_onsite_disorder(w = 1.5)
 
    # Evaluate the single-point Chern number
    sp_inv = model.single_point_chern()
-   print("Single-point invariant: {}".format(sp_inv['symmetric']))
+   print("Single-point invariant: {}".format(sp_inv))
 
    # Evaluate the PBC local Chern marker
    pbclcm = model.pbc_local_chern_marker(macroscopic_average = True, cutoff = 2)

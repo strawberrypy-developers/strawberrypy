@@ -9,7 +9,7 @@ The code reads tight-binding models from `PythTB <http://www.physics.rutgers.edu
 StraWBerryPy can work both with periodic (PBCs) and open (OBCs) boundary conditions. The code allows to create and manipulate supercells and finite models, for example adding disorder. Single-point and local topological markers can be computed, in addition to other quantum-geometrical quantities (e.g., the localization marker).
 
 * `Github page <https://github.com/strawberrypy-developers/strawberrypy>`_
-* Documentation
+* `Documentation <http://strawberrypy.readthedocs.io/>`_
 
 
 How to cite

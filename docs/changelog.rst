@@ -7,7 +7,7 @@ What's new
 In the following, a short summary of the main changes in StraWBerryPy from its first release as `SPInv <https://github.com/roberta-favata/spinv>`_.
 
 StraWBerryPy 0.3.0
-^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
 
 We modified the structure of the code in order to make it much more user-friendly, reducing the number of variables the user has to pass to the functions and storing all the information from the input model at once at the beginning of the code upon creating the model. 
 The base class is :python:`Model`, from which :python:`Supercell` and :python:`FiniteModel` are derived, and extrapolates all the needed information for performing the several calculations on the input model. All functionalities are provided as methods of  :python:`Supercell` and :python:`FiniteModel` classes.
