@@ -1,7 +1,7 @@
-sphinx==7.2.0       
-sphinx-copybutton==0.5.2       
-sphinxawesome-theme==5.0.1
-sphinx_book_theme==1.0.1
+sphinx
+sphinx-copybutton
+sphinxawesome-theme
+sphinx_book_theme
 wannierberri[all]==0.15.0
 pythtb==1.8.0
 tbmodels==1.4.3
