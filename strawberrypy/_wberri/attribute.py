@@ -40,7 +40,7 @@ def get_positions(model):
 
 def get_hamiltonian(model):
     r"""
-    Returns the Wannier Hamiltonian at the :math:`\Gamma`-point (see Eq. 13 in Ref.) and the Data_K_R object containing information on the FFT grid for a ``wannierberri.System_w90`` instance defined by R-space matrices.
+    Returns the Wannier Hamiltonian at the :math:`\Gamma`-point (see Eq. (13) in Ref. `Marrazzo et al. (2023) <https://arxiv.org/abs/2312.10769)>`_ ) and the Data_K_R object containing information on the FFT grid for a ``wannierberri.System_w90`` instance defined by R-space matrices.
 
     Parameters
     ----------
@@ -68,7 +68,7 @@ def get_hamiltonian(model):
 
 def read_spn(model, data, u_n0): 
     r"""
-    Returns the Wannier interpolated spin matrix :math:`S^(H)_z` (see Eq. 25 in Ref.) at the :math:`\Gamma`-point if seedname.spn file is provided.
+    Returns the Wannier interpolated spin matrix :math:`S^(H)_z` (see Eq. (25) in Ref. `Marrazzo et al. (2023) <https://arxiv.org/abs/2312.10769)>`_ ) at the :math:`\Gamma`-point if seedname.spn file is provided.
 
     Parameters
     ----------
@@ -77,7 +77,7 @@ def read_spn(model, data, u_n0):
         data :
             ``wannierberri.System_w90`` object for extracting k-space Wannier interpolated matrices.
         u_n0 :
-            Matrix of Hamiltonian eigenstates at :math:`\Gamma`-point (unitary matrix U in Eq. 25 in Ref.).
+            Matrix of Hamiltonian eigenstates at :math:`\Gamma`-point (unitary matrix :math:`\mathcal{U}` in Eq. (25) in Ref. `Marrazzo et al. (2023) <https://arxiv.org/abs/2312.10769)>`_ ).
 
     Returns
     -------
