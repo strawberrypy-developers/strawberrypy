@@ -326,6 +326,7 @@ class Model():
         self.hamiltonian = ham
         self.sz = sz
         self.n_occ = int(nocc)
+        self.n_orb = int(norbs)
         self.disordered = True
         self.cart_positions = cart_pos.T
 

@@ -140,6 +140,7 @@ def unique_vacancies(num : int, Lx : int, Ly : int, basis : int, seed : int = No
 
         # If this is a new entry store it
         if not trial_index in indexes:
+            indexes.append(trial_index)
             unique_list.append(trial)
 
     return unique_list

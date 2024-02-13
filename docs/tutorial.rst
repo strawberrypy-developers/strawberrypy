@@ -37,7 +37,7 @@ In order to add disorder and vacancies to a given model we can use the following
     model.add_onsite_disorder(w = 3, seed = rng_seed)
 
     # Add 15 random vacancies to the lattice
-    vacncies = strawberrypy.utils.unique_vacancies(num = 15, Lx = model.Lx, Ly = model.Ly, basis = model.states_uc, seed = rng_seed)
+    vacncies = strawberrypy.utils.unique_vacancies(num = 15, Lx = model.Lx, Ly = model.Ly, basis = atoms_uc, seed = rng_seed)
     model.add_vacancies(vacancies_list = vacancies)
 
 .. note::
@@ -146,7 +146,7 @@ Output: ``In the pristine KM model (w = 0): SPSCN = -0.0024642975185114. In the 
 
 Topological periodic heterostructure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-As an example, we report here the code used to generate Fig. 3 of Ref. `Baù-Marrazzo(2023) <https://arxiv.org/abs/2310.15783>`_.
+As an example, we report here the code used to generate Fig. 3 of Ref. `Baù-Marrazzo(2023) <https://doi.org/10.1103/PhysRevB.109.014206>`_.
 
 .. code:: python
 
