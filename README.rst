@@ -29,9 +29,9 @@ If you use the implementation of the local Chern marker in periodic boundary con
 
   N. Baù and A. Marrazzo
   Local Chern marker for periodic systems
-  `accepted in PRB, arxiv (2023)`_
+  `Phys. Rev. B 109, 014206 (2024)`_
 
-.. _accepted in PRB, arxiv (2023): https://doi.org/10.48550/arXiv.2310.15783
+.. _Phys. Rev. B 109, 014206 (2024): https://doi.org/10.1103/PhysRevB.109.014206
 
 If you use the implementation of the localization marker:
 

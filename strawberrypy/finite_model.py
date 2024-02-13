@@ -140,7 +140,7 @@ class FiniteModel(Model):
             raise NotImplementedError("The local Chern marker is not yet implemented for dimensionality different than 2.")
 
         if input_projector is None:
-            # Eigenvectors at \Gamma
+            # Eigenvectors of the Hamiltonian
             eigenvals, eigenvecs = la.eigh(self.hamiltonian)
 
             # Evaluate the chemical potential
@@ -216,9 +216,9 @@ class FiniteModel(Model):
         Returns
         --------
             lattice_loc :
-                Local Chern marker evaluated on the whole lattice if :python:`direction == None`.
+                Localization marker evaluated on the whole lattice if :python:`direction == None`.
             loc_direction :
-                Local Chern marker evaluated along :python:`direction` starting from :python:`start`.
+                Localization marker evaluated along :python:`direction` starting from :python:`start`.
             gs_projector :
                 Ground state projector, returned if :python:`return_projector == True`.
 
@@ -236,12 +236,12 @@ class FiniteModel(Model):
         
         if direction is not None:
             if direction == 0:
-                if start not in range(self.Ly): raise RuntimeError("Invalid start parameter (must be within [0, ny_sites - 1]).")
+                if start not in range(self.Ly): raise RuntimeError("Invalid start parameter (must be within [0, self.Ly - 1]).")
             else:
-                if start not in range(self.Lx): raise RuntimeError("Invalid start parameter (must be within [0, nx_sites - 1]).")
+                if start not in range(self.Lx): raise RuntimeError("Invalid start parameter (must be within [0, self.Lx - 1]).")
 
         if input_projector is None:
-            # Eigenvectors at \Gamma
+            # Eigenvectors of the Hamiltonian
             _, eigenvecs = la.eigh(self.hamiltonian)
 
             # Build the ground state projector
