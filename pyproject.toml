@@ -31,8 +31,8 @@ repository = "https://github.com/strawberrypy-developers/strawberrypy.git"
 documentation = "http://strawberrypy.readthedocs.io/"
 
 [project.optional-dependencies]
-devs = ["sphinx==6.2.1",
-        "sphinx-copybutton==0.5.2",
-        "sphinxawesome-theme==5.0.1",
-        "sphinx_book_theme==1.0.1",
+devs = ["sphinx",
+        "sphinx-copybutton",
+        "sphinxawesome-theme",
+        "sphinx_book_theme",
         ]
