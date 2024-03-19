@@ -47,14 +47,16 @@ We acknowledge support from:
 
 * `ICSC <https://www.supercomputing-icsc.it/en/icsc-home/>`_ - Centro Nazionale di Ricerca in High Performance Computing, Big Data and Quantum Computing, funded by European Union 
 * `NextGenerationEU <https://next-generation-eu.europa.eu/index_en>`_
-* `PNRR <https://www.italiadomani.gov.it/content/sogei-ng/it/it/home.html>`_, Missione 4 Componente 2 Investimento 1.4.
+* `PNRR <https://www.italiadomani.gov.it/content/sogei-ng/it/it/home.html>`_, Missione 4 Componente 2 Investimento 1.4
 
-.. image:: docs/_images/logoxweb.svg 
-  :width: 200
+.. |pic1| image:: docs/_images/logoxweb.svg
+  :width: 333
+  :target: https://www.supercomputing-icsc.it/en/icsc-home/
+.. |pic2| image:: docs/_images/Logo-Fin-Ngeu.png
+  :width: 333
+  :target: https://next-generation-eu.europa.eu/index_en
+.. |pic3| image:: docs/_images/Logo_Italia_Domani.jpg
+  :width: 333
+  :target: https://www.italiadomani.gov.it/content/sogei-ng/it/it/home.html
 
-.. image:: docs/_images/Logo-Fin-Ngeu.png
-  :width: 200
-
-.. image:: docs/_images/Logo_Italia_Domani.jpg
-  :width: 200
-
+|pic1| |pic2| |pic3|
