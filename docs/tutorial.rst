@@ -146,7 +146,7 @@ Output: ``In the pristine KM model (w = 0): SPSCN = -0.0024642975185114. In the 
 
 Topological periodic heterostructure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-As an example, we report here the code used to generate Fig. 3 of Ref. `Baù-Marrazzo(2023) <https://doi.org/10.1103/PhysRevB.109.014206>`_.
+As an example, we report here the code used to generate Fig. 3 of Ref. `Baù-Marrazzo (2024a) <https://doi.org/10.1103/PhysRevB.109.014206>`_.
 
 .. code:: python
 

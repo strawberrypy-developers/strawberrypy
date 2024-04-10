@@ -6,6 +6,12 @@ What's new
 ==========
 In the following, a short summary of the main changes in StraWBerryPy from its first release as `SPInv <https://github.com/roberta-favata/spinv>`_.
 
+StraWBerryPy 0.3.1
+^^^^^^^^^^^^^^^^^^
+
+* Introduced the local spin-Chern marker for finite and periodic system, as defined in Ref. `Baù-Marrazzo (2024b) <https://arxiv.org/abs/2404.04598>`_.
+* Introduced the local :math:`\mathbb{Z}_{2}` marker for finite and periodic system, as defined in Ref. `Baù-Marrazzo (2024b) <https://arxiv.org/abs/2404.04598>`_.
+
 StraWBerryPy 0.3.0
 ^^^^^^^^^^^^^^^^^^
 
@@ -15,7 +21,7 @@ The functions of previous versions have been updated in order to work with this 
 
 * Introduced three main classes :python:`Model`, :python:`Supercell` and :python:`FiniteModel` which are aimed at the creation of the specific model.
 * Introduced the interface with `Wannier90 <https://wannier.org/>`_ through `WannierBerri <https://wannier-berri.org/index.html>`_, which allows to read Wannier Hamiltonians.
-* Introduced the PBC local Chern marker for periodic system in a supercell, as defined in Ref. `Baù-Marrazzo (2023) <https://doi.org/10.1103/PhysRevB.109.014206>`_.
+* Introduced the PBC local Chern marker for periodic system in a supercell, as defined in Ref. `Baù-Marrazzo (2024a) <https://doi.org/10.1103/PhysRevB.109.014206>`_.
 * Introduced the localization marker for finite systems, as defined in Ref. `Marrazzo-Resta (2019) <https://doi.org/10.1103/PhysRevLett.122.166602>`_.
 * Introduced the possibility of add disorder in the system both by an on-site uniformly distributed random term (Anderson disorder) and by vacancies in the lattice.
 

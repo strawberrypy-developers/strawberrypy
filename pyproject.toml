@@ -6,9 +6,9 @@ build-backend = "flit_core.buildapi"
 name = "strawberrypy"
 authors = [{name = "Roberta Favata", email = "roberta.favata@phd.units.it"},
             {name = "Nicolas Baù", email = "nicolas.bau@phd.units.it"},
-            {name = "Antimo Marrazzo", email="antimo.marrazzo@units.it"}]
+            {name = "Antimo Marrazzo", email="amarrazz@sissa.it"}]
 
-version = "0.3.0"
+version = "0.3.1"
 
 description = "Python package for calculation of topological invariants through single-point formulas and local markers"
 keywords = ["physics", "tight-binding", "topology", "single-point invariants", "local topological markers", "wannier90"]

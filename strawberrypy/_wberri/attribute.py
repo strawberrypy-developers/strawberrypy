@@ -56,8 +56,8 @@ def get_hamiltonian(model):
     """
 
     print('Reading Hamiltonian at Gamma point in Wannier gauge..')
-    grid = Grid(model, NK=model.NKFFT_recommended)
-    dK = 1. / grid.div
+    grid = Grid(model, NK=[1,1,1])
+    dK = [0,0,0]
     data = Data_K_R(model, dK, grid)
 
     Ham_W_R = model.Ham_R.copy()

@@ -9,6 +9,7 @@ from . import _pythtb
 from . import _wberri
 
 import scipy.linalg as la
+from opt_einsum import contract
 
 class Model():
     r"""
@@ -599,3 +600,93 @@ class Model():
                 raise RuntimeError("Unexpected error occourred in counting the neighbors of a lattice site, there are none.")
 
         return np.array(return_vals)
+    
+    #################################################
+    # Functions used in the Z2 topological markers
+    #################################################
+
+    def _delta_projection(self, evecs, rank : int, trial_projections = None):
+        r"""
+        Compute the quasi Wannier functions via projections.
+
+        Parameters
+        ----------
+            evecs :
+                The eigenvectors of the Hamiltonian.
+            rank :
+                The number of effectively occupied states (in the case of :python:`smearing_temperature == 0`, half-filling is assumed).
+            trial_projections :
+                Matrix of the trial projections used in the procedure.
+
+        Returns
+        -------
+            qwfs :
+                The list of quasi Wannier functions by row.
+
+        .. note::
+            The parameter :python:`trial_projections` should contain the projections **in the primitive cell**, as the rest are computed replicating of this choice.
+        """
+
+        # Identity matrix
+        one = np.zeros(shape = (evecs.shape[0], evecs.shape[0]))
+        
+        # If no trial projection is specified, use a default one if the number of atoms is 2, else return error
+        projections = trial_projections
+        if projections is None and self.states_uc // 2 == 2:
+            projections = np.array([
+                [1, 0, 0, 0],
+                [0, 0, 1, 0],
+                [1, 0, 0, 0],
+                [0, 0, -1, 0]
+            ])
+        elif projections is None:
+            raise RuntimeError("Initial projections are not specified and cannot be guessed.")
+
+        # Normalize the matrix of projections
+        one = np.kron(np.eye(rank // 2), projections) / la.norm(projections[:, 0])
+        
+        # Compute rotation
+        amatrix = np.array([[np.vdot(evecs[:, m], one[:, 2 * n]) for n in range(rank)] for m in range(rank)], dtype = complex)
+        smatrix = np.array(la.sqrtm(la.pinv(amatrix.T.conjugate() @ amatrix)), dtype = complex)
+        
+        # Compute quasi Wannier functions
+        qwfs = contract("ki,ij->kj", evecs, amatrix @ smatrix).T
+        qwfs = np.array([vi / np.sqrt(np.vdot(vi, vi)) for vi in qwfs])
+        
+        return qwfs
+    
+    def _time_reversal_separation(self, evecs_proj):
+        r"""
+        Split the quasi Wannier functions using the time reversal symmetry. 
+
+        Parameters
+        ----------
+            evecs_proj :
+                The quasi Wannier functions, ordered by row.
+
+        Returns
+        -------
+            vectors, tr_vectors :
+                The quasi Wannier functions split using time reversal.
+        """
+        
+        # Quasi Wannier functions (qWF) by row
+        revecs = np.copy(evecs_proj)
+
+        # Vectors of half space to store (in rows)
+        vectors = []; tr_vectors = []
+
+        # Sigma y matrix
+        diagonal = np.array([[-1.j, 0] for _ in range(revecs.shape[1])], dtype = complex).flatten()
+        sigma_y = np.diag(diagonal, 1) + np.diag(diagonal.conjugate(), -1)
+        sigma_y = sigma_y[:revecs.shape[1], :revecs.shape[1]]
+
+        # Cycle over the number of degenerate subspaces
+        for i in range(len(evecs_proj) // 2):
+
+            # I choose one eigenvector and compute its time reversal partner
+            trvec = 1.j * sigma_y @ (revecs[2 * i].conjugate())
+            vectors.append(revecs[2 * i])
+            tr_vectors.append(trvec)
+
+        return np.array(vectors), np.array(tr_vectors)

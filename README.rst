@@ -17,7 +17,7 @@ How to cite
 Please cite the following papers in any publication arising from the use of 
 this code. 
 
-In particular, if you use the implementation of the single-point (Chern or Z2) invariants
+In particular, if you use the implementation of the single-point (Chern or :math:`\mathbb{Z}_{2}`) invariants
   
   R. Favata and A. Marrazzo
   Single-point spin Chern number in a supercell framework
@@ -33,6 +33,14 @@ If you use the implementation of the local Chern marker in periodic boundary con
 
 .. _Phys. Rev. B 109, 014206 (2024): https://doi.org/10.1103/PhysRevB.109.014206
 
+If you use the implementation of the local spin-Chern or the local :math:`\mathbb{Z}_{2}` markers:
+
+  N. Baù and A. Marrazzo
+  Theory of local :math:`\mathbb{Z}_{2}` topological markers for finite and periodic two-dimensional systems
+  `arXiv:2404.04598 (2024)`_
+
+.. _arXiv:2404.04598 (2024): https://arxiv.org/abs/2404.04598
+
 If you use the implementation of the localization marker:
 
   A. Marrazzo and R. Resta
@@ -41,3 +49,18 @@ If you use the implementation of the localization marker:
   
 .. _Phys. Rev. Lett. 122, 166602 (2019): https://doi.org/10.1103/PhysRevLett.122.166602
 
+Acknowledgements
+++++++++++++++++
+We acknowledge support from the `ICSC <https://www.supercomputing-icsc.it/en/icsc-home/>`_ – Centro Nazionale di Ricerca in High Performance Computing, Big Data and Quantum Computing, funded by European Union – `NextGenerationEU <https://next-generation-eu.europa.eu/index_en>`_ – `PNRR <https://www.italiadomani.gov.it/content/sogei-ng/it/it/home.html>`_, Missione 4 Componente 2 Investimento 1.4.
+
+.. |pic1| image:: docs/_static/media/logoxweb.svg
+  :width: 250
+  :target: https://www.supercomputing-icsc.it/en/icsc-home/
+.. |pic2| image:: docs/_static/media/Logo-Fin-Ngeu.png
+  :width: 250
+  :target: https://next-generation-eu.europa.eu/index_en
+.. |pic3| image:: docs/_static/media/Logo_Italia_Domani.jpg
+  :width: 250
+  :target: https://www.italiadomani.gov.it/content/sogei-ng/it/it/home.html
+
+|pic1| |pic2| |pic3|
