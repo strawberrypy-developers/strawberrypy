@@ -17,7 +17,7 @@ How to cite
 Please cite the following papers in any publication arising from the use of 
 this code. 
 
-In particular, if you use the implementation of the single-point (Chern or :math:`\mathbb{Z}_{2}`) invariants
+In particular, if you use the implementation of the single-point (Chern or :math:`$\mathbb{Z}_{2}$`) invariants
   
   R. Favata and A. Marrazzo
   Single-point spin Chern number in a supercell framework
@@ -33,10 +33,10 @@ If you use the implementation of the local Chern marker in periodic boundary con
 
 .. _Phys. Rev. B 109, 014206 (2024): https://doi.org/10.1103/PhysRevB.109.014206
 
-If you use the implementation of the local spin-Chern or the local :math:`\mathbb{Z}_{2}` markers:
+If you use the implementation of the local spin-Chern or the local :math:`$\mathbb{Z}_{2}$` markers:
 
   N. Baù and A. Marrazzo
-  Theory of local :math:`\mathbb{Z}_{2}` topological markers for finite and periodic two-dimensional systems
+  Theory of local :math:`$\mathbb{Z}_{2}$` topological markers for finite and periodic two-dimensional systems
   `arXiv:2404.04598 (2024)`_
 
 .. _arXiv:2404.04598 (2024): https://arxiv.org/abs/2404.04598
