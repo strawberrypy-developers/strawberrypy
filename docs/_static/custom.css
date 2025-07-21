@@ -87,3 +87,12 @@ div.sphinxsidebar {
 .highlight{
     background-color: #F5F5F5
 }
+.bd-main {
+    max-width: 75%;
+    margin: 0 auto;
+}
+.bd-sidebar-secondary.bd-toc.noprint {
+    left: 80%;
+    position: fixed;
+    z-index: 100;
+}

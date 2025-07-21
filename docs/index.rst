@@ -64,7 +64,7 @@ Contents
    :maxdepth: 1
 
    tutorial
-   modules
+   strawberrypy
    changelog
 
 Indices and tables

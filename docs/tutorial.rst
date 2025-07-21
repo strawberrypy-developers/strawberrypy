@@ -37,7 +37,7 @@ In order to add disorder and vacancies to a given model we can use the following
     model.add_onsite_disorder(w = 3, seed = rng_seed)
 
     # Add 15 random vacancies to the lattice
-    vacncies = strawberrypy.utils.unique_vacancies(num = 15, Lx = model.Lx, Ly = model.Ly, basis = atoms_uc, seed = rng_seed)
+    vacancies = strawberrypy.utils.unique_vacancies(num = 16, Lx = model.Lx, Ly = model.Ly, basis = atoms_uc, seed = rng_seed)
     model.add_vacancies(vacancies_list = vacancies)
 
 .. note::
@@ -131,7 +131,7 @@ As an example, we show the detection, through single-point spin Chern number cal
     km_model = example_models.kane_mele_tbmodels(rashba = 1., esite = 5.3, spin_orb = 0.3)
 
     # Create a supercell L x L
-    model = supercell.Supercell(tbmodel = km_model, Lx = L, Ly = L, spinful = True)
+    model = Supercell(tbmodel = km_model, Lx = L, Ly = L, spinful = True)
 
     # Compute the single-point spin Chern number for the pristine model
     model.single_point_spin_chern(formula = 'symmetric')

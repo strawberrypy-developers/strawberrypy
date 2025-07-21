@@ -2,8 +2,8 @@
     :language: python
     :class: highlight
 
-StraWBerryPy package
-====================
+Reference
+=========
 
 .. toctree::
    :maxdepth: 2

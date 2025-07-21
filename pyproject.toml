@@ -8,7 +8,7 @@ authors = [{name = "Roberta Favata", email = "roberta.favata@phd.units.it"},
             {name = "Nicolas Baù", email = "nicolas.bau@phd.units.it"},
             {name = "Antimo Marrazzo", email="amarrazz@sissa.it"}]
 
-version = "0.3.1"
+version = "0.3.2"
 
 description = "Python package for calculation of topological invariants through single-point formulas and local markers"
 keywords = ["physics", "tight-binding", "topology", "single-point invariants", "local topological markers", "wannier90"]
@@ -16,7 +16,7 @@ keywords = ["physics", "tight-binding", "topology", "single-point invariants", "
 readme = "README.rst"
 license = {file = "LICENSE.txt"}
 
-requires-python = ">= 3.8"
+requires-python = ">= 3.8, < 3.12"
 dependencies = [
     'wannierberri[all]==0.15.0',
     'pythtb==1.8.0',
@@ -35,4 +35,5 @@ devs = ["sphinx",
         "sphinx-copybutton",
         "sphinxawesome-theme",
         "sphinx_book_theme",
+        "pytest"
         ]
