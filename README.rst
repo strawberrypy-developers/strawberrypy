@@ -37,9 +37,9 @@ If you use the implementation of the local spin-Chern or the local :math:`$\math
 
   N. Baù and A. Marrazzo
   Theory of local :math:`$\mathbb{Z}_{2}$` topological markers for finite and periodic two-dimensional systems
-  `arXiv:2404.04598 (2024)`_
+  `Phys. Rev. B 110, 054203 (2024)`_
 
-.. _arXiv:2404.04598 (2024): https://arxiv.org/abs/2404.04598
+.. _Phys. Rev. B 110, 054203 (2024): https://doi.org/10.1103/PhysRevB.110.054203
 
 If you use the implementation of the localization marker:
 
