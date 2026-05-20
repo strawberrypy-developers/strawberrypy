@@ -13,20 +13,37 @@ Welcome to StraWBerryPy!
 **StraWBerryPy** (Single-poinT and local invaRiAnts for Wannier Berriologies in Python) is a Python package to calculate topological invariants and quantum-geometrical quantities in non-crystalline topological insulators. 
 
 StraWBerryPy can work with periodic and finite systems in tight-binding.
-In periodic boundary conditions (PBCs), the code implements the single-point formulas for the Chern number `[Ceresoli-Resta] <https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.012405>`_ and the single-point spin Chern number `[Favata-Marrazzo] <https://iopscience.iop.org/article/10.1088/2516-1075/acba6f/meta>`_ in the supercell framework. In PBCs, it is also possible to calculate the local Chern marker within periodic boundary conditions `[Baù-Marrazzo](a) <https://doi.org/10.1103/PhysRevB.109.014206>`_, and the local spin-Chern and local :math:`\mathbb{Z}_{2}` markers `[Baù-Marrazzo](b) <https://arxiv.org/abs/2404.04598>`_.
-In addition, StraWBerryPy can handle finite systems (such as bounded samples and heterostructures) in open boundary conditions (OBCs) and can compute the local Chern marker `[Bianco-Resta] <https://journals.aps.org/prb/abstract/10.1103/PhysRevB.84.241106>`_, the localization marker `[Marrazzo-Resta] <https://doi.org/10.1103/PhysRevLett.122.166602>`_ , and the local spin-Chern and local :math:`\mathbb{Z}_{2}` markers `[Baù-Marrazzo](b) <https://arxiv.org/abs/2404.04598>`_.
+In periodic boundary conditions (PBCs), the code implements the single-point formulas for the Chern number `[Ceresoli-Resta] <https://journals.aps.org/prb/abstract/10.1103/PhysRevB.76.012405>`_ and the single-point spin Chern number `[Favata-Marrazzo] <https://iopscience.iop.org/article/10.1088/2516-1075/acba6f/meta>`_ in the supercell framework. In PBCs, including periodic heterostructures, it is also possible to calculate the local Chern marker within periodic boundary conditions `[Baù-Marrazzo](a) <https://doi.org/10.1103/PhysRevB.109.014206>`_, and the local spin-Chern and local :math:`\mathbb{Z}_{2}` markers `[Baù-Marrazzo](b) <https://doi.org/10.1103/PhysRevB.110.054203>`_.
+In addition, StraWBerryPy can handle finite systems (such as bounded samples and heterostructures) in open boundary conditions (OBCs) and can compute the local Chern marker `[Bianco-Resta] <https://journals.aps.org/prb/abstract/10.1103/PhysRevB.84.241106>`_, the localization marker `[Marrazzo-Resta] <https://doi.org/10.1103/PhysRevLett.122.166602>`_ , and the local spin-Chern and :math:`\mathbb{Z}_{2}` markers `[Baù-Marrazzo](b) <https://doi.org/10.1103/PhysRevB.110.054203>`_.
 
-The code provides dedicated interfaces to the tight-binding engines `PythTB <http://www.physics.rutgers.edu/pythtb/>`_ and `TBmodels <https://tbmodels.greschd.ch/en/latest/>`_. Latest version of StraWBerryPy implements the calculation of single-point topological invariants with ab initio Wannier Hamiltonians, which are read in the format produced by `Wannier90 <https://wannier.org/>`_ through `WannierBerri <https://wannier-berri.org/index.html>`_.
+The code provides dedicated interfaces to the tight-binding engines `PythTB <https://pythtb.readthedocs.io/en/latest/index.html>`_ and `TBmodels <https://tbmodels.greschd.ch/en/latest/>`_. Latest version of StraWBerryPy implements the calculation of single-point topological invariants with *ab initio* Wannier Hamiltonians, which are read in the format produced by `Wannier90 <https://wannier.org/>`_ through `WannierBerri <https://wannier-berri.org/index.html>`_. StraWBerryPy is also parallelized using MPI and ScaLAPACK, enabling efficient and large-scale distributed computations on high-performance computing (HPC) clusters across multiple nodes.
 
-Installation
-------------
-To install StraWBerry you can clone `this <https://github.com/strawberrypy-developers/strawberrypy.git>`_ Github repository and run the following instructions:
+.. grid:: 2
+    :gutter: 3
 
-.. code:: bash
-   
-   git clone https://github.com/strawberrypy-developers/strawberrypy.git
-   cd strawberrypy
-   pip install .
+    .. grid-item-card:: 🚀 Getting Started
+        :link: installation
+        :link-type: doc
+
+        Learn how to install StraWBerryPy, open-source dependencies, and MPI configurations.
+
+    .. grid-item-card:: 📚 Tutorials
+        :link: tutorial
+        :link-type: doc
+
+        Step-by-step guides on defining models, adding disorder, and computing invariants.
+
+    .. grid-item-card:: 💻 API Reference
+        :link: strawberrypy
+        :link-type: doc
+
+        Comprehensive documentation of StraWBerryPy's classes, methods, and functions.
+
+    .. grid-item-card:: 🛠️ Developer Guide
+        :link: dev_guide
+        :link-type: doc
+
+        Information on contributing, running tests, and source code.
 
 Quick start
 -----------
@@ -39,37 +56,60 @@ Here, a quick example for calculating the single-point and the local topological
    from strawberrypy import *
 
    # Define the PBC model
-   pbc_model = example_models.haldane_tbmodels(delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2)
+   pbc_model = example_models.haldane_tbmodels(
+         delta = 0.3, t = 1, t2 = 0.15, phi = np.pi / 2
+      )
 
    # Build the supercell of the model
-   model = Supercell(tbmodel = pbc_model, Lx = 30, Ly = 30, spinful = False)
+   model = Model(
+         model = pbc_model, spinful = False
+      ).make_supercell(Lx = 30, Ly = 30)
 
    # Add on-site Anderson disorder
-   model.add_onsite_disorder(w = 1.5)
+   model.add_disorder_uniform(w = 4, seed = 0)
 
    # Evaluate the single-point Chern number
    sp_inv = model.single_point_chern()
-   print("Single-point invariant: {}".format(sp_inv))
+   print(f"Single-point invariant: {sp_inv}")
 
    # Evaluate the PBC local Chern marker
-   pbclcm = model.pbc_local_chern_marker(macroscopic_average = True, cutoff = 2)
+   pbclcm = model.pbc_local_chern_marker(
+         macroscopic_average = True, cutoff = 2
+      )
 
 .. image:: _static/media/pbc_lcm_index.png
    :width: 150%
-   :alt: PBC local Chern marker produced with the code above
+   :alt: PBC local Chern marker and single-point Chern number
 
-Contents
-^^^^^^^^
+Feedbacks
+---------
+We welcome feedbacks and contributions to the code! If you spot some bugs or have suggestions for improvement, please open an issue on the `GitHub repository <https://github.com/strawberrypy-developers/strawberrypy>`_ to reach us.
+
 .. toctree::
    :maxdepth: 1
+   :caption: Getting Started
+   :hidden:
 
+   installation
    tutorial
-   strawberrypy
-   changelog
 
-Indices and tables
-^^^^^^^^^^^^^^^^^^
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-* `Github <https://github.com/strawberrypy-developers/strawberrypy>`_
+.. toctree::
+   :maxdepth: 1
+   :caption: Reference
+   :hidden:
+
+   strawberrypy
+   strawberrypy.example_models
+   strawberrypy.postprocess
+   strawberrypy.utils
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Additional
+   :hidden:
+
+   changelog
+   performance
+   dev_guide
+   citation
+   acknowledgements

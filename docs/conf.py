@@ -3,43 +3,66 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-import os, sys
-sys.path.insert(0, os.path.abspath('..'))
+import os, sys, re
+
+sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'StraWBerryPy'
-copyright = '2023, Roberta Favata, Nicolas Baù and Antimo Marrazzo'
-author = 'Roberta Favata, Nicolas Baù and Antimo Marrazzo'
-release = '0.3.2'
-language = 'en'
+project = "StraWBerryPy"
+copyright = "2026, Roberta Favata, Nicolas Baù, Christian Loer Llemit, Surajit Manna and Antimo Marrazzo"
+author = "Roberta Favata, Nicolas Baù, Christian Loer Llemit, Surajit Manna and Antimo Marrazzo"
+release = re.search(
+    r".+version[^0-9]+([0-9.]+)", open("../strawberrypy/config.py").read()
+).group(1)
+language = "en"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-	'sphinx.ext.autodoc',
-	'sphinx.ext.viewcode',
-	'sphinx.ext.napoleon',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.autosectionlabel',
-    'sphinx_copybutton'
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.todo",
+    "sphinx_copybutton",
+    "sphinx_design",
+    "myst_nb",
 ]
 
-templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-highlight_language = 'python3'
-master_doc = 'index'
+templates_path = ["_templates"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+highlight_language = "python3"
+master_doc = "index"
+
+autodoc_typehints = "description"
+autodoc_members_order = "bysource"
+autoclass_content = "both"
+autosummary_generate = True
+numfig = True
+
+source_suffix = {".rst": "restructuredtext", ".md": "markdown"}
+rst_prolog = """
+.. role:: python(code)
+    :language: python
+    :class: highlight
+"""
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-# from: https://framagit.org/coslo/template-docs
 
-html_theme = 'sphinx_book_theme'
-html_static_path = ['_static']
-#html_css_files = ['custom.css']
-pygments_style = 'friendly'
+html_css_files = ["custom.css"]
+html_js_files = ["fix-scrollbar.js"]
+
+html_theme = "sphinx_book_theme"
+html_static_path = ["_static"]
+pygments_dark_style = "monokai"
+pygments_light_style = "tango"
 
 html_logo = "_static/media/logo.png"
 html_title = "StraWBerryPy"
@@ -50,22 +73,23 @@ html_theme_options = {
     "repository_url": "https://github.com/strawberrypy-developers/strawberrypy.git",
     "repository_branch": "main",
     "path_to_docs": "docs",
-    "logo": {
-        "image_dark": html_logo,
-        "image_light": html_logo,
-        "text": "<h1>StraWBerryPy</h1>\n<p>Single-poinT invaRiAnts and local</p>\n<p>markers for Wannier Berriologies</p>\n<p>in Python</p>",
-    },
+    "logo": {"image_dark": html_logo, "image_light": html_logo, "text": ("StraWBerryPy")},
     "toc_title": "&nbsp;On this page",
     "use_repository_button": True,
     "use_issues_button": False,
     "use_edit_page_button": False,
     "use_download_button": True,
     "secondary_sidebar_items": ["page-toc"],
-    "show_toc_level": 40,
+    "show_toc_level": 5,
     "footer_content_items": ["copyright.html"],
-    "home_page_in_toc": True,
+    "home_page_in_toc": False,
 }
 
 html_sidebars = {
-    "**": ["navbar-logo.html", "search-field.html", "sbt-sidebar-nav.html"]
+    "**": [
+        "navbar-logo.html",
+        "subtitle.html",
+        "search-button-field.html",
+        "sbt-sidebar-nav.html",
+    ]
 }

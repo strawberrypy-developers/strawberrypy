@@ -9,6 +9,9 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -18,10 +21,25 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.11'
+          python-version: ${{ matrix.python-version }}
+
+      - name: Show CPU info
+        run: |
+          echo "nproc:"
+          nproc
+
+          echo ""
+          echo "lscpu:"
+          lscpu
+
+          echo ""
+          echo "CPU count from Python:"
+          python -c "import os; print(os.cpu_count())"
 
       - name: Check pytest tests
         run: |
+          echo "STRAWBERRYPY_DEBUG_MODE=1" >> $GITHUB_ENV
           pip install . 
-          pip3 install pytest 
-          pytest
+          pip install pytest pytest-mpi
+          cd tests
+          python -m pytest -rP -v

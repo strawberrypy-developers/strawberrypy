@@ -2,7 +2,10 @@ sphinx
 sphinx-copybutton
 sphinxawesome-theme
 sphinx_book_theme
-wannierberri[all]==0.15.0
+sphinx_design
+myst_nb
+wannierberri[all]==1.2.1
 pythtb==1.8.0
 tbmodels==1.4.3
-opt-einsum==3.3.0
+opt-einsum==3.4.0
+mpi4py==4.1.0

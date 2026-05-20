@@ -1,14 +1,17 @@
 [build-system]
-requires = ["flit_core >=3.2,<4"]
-build-backend = "flit_core.buildapi"
+build-backend = "mesonpy"
+requires = ["meson-python", "numpy<=2.4", 'ninja<=1.13.0']
 
 [project]
 name = "strawberrypy"
-authors = [{name = "Roberta Favata", email = "roberta.favata@phd.units.it"},
+dynamic = ["version"]
+authors = [
+            {name = "Roberta Favata", email = "roberta.favata@phd.units.it"},
             {name = "Nicolas Baù", email = "nicolas.bau@phd.units.it"},
-            {name = "Antimo Marrazzo", email="amarrazz@sissa.it"}]
-
-version = "0.3.2"
+            {name = "Christian Loer Llemit", email = "cllemit@sissa.it"},
+            {name = "Surajit Manna", email = "smanna@sissa.it"},
+            {name = "Antimo Marrazzo", email = "amarrazz@sissa.it"}
+        ]
 
 description = "Python package for calculation of topological invariants through single-point formulas and local markers"
 keywords = ["physics", "tight-binding", "topology", "single-point invariants", "local topological markers", "wannier90"]
@@ -16,24 +19,38 @@ keywords = ["physics", "tight-binding", "topology", "single-point invariants", "
 readme = "README.rst"
 license = {file = "LICENSE.txt"}
 
-requires-python = ">= 3.8, < 3.12"
+requires-python = ">= 3.11, < 3.14"
 dependencies = [
-    'wannierberri[all]==0.15.0',
-    'pythtb==1.8.0',
-    'tbmodels==1.4.3',
-    'opt-einsum==3.3.0'
+    'wannierberri[all]==1.2.1',
+    'pythtb>=1.8.0',
+    'tbmodels>=1.4.3',
+    'opt-einsum>=3.4.0',
+    "numpy>=2.4"
 ]
 
-classifiers = ["Programming Language :: Python :: 3.8"]
+classifiers = ["Programming Language :: Python :: 3.9"]
 
 [project.urls]
 repository = "https://github.com/strawberrypy-developers/strawberrypy.git"
 documentation = "http://strawberrypy.readthedocs.io/"
 
 [project.optional-dependencies]
+mpi = [
+    'mpi4py==4.1.0',
+    ]
+
 devs = ["sphinx",
         "sphinx-copybutton",
         "sphinxawesome-theme",
         "sphinx_book_theme",
-        "pytest"
+        "sphinx_design",
+        "myst_nb",
+        "pytest",
+        "pytest-mpi",
+        "memory_profiler",
+        "black"
         ]
+
+[tool.black]
+line-length = 90
+skip-magic-trailing-comma = true

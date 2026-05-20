@@ -6,6 +6,14 @@ What's new
 ==========
 In the following, a short summary of the main changes in StraWBerryPy from its first release as `SPInv <https://github.com/roberta-favata/spinv>`_.
 
+StraWBerryPy 0.4.0
+^^^^^^^^^^^^^^^^^^
+
+* The code is now parallelized with MPI and ScaLAPACK, allowing the calculation of quantities on large systems across multiple nodes.
+* The class :python:`Model` has been updated to store the information of the input model in a more efficient way, and is now the object that should be called when creating the model, while :python:`Supercell` and :python:`FiniteModel` are spawned from it by calling the appropriate methods.
+* The interface with `Wannier90 <https://wannier.org/>`_ has been updated to read the files also with TBmodels and PythTB.
+* Introduced post-processing tools to compute averages in real space, trace of local topological markers in periodic boundary conditions, correlation functions and plot utilities.
+
 StraWBerryPy 0.3.1
 ^^^^^^^^^^^^^^^^^^
 

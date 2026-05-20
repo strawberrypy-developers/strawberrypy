@@ -6,14 +6,13 @@ Utility functions
 =================
 
 .. automodule:: strawberrypy.utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
+    :no-members:
 
-.. Module contents
-.. ---------------
-..
-.. .. automodule:: strawberrypy.example_models
-..   :members:
-..   :undoc-members:
-..   :show-inheritance:
+.. currentmodule:: strawberrypy.utils
+
+.. autosummary::
+    :nosignatures:
+   
+    unique_vacancies
+
+.. autofunction:: unique_vacancies

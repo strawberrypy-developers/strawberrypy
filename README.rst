@@ -1,3 +1,6 @@
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
+
 ============
 StraWBerryPy
 ============
@@ -11,6 +14,28 @@ StraWBerryPy can work both with periodic (PBCs) and open (OBCs) boundary conditi
 * `Github page <https://github.com/strawberrypy-developers/strawberrypy>`_
 * `Documentation <http://strawberrypy.readthedocs.io/>`_
 
+Installation
+------------
+To install StraWBerry you can clone `this <https://github.com/strawberrypy-developers/strawberrypy.git>`_ Github repository and run the following instructions:
+
+Option 1: Install serial version (using python threading)
+
+.. code:: bash
+   
+   git clone https://github.com/strawberrypy-developers/strawberrypy.git
+   cd strawberrypy
+   pip install .
+
+Option 2: Install MPI version
+
+.. code:: bash
+
+   git clone https://github.com/strawberrypy-developers/strawberrypy.git
+   cd strawberrypy
+   make install USE_MPI=true USE_ELPA=true [EXTRAS=devs]
+
+The MPI version automatically detects MPI availability and multi-core support at runtime and falls back to non-MPI execution (serial version) if MPI is not detected.
+The mpi version requires BLAS, ELPA, LAPACK, and ScaLAPACK libraries and mpi-wrapped compilers. One can set the CC, FC, FFLAGS, and LDFLAGS appropriately in the Makefile. A more detailed guide for the setup is available in the `installation guide <https://strawberrypy.readthedocs.io/en/latest/installation.html>`_ and the `developer manual <https://strawberrypy.readthedocs.io/en/latest/dev_guide.html>`_.
 
 How to cite
 +++++++++++

@@ -1,11 +1,11 @@
 import numpy as np
-from wannierberri import Grid
-from wannierberri.data_K import Data_K_R
+import wannierberri as wberri
+
+wberri_version = wberri.__version__
 
 
 def _reciprocal_vec(model):
-    """
-    Returns reciprocal lattice vectors in cartesian coordinates. ``wannierberri.System_w90`` version.
+    r"""Returns reciprocal lattice vectors in cartesian coordinates.
 
     Parameters
     ----------
@@ -18,13 +18,18 @@ def _reciprocal_vec(model):
             Reciprocal lattice vectors.
     """
     b_matrix = model.recip_lattice
-    b1 = b_matrix[0,:]
-    b2 = b_matrix[1,:]
-    return b1, b2
+    b1 = b_matrix[0, :]
+    b2 = b_matrix[1, :]
+    try:
+        b3 = b_matrix[2, :]
+    except IndexError:
+        b3 = np.array((0, 0, 1))
+
+    return b1, b2, b3
+
 
 def get_positions(model):
-    """
-    Returns the cartesian coordinates of the centers of Wannier functions. ``wannierberri.System_w90`` version.
+    r"""Returns the cartesian coordinates of the centers of Wannier functions.
 
     Parameters
     ----------
@@ -38,9 +43,12 @@ def get_positions(model):
     """
     return model.wannier_centers_cart
 
-def get_hamiltonian(model):
-    r"""
-    Returns the Wannier Hamiltonian at the :math:`\Gamma`-point (see Eq. (13) in Ref. `Marrazzo et al. (2023) <https://arxiv.org/abs/2312.10769)>`_ ) and the Data_K_R object containing information on the FFT grid for a ``wannierberri.System_w90`` instance defined by R-space matrices.
+
+def get_hamiltonian(model, mp_grid: list[int, int, int] = [1, 1, 1], **kwargs):
+    r"""Returns the Wannier Hamiltonian at the :math:`\Gamma`-point (see Eq. 13) in Ref.
+    `Marrazzo et al. (2023) <https://arxiv.org/abs/2312.10769)>`_ ) and the Data_K_R object
+    containing information on the FFT grid for a ``wannierberri.System_w90`` instance
+    defined by R-space matrices.
 
     Parameters
     ----------
@@ -50,58 +58,97 @@ def get_hamiltonian(model):
     Returns
     -------
         ham :
-            Interpolated Hamiltonian matrix in the Wannier gauge calculated at the :math:`\Gamma`-point.
-        data :
-            ``wannierberri.System_w90`` object for extracting k-space Wannier interpolated matrices.
+            Interpolated Hamiltonian matrix in the Wannier gauge calculated at the
+            :math:`\Gamma`-point.
+        mp_grid :
+            MP grid dimensions used in the .WIN file for the WannierBerri model.
     """
+    grid = wberri.Grid(model, NK=mp_grid)
+    data = wberri.data_K.Data_K_R(model, [0, 0, 0], grid)
+    Ham_W_k = data.rvec.R_to_k(model.Ham_R.copy(), hermitian=True)
 
-    print('Reading Hamiltonian at Gamma point in Wannier gauge..')
-    grid = Grid(model, NK=[1,1,1])
-    dK = [0,0,0]
-    data = Data_K_R(model, dK, grid)
+    return Ham_W_k[0, :, :], data
 
-    Ham_W_R = model.Ham_R.copy()
-    Ham_W_k = data.fft_R_to_k(Ham_W_R, hermitean=True)
-    ham = Ham_W_k[0,:,:]
 
-    return ham, data
-
-def read_spn(model, data, u_n0): 
-    r"""
-    Returns the Wannier interpolated spin matrix :math:`S^(H)_z` (see Eq. (25) in Ref. `Marrazzo et al. (2023) <https://arxiv.org/abs/2312.10769)>`_ ) at the :math:`\Gamma`-point if seedname.spn file is provided.
+def read_spn(model, data):
+    r"""Returns the Wannier interpolated spin matrix :math:`S^(W)_z` (see Eq. (25) in Ref.
+    `Marrazzo et al. (2023) <https://arxiv.org/abs/2312.10769)>`_ ) at the :math:`\Gamma`-point
+    if seedname.spn file is provided.
 
     Parameters
     ----------
         model :
             A ``wannierberri.System_w90`` instance.
         data :
-            ``wannierberri.System_w90`` object for extracting k-space Wannier interpolated matrices.
-        u_n0 :
-            Matrix of Hamiltonian eigenstates at :math:`\Gamma`-point (unitary matrix :math:`\mathcal{U}` in Eq. (25) in Ref. `Marrazzo et al. (2023) <https://arxiv.org/abs/2312.10769)>`_ ).
+            ``wannierberri.System_w90`` object for extracting k-space Wannier interpolated
+            matrices.
 
     Returns
     -------
         Sz :
             Wannier interpolated spin matrix calculated at the :math:`\Gamma`-point.
     """
+    SS = data.rvec.R_to_k(model.get_R_mat("SS").copy(), hermitian=True)
 
-    print('Reading Spin matrix at Gamma point in Wannier gauge..')
+    return SS[0, :, :, 2]
 
-    SS = data.fft_R_to_k(model.get_R_mat('SS').copy(), hermitean=True)
-    Sz_W = SS[0,:,:,2]
-    Sz = np.conj(u_n0) @ Sz_W @ u_n0.T
-    
-    return Sz
 
 def calc_states_uc(model):
-    """
-    Returns the number of Wannier functions per unit cell for a wannierberri.System_w90
-    """
+    r"""Returns the number of Wannier functions per unit cell for a wannierberri.System_w90."""
     return model.num_wann
 
+
 def initialize_mask(model):
-    """
-    Returns a list of True for each state of the model
-    """
+    r"""Returns a list of True for each state of the model."""
     return np.array([True for _ in range(model.num_wann)])
 
+
+def get_model_wberri(path_seedname: str = None, spin: bool = False) -> wberri.System_w90:
+    r"""Create a ``wannierberri.System_w90`` instance from the Wannier90
+    seedname and path to the Wannier90 output files."""
+    return wberri.System_w90(seedname=path_seedname, spin=spin)
+
+
+def read_spn_from_seedname(
+    path_seedname: str = None,
+    spin: bool = False,
+    mp_grid: list[int, int, int] = [1, 1, 1],
+    **kwargs,
+) -> np.ndarray:
+    r"""Read spin matrices from a .SPN file using WannierBerri.
+
+    Parameters
+    ----------
+        path_seedname : str
+            Path to the Wannier90 seedname (without extension).
+        spin : bool
+            Whether to read the spin matrix as spinful (True) or spinless (False).
+        mp_grid : list of int
+            MP grid dimensions used in the .WIN file.
+        **kwargs : dict
+            Additional keyword arguments passed to WannierBerri's System_w90.
+
+    Returns
+    -------
+        spin_matrices : np.ndarray
+            Spin matrices in the Wannier gauge at Gamma point.
+    """
+    return_model = kwargs.pop("return_model", False)
+    model_wb = get_model_wberri(path_seedname=path_seedname, spin=spin)
+    data_wb = wberri.data_K.Data_K_R(
+        model_wb, [0, 0, 0], wberri.Grid(model_wb, NK=mp_grid)
+    )
+
+    # Spin matrices in the Wannier gauge in Gamma
+    spinmats = data_wb.rvec.R_to_k(model_wb.get_R_mat("SS").copy(), hermitian=True)
+
+    if return_model:
+        return model_wb, spinmats
+    else:
+        return spinmats
+
+
+def calc_uc_vol(model):
+    r"""Returns the unit cell volume for a ``wannierberri.System_w90`` instance."""
+    uc = model.real_lattice
+    return np.abs(np.dot(uc[0], np.cross(uc[1], uc[2])))

@@ -1,0 +1,2 @@
+option('use_mpi', type : 'boolean', value : false, description : 'Enable MPI support')
+option('use_elpa', type : 'boolean', value : false, description : 'Enable ELPA support for eigenvalue decomposition.')

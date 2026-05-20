@@ -1,0 +1,61 @@
+name: MPI Tests
+
+on: [push]
+
+jobs:
+  build-mpi:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libopenmpi-dev \
+            openmpi-bin \
+            gfortran \
+            liblapack-dev \
+            libblas-dev
+
+      - name: Install Intel MKL (via apt)
+        run: |
+          wget -O - https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | sudo apt-key add -
+          sudo sh -c 'echo deb https://apt.repos.intel.com/oneapi all main > /etc/apt/sources.list.d/oneAPI.list'
+          sudo apt-get update
+          sudo apt-get install -y intel-oneapi-mkl-devel
+        continue-on-error: true
+
+      - name: Set MKL environment (if installed)
+        run: |
+          if [ -d "/opt/intel/oneapi/mkl/latest" ]; then
+            echo "MKLROOT=/opt/intel/oneapi/mkl/latest" >> $GITHUB_ENV
+            source /opt/intel/oneapi/mkl/latest/env/vars.sh
+          fi
+
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/oneapi/mkl/latest/lib" >> $GITHUB_ENV
+          echo "OMPI_ALLOW_RUN_AS_ROOT=1" >> $GITHUB_ENV
+          echo "OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1" >> $GITHUB_ENV
+          echo "STRAWBERRYPY_DEBUG_MODE=1" >> $GITHUB_ENV
+
+      - name: Install package with MPI support
+        run: |
+              make USE_MPI=true USE_ELPA=false EXTRAS=devs
+
+      - name: Install test dependencies
+        run: |
+          pip install pytest pytest-mpi
+
+      - name: Run MPI tests
+        run: |
+          cd tests
+          mpirun --use-hwthread-cpus --map-by :OVERSUBSCRIBE -n 6 python -m pytest -rP -v --with-mpi 
