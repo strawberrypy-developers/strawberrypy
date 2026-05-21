@@ -117,20 +117,20 @@ In the backends, custom functions to create, distribute and gather matrices in b
    :header-rows: 0
    :class: autosummary longtable
 
-   * - :obj:`distribute <strawberrypy.backends.mpi_linalg.MPIRoutine.distribute>`
+   * - :obj:`distribute <strawberrypy.backends.serial_linalg.SerialRoutine.distribute>`
      - Distribute a matrix defined on a specific rank to all processes using a ScaLAPACK-style block-cyclic layout. Return the local portion of the matrix on each process in parallel, or the full matrix on the root process in serial.
-   * - :obj:`distribute_diag <strawberrypy.backends.mpi_linalg.MPIRoutine.distribute_diag>`
+   * - :obj:`distribute_diag <strawberrypy.backends.serial_linalg.SerialRoutine.distribute_diag>`
      - Distribute a 1D array as the diagonal of a global matrix in block-cyclic layout. Return the 2D local portion of the matrix on each process in parallel, or the full matrix on the root process in serial.
-   * - :obj:`gather <strawberrypy.backends.mpi_linalg.MPIRoutine.gather>`
+   * - :obj:`gather <strawberrypy.backends.serial_linalg.SerialRoutine.gather>`
      - Gather local block-cyclic pieces from all ranks and reconstruct the global matrix on a given rank. Return the full matrix on the root process in serial.
-   * - :obj:`get_diag <strawberrypy.backends.mpi_linalg.MPIRoutine.get_diag>`
+   * - :obj:`get_diag <strawberrypy.backends.serial_linalg.SerialRoutine.get_diag>`
      - Extract diagonal elements of a global matrix that is stored distributed in block-cyclic layout. Return the full diagonal as a 1D array on the root process in serial.
-   * - :obj:`shared_array <strawberrypy.backends.mpi_linalg.MPIRoutine.shared_array>`
+   * - :obj:`shared_array <strawberrypy.backends.serial_linalg.SerialRoutine.shared_array>`
      - Create a node-local shared array from data owned by the root rank. In serial, return a NumPy array.
 
 Via the same attribute ``Model.backend``, the following linear algebra functions are available for use in the codebase, with the same function signatures in both serial and parallel backends:
 
-.. currentmodule:: strawberrypy.backends.mpi_linalg.MPILinalg
+.. currentmodule:: strawberrypy.backends.serial_linalg.SerialLinalg
 
 .. autosummary::
     :nosignatures:
@@ -143,7 +143,7 @@ Via the same attribute ``Model.backend``, the following linear algebra functions
 
 The physics backend, accessible via the attribute ``Model.physics``, implement the following functions:
 
-.. currentmodule:: strawberrypy.backends.mpi_physics.MPIPhysics
+.. currentmodule:: strawberrypy.backends.serial_physics.SerialPhysics
 
 .. autosummary::
     :nosignatures:
