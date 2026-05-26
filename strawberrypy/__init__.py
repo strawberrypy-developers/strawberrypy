@@ -1,6 +1,7 @@
 from .classes import Model
 from . import example_models
 from . import postprocessing
+from . import utils
 from .config import __version__
 
 # Will be removed eventually to avoid direct call

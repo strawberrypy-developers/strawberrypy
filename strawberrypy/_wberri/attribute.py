@@ -17,15 +17,7 @@ def _reciprocal_vec(model):
         b1, b2 :
             Reciprocal lattice vectors.
     """
-    b_matrix = model.recip_lattice
-    b1 = b_matrix[0, :]
-    b2 = b_matrix[1, :]
-    try:
-        b3 = b_matrix[2, :]
-    except IndexError:
-        b3 = np.array((0, 0, 1))
-
-    return b1, b2, b3
+    return model.recip_lattice
 
 
 def get_positions(model):
@@ -151,4 +143,4 @@ def read_spn_from_seedname(
 def calc_uc_vol(model):
     r"""Returns the unit cell volume for a ``wannierberri.System_w90`` instance."""
     uc = model.real_lattice
-    return np.abs(np.dot(uc[0], np.cross(uc[1], uc[2])))
+    return np.linalg.norm(np.cross(uc[0], uc[1]))

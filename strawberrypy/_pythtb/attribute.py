@@ -55,23 +55,15 @@ def _reciprocal_vec(model):
     """
     try:
         try:
-            b1, b2 = model.recip_lat_vecs
+            bvecs = model.recip_lat_vecs
         except ValueError:
-            b1, b2 = None, None  # Case for finite systems
+            bvecs = [None for _ in range(model.dim_r)]  # Case for finite systems
     except AttributeError:
         # Raises AttributeError if the model is not pythtb.tb_model
         _ = model._dim_k
+        bvecs = (2.0 * np.pi) * np.linalg.inv(model.get_lat()).T
 
-        lat = model.get_lat()
-        a_matrix = np.array([[lat[1, 1], -lat[0, 1]], [-lat[1, 0], lat[0, 0]]])
-        b_matrix = (
-            2.0 * np.pi / (lat[0, 0] * lat[1, 1] - lat[0, 1] * lat[1, 0])
-        ) * a_matrix
-
-        b1 = b_matrix[:, 0].reshape(-1, 1)
-        b2 = b_matrix[:, 1].reshape(-1, 1)
-
-    return b1, b2
+    return bvecs
 
 
 def get_positions(model, spinful):

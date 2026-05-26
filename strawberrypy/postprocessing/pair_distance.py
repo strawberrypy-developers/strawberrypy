@@ -64,7 +64,7 @@ def _get_pbc_distance_pairs_amorphous_serial(model: Model) -> np.ndarray:
             The matrix of pair distances in cartesian coordinates, accounting for periodic
             boundary conditions.
     """
-    lvecs = model.lvecs
+    lvecs = np.copy(model.lvecs)
 
     # Reduced Lvecs
     lvecs[0] /= model.Lx
@@ -119,7 +119,7 @@ def _get_pbc_distance_pairs_amorphous_mpi(model: Model) -> np.ndarray:
             The matrix of pair distances in cartesian coordinates, accounting for periodic
             boundary conditions.
     """
-    lvecs = model.backend.comm.bcast(model.lvecs, root=0)
+    lvecs = np.copy(model.backend.comm.bcast(model.lvecs, root=0))
 
     # Reduced Lvecs
     lvecs[0] /= model.Lx
@@ -214,7 +214,7 @@ def _get_pbc_distance_pairs_serial(model: Model) -> np.ndarray:
             The matrix of pair distances in cartesian coordinates, accounting for periodic
             boundary conditions (minimum convention image).
     """
-    lvecs = model.lvecs
+    lvecs = np.copy(model.lvecs)
 
     # Reduced Lvecs
     lvecs[0] /= model.Lx
@@ -293,7 +293,7 @@ def _get_pbc_distance_pairs_mpi(model: Model) -> np.ndarray:
             The matrix of pair distances in cartesian coordinates, accounting for periodic
             boundary conditions (minimum convention image).
     """
-    lvecs = model.backend.comm.bcast(model.lvecs, root=0)
+    lvecs = np.copy(model.backend.comm.bcast(model.lvecs, root=0))
 
     # Reduced Lvecs
     lvecs[0] /= model.Lx

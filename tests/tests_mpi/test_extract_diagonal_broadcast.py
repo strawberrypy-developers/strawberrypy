@@ -23,7 +23,7 @@ def test_get_diag_broadcast_roundtrip():
     # Use broadcast=True to receive the diagonal on all ranks
     diag_all = backend.get_diag(loc_A, N, root=0, dtype=np.float64, broadcast=True)
 
-    if DEBUG_MODE:
+    if DEBUG_MODE and rank == 0:
         print(f"Rank {rank}: diag_all={diag_all}", flush=True)
 
     # On every rank diag_all should be available

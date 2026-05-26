@@ -5,7 +5,7 @@ import os
 
 ####################################################################################
 # Global version of the package
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 # Enable or disable debug mode (for testing purposes)
 DEBUG_MODE = bool(int(os.environ.get("STRAWBERRYPY_DEBUG_MODE", "0")))

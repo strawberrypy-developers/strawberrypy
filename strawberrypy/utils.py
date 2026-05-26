@@ -44,19 +44,23 @@ def unique_vacancies(
     if seed is not None:
         np.random.seed(seed)
 
+    # Check if atom_type is valid
+    if atom_type is not None and (atom_type < 0 or atom_type >= basis):
+        raise ValueError(f"atom_type must be between 0 and {basis - 1}")
+
     if same_number:
-        atom = np.zeros(num, dtype=np.integer)
-        type_B = np.zeros(num, dtype=np.integer)
-        type_B[: num // basis] = np.ones(num // basis, dtype=np.integer)
+        atom = np.zeros(num, dtype=np.uint32)
+        type_B = np.zeros(num, dtype=np.uint32)
+        type_B[: num // basis] = np.ones(num // basis, dtype=np.uint32)
 
         nonzeros = np.sort(np.nonzero(np.random.permutation(type_B))[0])
-        atom[nonzeros] = np.ones(num // basis, dtype=np.integer)
+        atom[nonzeros] = np.ones(num // basis, dtype=np.uint32)
 
         ind = 0
         # Generate num unique entries
         while len(unique_list) < num:
             # Trial entry
-            at_type = atom[ind]
+            at_type = int(atom[ind])
 
             trial = [np.random.randint(Lx), np.random.randint(Ly), at_type]
 

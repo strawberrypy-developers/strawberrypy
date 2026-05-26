@@ -17,10 +17,7 @@ def _reciprocal_vec(model):
         b1, b2 :
             Reciprocal lattice vectors.
     """
-    b_matrix = model.reciprocal_lattice
-    b1 = b_matrix[0, :]
-    b2 = b_matrix[1, :]
-    return b1, b2
+    return model.reciprocal_lattice
 
 
 def get_positions(model, nx_sites=1, ny_sites=1):

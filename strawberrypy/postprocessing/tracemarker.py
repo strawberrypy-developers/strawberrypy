@@ -90,17 +90,17 @@ def trace_marker(
         # Trace over the whole sample and set the correct normalization factor
         if invariant == "chern":
             if bare_marker and not macroscopic_average:
-                sp_inv = np.sum(marker)  * (model.states_uc / model.n_orb)
+                sp_inv = np.sum(marker) / (model.Lx * model.Ly)
             else: 
-                sp_inv = np.sum(marker) / (model.n_orb)
+                sp_inv = np.sum(marker) / (model.Lx * model.Ly * model.states_uc)
                 
         else:
             if bare_marker and not macroscopic_average:
-                sp_c1 = np.sum(marker[0]) * (model.states_uc / model.n_orb)
-                sp_c2 = np.sum(marker[1]) * (model.states_uc / model.n_orb)
+                sp_c1 = np.sum(marker[0]) / (model.Lx * model.Ly)
+                sp_c2 = np.sum(marker[1]) / (model.Lx * model.Ly)
             else:
-                sp_c1 = np.sum(marker[0]) / (model.n_orb)
-                sp_c2 = np.sum(marker[1]) / (model.n_orb)
+                sp_c1 = np.sum(marker[0]) / (model.Lx * model.Ly * model.states_uc)
+                sp_c2 = np.sum(marker[1]) / (model.Lx * model.Ly * model.states_uc)
 
             # sp_inv = np.abs(np.fmod(0.5 * (sp_c1 - sp_c2), 2))
             sp_inv = np.mod(0.5 * (sp_c1 - sp_c2), 2)

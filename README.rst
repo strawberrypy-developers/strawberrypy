@@ -16,7 +16,7 @@ StraWBerryPy can work both with periodic (PBCs) and open (OBCs) boundary conditi
 
 Installation
 ------------
-To install StraWBerry you can clone `this <https://github.com/strawberrypy-developers/strawberrypy.git>`_ Github repository and run the following instructions:
+To install StraWBerryPy you can clone `this <https://github.com/strawberrypy-developers/strawberrypy.git>`_ Github repository and run the following instructions:
 
 Option 1: Install serial version (using python threading)
 

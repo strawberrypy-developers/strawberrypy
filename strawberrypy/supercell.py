@@ -829,7 +829,7 @@ class Supercell(Model):
         del loc_chern_op
 
         chern_diags = (
-            -np.imag(chern_diags) * (self.n_orb / self.states_uc) / (np.pi * (8 if formula == "symmetric" else 2))
+            -np.imag(chern_diags) * (self.Lx * self.Ly) / (np.pi * (8 if formula == "symmetric" else 2))
             if self.backend.is_master_rank
             else None
         )
@@ -1434,13 +1434,13 @@ class Supercell(Model):
         del loc_spinchern_op_plus
 
         chern_diags_minus = (
-            -np.imag(chern_diags_minus) * (self.n_orb / self.states_uc) / (np.pi * (8 if formula == "symmetric" else 2))
+            -np.imag(chern_diags_minus) * (self.Lx * self.Ly) / (np.pi * (8 if formula == "symmetric" else 2))
             if self.backend.is_master_rank
             else None
         )
 
         chern_diags_plus = (
-            -np.imag(chern_diags_plus) * (self.n_orb / self.states_uc) / (np.pi * (8 if formula == "symmetric" else 2))
+            -np.imag(chern_diags_plus) * (self.Lx * self.Ly) / (np.pi * (8 if formula == "symmetric" else 2))
             if self.backend.is_master_rank
             else None
         )
@@ -1937,7 +1937,7 @@ class Supercell(Model):
         chern_diags_1 = (
             (
                 -np.imag(chern_diags_1)
-                * (self.n_orb / self.states_uc)
+                * (self.Lx * self.Ly)
                 / (np.pi * (8 if formula == "symmetric" else 2))
             )
             if self.backend.is_master_rank
@@ -1947,7 +1947,7 @@ class Supercell(Model):
         chern_diags_2 = (
             (
                 -np.imag(chern_diags_2)
-                * (self.n_orb / self.states_uc)
+                * (self.Lx * self.Ly)
                 / (np.pi * (8 if formula == "symmetric" else 2))
             )
             if self.backend.is_master_rank
